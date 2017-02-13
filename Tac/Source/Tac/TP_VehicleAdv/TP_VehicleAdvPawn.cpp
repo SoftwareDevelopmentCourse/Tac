@@ -10,7 +10,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Components/InputComponent.h"
-#include "Components/TextRenderComponent.h"
+#include "Components/TextRenderComponent.h"//TODO Delete
 #include "Sound/SoundCue.h"
 #include "PhysicalMaterials/PhysicalMaterial.h"
 #include "WheeledVehicleMovementComponent4W.h"
@@ -19,9 +19,7 @@
 
 // Needed for VR Headset
 #include "Engine.h"
-#if HMD_MODULE_INCLUDED
-#include "IHeadMountedDisplay.h"
-#endif // HMD_MODULE_INCLUDED
+// TODO Delete
 
 const FName ATP_VehicleAdvPawn::LookUpBinding("LookUp");
 const FName ATP_VehicleAdvPawn::LookRightBinding("LookRight");
@@ -32,18 +30,18 @@ const FName ATP_VehicleAdvPawn::EngineAudioRPM("RPM");
 ATP_VehicleAdvPawn::ATP_VehicleAdvPawn()
 {
 	// Car mesh
-	static ConstructorHelpers::FObjectFinder<USkeletalMesh> CarMesh(TEXT("/Game/VehicleAdv/Vehicle/Vehicle_SkelMesh.Vehicle_SkelMesh"));
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> CarMesh(TEXT("/Game/Adv/VehicleAdv/Vehicle/Vehicle_SkelMesh.Vehicle_SkelMesh"));
 	GetMesh()->SetSkeletalMesh(CarMesh.Object);
 	
-	static ConstructorHelpers::FClassFinder<UObject> AnimBPClass(TEXT("/Game/VehicleAdv/Vehicle/VehicleAnimationBlueprint"));
+	static ConstructorHelpers::FClassFinder<UObject> AnimBPClass(TEXT("/Game/Adv/VehicleAdv/Vehicle/VehicleAnimationBlueprint"));
 	GetMesh()->SetAnimationMode(EAnimationMode::AnimationBlueprint);
 	GetMesh()->SetAnimInstanceClass(AnimBPClass.Class);
 
 	// Setup friction materials
-	static ConstructorHelpers::FObjectFinder<UPhysicalMaterial> SlipperyMat(TEXT("/Game/VehicleAdv/PhysicsMaterials/Slippery.Slippery"));
+	static ConstructorHelpers::FObjectFinder<UPhysicalMaterial> SlipperyMat(TEXT("/Game/Adv/VehicleAdv/PhysicsMaterials/Slippery.Slippery"));
 	SlipperyMaterial = SlipperyMat.Object;
 		
-	static ConstructorHelpers::FObjectFinder<UPhysicalMaterial> NonSlipperyMat(TEXT("/Game/VehicleAdv/PhysicsMaterials/NonSlippery.NonSlippery"));
+	static ConstructorHelpers::FObjectFinder<UPhysicalMaterial> NonSlipperyMat(TEXT("/Game/Adv/VehicleAdv/PhysicsMaterials/NonSlippery.NonSlippery"));
 	NonSlipperyMaterial = NonSlipperyMat.Object;
 
 	UWheeledVehicleMovementComponent4W* Vehicle4W = CastChecked<UWheeledVehicleMovementComponent4W>(GetVehicleMovement());
@@ -130,35 +128,9 @@ ATP_VehicleAdvPawn::ATP_VehicleAdvPawn()
 	Camera->SetRelativeRotation(FRotator(10.0f, 0.0f, 0.0f));
 	Camera->bUsePawnControlRotation = false;
 	Camera->FieldOfView = 90.f;
-
-	// Create In-Car camera component 
-	InternalCameraOrigin = FVector(-34.0f, -10.0f, 50.0f);
-	InternalCameraBase = CreateDefaultSubobject<USceneComponent>(TEXT("InternalCameraBase"));
-	InternalCameraBase->SetRelativeLocation(InternalCameraOrigin);
-	InternalCameraBase->SetupAttachment(GetMesh());
-
-	InternalCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("InternalCamera"));
-	InternalCamera->bUsePawnControlRotation = false;
-	InternalCamera->FieldOfView = 90.f;
-	InternalCamera->SetupAttachment(InternalCameraBase);
-
-	// In car HUD
-	// Create text render component for in car speed display
-	InCarSpeed = CreateDefaultSubobject<UTextRenderComponent>(TEXT("IncarSpeed"));
-	InCarSpeed->SetRelativeScale3D(FVector(0.1f, 0.1f, 0.1f));
-	InCarSpeed->SetRelativeLocation(FVector(35.0f, -6.0f, 20.0f));
-	InCarSpeed->SetRelativeRotation(FRotator(0.0f, 180.0f, 0.0f));
-	InCarSpeed->SetupAttachment(GetMesh());
-
-	// Create text render component for in car gear display
-	InCarGear = CreateDefaultSubobject<UTextRenderComponent>(TEXT("IncarGear"));
-	InCarGear->SetRelativeScale3D(FVector(0.1f, 0.1f, 0.1f));
-	InCarGear->SetRelativeLocation(FVector(35.0f, 5.0f, 20.0f));
-	InCarGear->SetRelativeRotation(FRotator(0.0f, 180.0f, 0.0f));
-	InCarGear->SetupAttachment(GetMesh());
 	
 	// Setup the audio component and allocate it a sound cue
-	static ConstructorHelpers::FObjectFinder<USoundCue> SoundCue(TEXT("/Game/VehicleAdv/Sound/Engine_Loop_Cue.Engine_Loop_Cue"));
+	static ConstructorHelpers::FObjectFinder<USoundCue> SoundCue(TEXT("/Game/Adv/VehicleAdv/Sound/Engine_Loop_Cue.Engine_Loop_Cue"));
 	EngineSoundComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("EngineSound"));
 	EngineSoundComponent->SetSound(SoundCue.Object);
 	EngineSoundComponent->SetupAttachment(GetMesh());
@@ -185,9 +157,7 @@ void ATP_VehicleAdvPawn::SetupPlayerInputComponent(class UInputComponent* Player
 
 	PlayerInputComponent->BindAction("Handbrake", IE_Pressed, this, &ATP_VehicleAdvPawn::OnHandbrakePressed);
 	PlayerInputComponent->BindAction("Handbrake", IE_Released, this, &ATP_VehicleAdvPawn::OnHandbrakeReleased);
-	PlayerInputComponent->BindAction("SwitchCamera", IE_Pressed, this, &ATP_VehicleAdvPawn::OnToggleCamera);
 
-	PlayerInputComponent->BindAction("ResetVR", IE_Pressed, this, &ATP_VehicleAdvPawn::OnResetVR); 
 }
 
 void ATP_VehicleAdvPawn::MoveForward(float Val)
@@ -211,34 +181,6 @@ void ATP_VehicleAdvPawn::OnHandbrakeReleased()
 	GetVehicleMovementComponent()->SetHandbrakeInput(false);
 }
 
-void ATP_VehicleAdvPawn::OnToggleCamera()
-{
-	EnableIncarView(!bInCarCameraActive);
-}
-
-void ATP_VehicleAdvPawn::EnableIncarView(const bool bState)
-{
-	if (bState != bInCarCameraActive)
-	{
-		bInCarCameraActive = bState;
-		
-		if (bState == true)
-		{
-			OnResetVR();
-			Camera->Deactivate();
-			InternalCamera->Activate();
-		}
-		else
-		{
-			InternalCamera->Deactivate();
-			Camera->Activate();
-		}
-		
-		InCarSpeed->SetVisibility(bInCarCameraActive);
-		InCarGear->SetVisibility(bInCarCameraActive);
-	}
-}
-
 void ATP_VehicleAdvPawn::Tick(float Delta)
 {
 	Super::Tick(Delta);
@@ -250,28 +192,7 @@ void ATP_VehicleAdvPawn::Tick(float Delta)
 	UpdatePhysicsMaterial();
 
 	// Update the strings used in the hud (incar and onscreen)
-	UpdateHUDStrings();
-
-	// Set the string in the incar hud
-	SetupInCarHUD();
-
-	bool bHMDActive = false;
-#if HMD_MODULE_INCLUDED
-	if ((GEngine->HMDDevice.IsValid() == true ) && ( (GEngine->HMDDevice->IsHeadTrackingAllowed() == true) || (GEngine->IsStereoscopic3D() == true)))
-	{
-		bHMDActive = true;
-	}
-#endif // HMD_MODULE_INCLUDED
-	if( bHMDActive == false )
-	{
-		if ( (InputComponent) && (bInCarCameraActive == true ))
-		{
-			FRotator HeadRotation = InternalCamera->RelativeRotation;
-			HeadRotation.Pitch += InputComponent->GetAxisValue(LookUpBinding);
-			HeadRotation.Yaw += InputComponent->GetAxisValue(LookRightBinding);
-			InternalCamera->RelativeRotation = HeadRotation;
-		}
-	}	
+	UpdateHUDStrings();	
 
 	// Pass the engine RPM to the sound component
 	float RPMToAudioScale = 2500.0f / GetVehicleMovement()->GetEngineMaxRotationSpeed();
@@ -282,32 +203,8 @@ void ATP_VehicleAdvPawn::BeginPlay()
 {
 	Super::BeginPlay();
 
-	bool bWantInCar = false;
-	// First disable both speed/gear displays 
-	bInCarCameraActive = false;
-	InCarSpeed->SetVisibility(bInCarCameraActive);
-	InCarGear->SetVisibility(bInCarCameraActive);
-
-	// Enable in car view if HMD is attached
-#if HMD_MODULE_INCLUDED
-	bWantInCar = UHeadMountedDisplayFunctionLibrary::IsHeadMountedDisplayEnabled();
-#endif // HMD_MODULE_INCLUDED
-
-	EnableIncarView(bWantInCar);
 	// Start an engine sound playing
 	EngineSoundComponent->Play();
-}
-
-void ATP_VehicleAdvPawn::OnResetVR()
-{
-#if HMD_MODULE_INCLUDED
-	if (GEngine->HMDDevice.IsValid())
-	{
-		GEngine->HMDDevice->ResetOrientationAndPosition();
-		InternalCamera->SetRelativeLocation(InternalCameraOrigin);
-		GetController()->SetControlRotation(FRotator());
-	}
-#endif // HMD_MODULE_INCLUDED
 }
 
 void ATP_VehicleAdvPawn::UpdateHUDStrings()
@@ -329,26 +226,6 @@ void ATP_VehicleAdvPawn::UpdateHUDStrings()
 		GearDisplayString = (Gear == 0) ? LOCTEXT("N", "N") : FText::AsNumber(Gear);
 	}
 
-}
-
-void ATP_VehicleAdvPawn::SetupInCarHUD()
-{
-	APlayerController* PlayerController = Cast<APlayerController>(GetController());
-	if ((PlayerController != nullptr) && (InCarSpeed != nullptr) && (InCarGear != nullptr))
-	{
-		// Setup the text render component strings
-		InCarSpeed->SetText(SpeedDisplayString);
-		InCarGear->SetText(GearDisplayString);
-		
-		if (bInReverseGear == false)
-		{
-			InCarGear->SetTextRenderColor(GearDisplayColor);
-		}
-		else
-		{
-			InCarGear->SetTextRenderColor(GearDisplayReverseColor);
-		}
-	}
 }
 
 void ATP_VehicleAdvPawn::UpdatePhysicsMaterial()
