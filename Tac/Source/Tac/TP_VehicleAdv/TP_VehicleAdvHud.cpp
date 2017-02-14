@@ -8,8 +8,6 @@
 #include "Engine/Font.h"
 #include "CanvasItem.h"
 
-// Needed for VR Headset
-#include "Engine.h"//TODO Delete
 #define LOCTEXT_NAMESPACE "VehicleHUD"
 
 ATP_VehicleAdvHud::ATP_VehicleAdvHud()

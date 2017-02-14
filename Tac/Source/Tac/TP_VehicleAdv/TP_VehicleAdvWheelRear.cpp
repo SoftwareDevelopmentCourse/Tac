@@ -20,6 +20,6 @@ UTP_VehicleAdvWheelRear::UTP_VehicleAdvWheelRear()
 	SuspensionDampingRatio = 1.05f;
 
 	// Find the tire object and set the data for it
-	static ConstructorHelpers::FObjectFinder<UTireConfig> TireData(TEXT("/Game/VehicleAdv/Vehicle/WheelData/Vehicle_BackTireConfig.Vehicle_BackTireConfig"));
+	static ConstructorHelpers::FObjectFinder<UTireConfig> TireData(TEXT("/Game/Adv/VehicleAdv/Vehicle/WheelData/Vehicle_BackTireConfig.Vehicle_BackTireConfig"));
 	TireConfig = TireData.Object;
 }

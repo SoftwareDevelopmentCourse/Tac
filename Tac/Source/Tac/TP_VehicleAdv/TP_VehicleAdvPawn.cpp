@@ -10,16 +10,12 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Components/InputComponent.h"
-#include "Components/TextRenderComponent.h"//TODO Delete
 #include "Sound/SoundCue.h"
 #include "PhysicalMaterials/PhysicalMaterial.h"
 #include "WheeledVehicleMovementComponent4W.h"
 #include "Engine/SkeletalMesh.h"
 
 
-// Needed for VR Headset
-#include "Engine.h"
-// TODO Delete
 
 const FName ATP_VehicleAdvPawn::LookUpBinding("LookUp");
 const FName ATP_VehicleAdvPawn::LookRightBinding("LookRight");

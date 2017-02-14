@@ -6,7 +6,6 @@
 class UPhysicalMaterial;
 class UCameraComponent;
 class USpringArmComponent;
-class UTextRenderComponent;//TODO Delete
 class UInputComponent;
 
 UCLASS(config=Game)
