@@ -100,7 +100,7 @@ ATP_VehicleAdvPawn::ATP_VehicleAdvPawn()
 	if (UpdatedPrimitive)
 	{
 		UpdatedPrimitive->BodyInstance.COMNudge = FVector(8.0f, 0.0f, 0.0f);
-	}
+	}//TODO check
 
 	// Set the inertia scale. This controls how the mass of the vehicle is distributed.
 	Vehicle4W->InertiaTensorScale = FVector(1.0f, 1.333f, 1.2f);

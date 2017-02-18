@@ -7,7 +7,10 @@
 		{
 			"Name": "Tac",
 			"Type": "Runtime",
-			"LoadingPhase": "Default"
+			"LoadingPhase": "Default",
+			"AdditionalDependencies": [
+				"PhysXVehicles"
+			]
 		}
 	],
 	"Plugins": [
