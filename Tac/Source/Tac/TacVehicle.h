@@ -37,6 +37,8 @@ public:
 
 	void RotateCamera(float val);
 
+	void ZoomCamera(float val);
+
 	void Boost();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Setup")

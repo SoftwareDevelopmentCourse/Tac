@@ -32,7 +32,7 @@ ATacVehicle::ATacVehicle()
 
 	Vehicle4W->WheelSetups[1].WheelClass = FrontWheel.Class;
 	Vehicle4W->WheelSetups[1].BoneName = FName("PhysWheel_FR");
-	Vehicle4W->WheelSetups[1].AdditionalOffset = FVector(0.f, -20.f, 0.f);
+	Vehicle4W->WheelSetups[1].AdditionalOffset = FVector(0.f, 20.f, 0.f);
 
 	Vehicle4W->WheelSetups[2].WheelClass = RearWheel.Class;
 	Vehicle4W->WheelSetups[2].BoneName = FName("PhysWheel_BL");
@@ -40,7 +40,7 @@ ATacVehicle::ATacVehicle()
 
 	Vehicle4W->WheelSetups[3].WheelClass = RearWheel.Class;
 	Vehicle4W->WheelSetups[3].BoneName = FName("PhysWheel_BR");
-	Vehicle4W->WheelSetups[3].AdditionalOffset = FVector(0.f, -20.f, 0.f);
+	Vehicle4W->WheelSetups[3].AdditionalOffset = FVector(0.f, 20.f, 0.f);
 
 	Vehicle4W->Mass = 1000.f;
 	Vehicle4W->EngineSetup.MOI = 0.5f;
@@ -54,9 +54,9 @@ ATacVehicle::ATacVehicle()
 	SpringArm->TargetArmLength = 250.0f;
 	SpringArm->bEnableCameraLag = false;
 	SpringArm->bEnableCameraRotationLag = false;
-	SpringArm->bInheritPitch = true;
+	SpringArm->bInheritPitch = false;
 	SpringArm->bInheritYaw = true;
-	SpringArm->bInheritRoll = true;
+	SpringArm->bInheritRoll = false;
 
 	// Create the chase camera component 
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("ChaseCamera"));
@@ -79,9 +79,9 @@ void ATacVehicle::SetupPlayerInputComponent(class UInputComponent* PlayerInputCo
 	PlayerInputComponent->BindAxis("MoveForward", this, &ATacVehicle::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &ATacVehicle::MoveRight);
 	PlayerInputComponent->BindAxis("LookRight", this, &ATacVehicle::RotateCamera);
+	PlayerInputComponent->BindAxis("Zoom", this, &ATacVehicle::ZoomCamera);
 
 	PlayerInputComponent->BindAction("Boost", IE_Pressed, this, &ATacVehicle::Boost);
-
 }
 
 void ATacVehicle::MoveForward(float Val)
@@ -98,6 +98,11 @@ void ATacVehicle::MoveRight(float Val)
 void ATacVehicle::RotateCamera(float val)
 {
 	SpringArm->AddRelativeRotation(FRotator(0.f, val, 0.f));
+}
+
+void ATacVehicle::ZoomCamera(float val)
+{
+	SpringArm->TargetArmLength += val * -10.f;
 }
 
 void ATacVehicle::Boost()
