@@ -48,6 +48,8 @@ public:
 	void OnHandbrakePressed();
 	/** Handle handbrake released */
 	void OnHandbrakeReleased();
+	/** Try to pick up ejector and take it */
+	void GetEjector();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Setup")
 	float BoostSpeed;
@@ -57,5 +59,5 @@ public:
 	FORCEINLINE UCameraComponent* GetCamera() const { return Camera; }
 
 private:
-	bool bCanBoost;	
+	bool bHasEjector;	
 };

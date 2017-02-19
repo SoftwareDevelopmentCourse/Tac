@@ -29,7 +29,7 @@ AEjector::AEjector()
 
 	InterpFunction.BindUFunction(this, FName{ TEXT("EjectorFloat") });
 
-	FloatRange = 50.f;
+	FloatRange = 5.f;
 }
 
 // Called when the game starts or when spawned
@@ -45,7 +45,7 @@ void AEjector::BeginPlay()
 void AEjector::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	Ejector->AddRelativeRotation(FRotator(0.f, 5.f, 0.f));
 }
 
 void AEjector::EjectorFloat(float val)
@@ -54,6 +54,7 @@ void AEjector::EjectorFloat(float val)
 	auto NewLocationZ =CurrentLocation.Z  + val * FloatRange;
 	auto NewLoaction = FVector(CurrentLocation.X, CurrentLocation.Y, NewLocationZ);
 	Ejector->SetRelativeLocation(NewLoaction);
-	UE_LOG(LogTemp, Log, TEXT("%s"), *NewLoaction.ToString());
+	//UE_LOG(LogTemp, Log, TEXT("%s"), *NewLoaction.ToString());
+
 }
 

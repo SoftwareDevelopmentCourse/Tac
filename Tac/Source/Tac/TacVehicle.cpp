@@ -13,13 +13,19 @@
 ATacVehicle::ATacVehicle()
 {
 	PrimaryActorTick.bCanEverTick = false;
-	
+
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh> TacMesh(TEXT("/Game/Tac/SK_Tac"));
-	GetMesh()->SetSkeletalMesh(TacMesh.Object);
+	if (TacMesh.Object)
+	{
+		GetMesh()->SetSkeletalMesh(TacMesh.Object);
+	}
 
 	static ConstructorHelpers::FClassFinder<UAnimInstance> TacAnim(TEXT("/Game/Tac/AnimBP_TacPawn"));
-	GetMesh()->SetAnimationMode(EAnimationMode::AnimationBlueprint);
-	GetMesh()->SetAnimInstanceClass(TacAnim.Class);
+	if (TacAnim.Class)
+	{
+		GetMesh()->SetAnimationMode(EAnimationMode::AnimationBlueprint);
+		GetMesh()->SetAnimInstanceClass(TacAnim.Class);
+	}
 
 	UWheeledVehicleMovementComponent4W* Vehicle4W = CastChecked<UWheeledVehicleMovementComponent4W>(GetVehicleMovement());
 
@@ -27,26 +33,28 @@ ATacVehicle::ATacVehicle()
 
 	static ConstructorHelpers::FClassFinder<UVehicleWheel> FrontWheel(TEXT("/Game/Tac/BP_TacWheel_Front"));
 	static ConstructorHelpers::FClassFinder<UVehicleWheel> RearWheel(TEXT("/Game/Tac/BP_TacWheel_Rear"));
+	if (FrontWheel.Class && RearWheel.Class)
+	{
+		Vehicle4W->WheelSetups[0].WheelClass = FrontWheel.Class;
+		Vehicle4W->WheelSetups[0].BoneName = FName("PhysWheel_FL");
+		Vehicle4W->WheelSetups[0].AdditionalOffset = FVector(0.f, -20.f, 0.f);
 
-	Vehicle4W->WheelSetups[0].WheelClass = FrontWheel.Class;
-	Vehicle4W->WheelSetups[0].BoneName = FName("PhysWheel_FL");
-	Vehicle4W->WheelSetups[0].AdditionalOffset = FVector(0.f, -20.f, 0.f);
+		Vehicle4W->WheelSetups[1].WheelClass = FrontWheel.Class;
+		Vehicle4W->WheelSetups[1].BoneName = FName("PhysWheel_FR");
+		Vehicle4W->WheelSetups[1].AdditionalOffset = FVector(0.f, 20.f, 0.f);
 
-	Vehicle4W->WheelSetups[1].WheelClass = FrontWheel.Class;
-	Vehicle4W->WheelSetups[1].BoneName = FName("PhysWheel_FR");
-	Vehicle4W->WheelSetups[1].AdditionalOffset = FVector(0.f, 20.f, 0.f);
+		Vehicle4W->WheelSetups[2].WheelClass = RearWheel.Class;
+		Vehicle4W->WheelSetups[2].BoneName = FName("PhysWheel_BL");
+		Vehicle4W->WheelSetups[2].AdditionalOffset = FVector(0.f, -20.f, 0.f);
 
-	Vehicle4W->WheelSetups[2].WheelClass = RearWheel.Class;
-	Vehicle4W->WheelSetups[2].BoneName = FName("PhysWheel_BL");
-	Vehicle4W->WheelSetups[2].AdditionalOffset = FVector(0.f, -20.f, 0.f);
+		Vehicle4W->WheelSetups[3].WheelClass = RearWheel.Class;
+		Vehicle4W->WheelSetups[3].BoneName = FName("PhysWheel_BR");
+		Vehicle4W->WheelSetups[3].AdditionalOffset = FVector(0.f, 20.f, 0.f);
 
-	Vehicle4W->WheelSetups[3].WheelClass = RearWheel.Class;
-	Vehicle4W->WheelSetups[3].BoneName = FName("PhysWheel_BR");
-	Vehicle4W->WheelSetups[3].AdditionalOffset = FVector(0.f, 20.f, 0.f);
-
-	Vehicle4W->Mass = 1000.f;
-	Vehicle4W->EngineSetup.MOI = 0.5f;
-	Vehicle4W->DifferentialSetup.DifferentialType = EVehicleDifferential4W::LimitedSlip_4W;
+		Vehicle4W->Mass = 1000.f;
+		Vehicle4W->EngineSetup.MOI = 0.5f;
+		Vehicle4W->DifferentialSetup.DifferentialType = EVehicleDifferential4W::LimitedSlip_4W;
+	}
 
 	// Create a spring arm component for our chase camera
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
@@ -76,7 +84,7 @@ ATacVehicle::ATacVehicle()
 	CollectCapsule->SetRelativeRotation(FRotator(90.f, 0.f, 0.f));
 
 	BoostSpeed = 400.f;
-	bCanBoost = false;
+	bHasEjector = false;
 }
 
 void ATacVehicle::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
@@ -92,6 +100,7 @@ void ATacVehicle::SetupPlayerInputComponent(class UInputComponent* PlayerInputCo
 	PlayerInputComponent->BindAxis("Zoom", this, &ATacVehicle::ZoomCamera);
 
 	PlayerInputComponent->BindAction("Boost", IE_Pressed, this, &ATacVehicle::Boost);
+	PlayerInputComponent->BindAction("Use", IE_Pressed, this, &ATacVehicle::GetEjector);
 	PlayerInputComponent->BindAction("Handbrake", IE_Pressed, this, &ATacVehicle::OnHandbrakePressed);
 	PlayerInputComponent->BindAction("Handbrake", IE_Released, this, &ATacVehicle::OnHandbrakeReleased);
 }
@@ -117,6 +126,18 @@ void ATacVehicle::OnHandbrakeReleased()
 	GetVehicleMovementComponent()->SetHandbrakeInput(false);
 }
 
+void ATacVehicle::GetEjector()
+{
+	UStaticMeshComponent* Ejector = NewObject<UStaticMeshComponent>(this);
+	Ejector->SetupAttachment(GetRootComponent(), TEXT("Ejector"));
+	Ejector->RegisterComponent();
+	UStaticMesh* EjectorMesh = Cast<UStaticMesh>(StaticLoadObject(UStaticMesh::StaticClass(), NULL, TEXT("StaticMesh'/Game/Geometry/SM_Ejector.SM_Ejector'")));
+	if (!EjectorMesh) { return; }
+	Ejector->SetStaticMesh(EjectorMesh);
+	bHasEjector = true;
+	//UE_LOG(LogTemp, Warning, TEXT("%s"), *EjectorMesh->GetName());
+}
+
 void ATacVehicle::RotateCamera(float val)
 {
 	SpringArm->AddRelativeRotation(FRotator(0.f, val, 0.f));
@@ -129,7 +150,7 @@ void ATacVehicle::ZoomCamera(float val)
 
 void ATacVehicle::Boost()
 {
-	if (bCanBoost)
+	if (bHasEjector)
 	{
 		auto Boost = GetMesh()->GetForwardVector() * BoostSpeed;
 		/*
