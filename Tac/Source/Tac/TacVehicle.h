@@ -30,16 +30,20 @@ public:
 	ATacVehicle();
 	
 	virtual void SetupPlayerInputComponent(UInputComponent* InputComponent) override;
-
+	/** Handle pressing forwards */
 	void MoveForward(float val);
-
+	/** Handle pressing right */
 	void MoveRight(float val);
-
+	/** Rotate Camera to adjust the view */
 	void RotateCamera(float val);
-
+	/** Zoom camera to adjust the view */
 	void ZoomCamera(float val);
-
+	/** Boost the vehicle */
 	void Boost();
+	/** Handle handbrake pressed */
+	void OnHandbrakePressed();
+	/** Handle handbrake released */
+	void OnHandbrakeReleased();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Setup")
 	float BoostSpeed;

@@ -12,6 +12,8 @@
 
 ATacVehicle::ATacVehicle()
 {
+	PrimaryActorTick.bCanEverTick = false;
+	
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh> TacMesh(TEXT("/Game/Tac/SK_Tac"));
 	GetMesh()->SetSkeletalMesh(TacMesh.Object);
 
@@ -82,6 +84,8 @@ void ATacVehicle::SetupPlayerInputComponent(class UInputComponent* PlayerInputCo
 	PlayerInputComponent->BindAxis("Zoom", this, &ATacVehicle::ZoomCamera);
 
 	PlayerInputComponent->BindAction("Boost", IE_Pressed, this, &ATacVehicle::Boost);
+	PlayerInputComponent->BindAction("Handbrake", IE_Pressed, this, &ATacVehicle::OnHandbrakePressed);
+	PlayerInputComponent->BindAction("Handbrake", IE_Released, this, &ATacVehicle::OnHandbrakeReleased);
 }
 
 void ATacVehicle::MoveForward(float Val)
@@ -93,6 +97,16 @@ void ATacVehicle::MoveForward(float Val)
 void ATacVehicle::MoveRight(float Val)
 {
 	GetVehicleMovementComponent()->SetSteeringInput(Val);
+}
+
+void ATacVehicle::OnHandbrakePressed()
+{
+	GetVehicleMovementComponent()->SetHandbrakeInput(true);
+}
+
+void ATacVehicle::OnHandbrakeReleased()
+{
+	GetVehicleMovementComponent()->SetHandbrakeInput(false);
 }
 
 void ATacVehicle::RotateCamera(float val)
@@ -113,5 +127,5 @@ void ATacVehicle::Boost()
 	GetMesh()->SetPhysicsLinearVelocity(CurrentVelocity + Boost);
 	*/
 	GetMesh()->AddImpulse(Boost,NAME_None,true);
-	UE_LOG(LogTemp, Error, TEXT("%s"), *Boost.ToString());
+	//UE_LOG(LogTemp, Error, TEXT("%s"), *Boost.ToString());
 }
