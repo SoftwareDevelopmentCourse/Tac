@@ -12,6 +12,7 @@
 class UCameraComponent;
 class USpringArmComponent;
 class UInputComponent;
+class UCapsuleComponent;
 
 UCLASS()
 class TAC_API ATacVehicle : public AWheeledVehicle
@@ -25,6 +26,9 @@ class TAC_API ATacVehicle : public AWheeledVehicle
 	/** Camera component that will be our viewpoint */
 	UPROPERTY(Category = Camera, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	UCameraComponent* Camera;
+
+	UPROPERTY(Category = Vehicle, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	UCapsuleComponent* CollectCapsule;
 	
 public:
 	ATacVehicle();
@@ -51,4 +55,7 @@ public:
 public:
 	FORCEINLINE USpringArmComponent* GetSpringArm() const { return SpringArm; }
 	FORCEINLINE UCameraComponent* GetCamera() const { return Camera; }
+
+private:
+	bool bCanBoost;	
 };

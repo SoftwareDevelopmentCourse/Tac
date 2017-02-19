@@ -68,7 +68,15 @@ ATacVehicle::ATacVehicle()
 	Camera->bUsePawnControlRotation = false;
 	Camera->FieldOfView = 90.f;
 
+	// Create the collect capsule component
+	CollectCapsule = CreateDefaultSubobject<UCapsuleComponent>(TEXT("CollectCapsule"));
+	CollectCapsule->SetupAttachment(RootComponent);
+	CollectCapsule->SetCapsuleHalfHeight(750.f);
+	CollectCapsule->SetCapsuleRadius(350.f);
+	CollectCapsule->SetRelativeRotation(FRotator(90.f, 0.f, 0.f));
+
 	BoostSpeed = 400.f;
+	bCanBoost = false;
 }
 
 void ATacVehicle::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
@@ -121,11 +129,17 @@ void ATacVehicle::ZoomCamera(float val)
 
 void ATacVehicle::Boost()
 {
-	auto Boost = GetMesh()->GetForwardVector() * BoostSpeed;
-	/*
-	auto CurrentVelocity = GetMesh()->GetPhysicsLinearVelocity();
-	GetMesh()->SetPhysicsLinearVelocity(CurrentVelocity + Boost);
-	*/
-	GetMesh()->AddImpulse(Boost,NAME_None,true);
-	//UE_LOG(LogTemp, Error, TEXT("%s"), *Boost.ToString());
+	if (bCanBoost)
+	{
+		auto Boost = GetMesh()->GetForwardVector() * BoostSpeed;
+		/*
+		auto CurrentVelocity = GetMesh()->GetPhysicsLinearVelocity();
+		GetMesh()->SetPhysicsLinearVelocity(CurrentVelocity + Boost);
+		*/
+		GetMesh()->AddImpulse(Boost, NAME_None, true);		
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Don't have an ejector!"));
+	}
 }
