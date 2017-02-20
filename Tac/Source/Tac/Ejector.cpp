@@ -15,6 +15,7 @@ AEjector::AEjector()
 	if (EjectorMesh.Object)
 	{
 		Ejector->SetStaticMesh(EjectorMesh.Object);
+		Ejector->BodyInstance.SetCollisionProfileName(TEXT("OverlapAllDynamic"));
 	}
 
 	static ConstructorHelpers::FObjectFinder<UCurveFloat> Curvy(TEXT("/Game/Gears/GearFloatCurve"));

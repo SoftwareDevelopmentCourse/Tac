@@ -9,6 +9,7 @@
 #include "Components/InputComponent.h"
 #include "WheeledVehicleMovementComponent4W.h"
 #include "Engine/SkeletalMesh.h"
+#include "Ejector.h"
 
 ATacVehicle::ATacVehicle()
 {
@@ -128,14 +129,21 @@ void ATacVehicle::OnHandbrakeReleased()
 
 void ATacVehicle::GetEjector()
 {
+	if (bHasEjector) { return; }
+	TArray<AActor*> EjectorInRange;
+	CollectCapsule->GetOverlappingActors(EjectorInRange, AEjector::StaticClass());
+	if (!EjectorInRange.IsValidIndex(0)) { return; }
+	AEjector* EjectorActor = Cast<AEjector>(EjectorInRange[0]);
+	EjectorActor->Destroy();
+	EjectorInRange.Empty();
 	UStaticMeshComponent* Ejector = NewObject<UStaticMeshComponent>(this);
 	Ejector->SetupAttachment(GetRootComponent(), TEXT("Ejector"));
+	Ejector->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	Ejector->RegisterComponent();
 	UStaticMesh* EjectorMesh = Cast<UStaticMesh>(StaticLoadObject(UStaticMesh::StaticClass(), NULL, TEXT("StaticMesh'/Game/Geometry/SM_Ejector.SM_Ejector'")));
 	if (!EjectorMesh) { return; }
 	Ejector->SetStaticMesh(EjectorMesh);
 	bHasEjector = true;
-	//UE_LOG(LogTemp, Warning, TEXT("%s"), *EjectorMesh->GetName());
 }
 
 void ATacVehicle::RotateCamera(float val)
