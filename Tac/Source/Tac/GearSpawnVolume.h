@@ -5,6 +5,33 @@
 #include "GameFramework/Actor.h"
 #include "GearSpawnVolume.generated.h"
 
+USTRUCT()
+struct FGearSpawn
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	TSubclassOf<AActor> WhatToSpawn;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	int32 SpawnAmount;
+
+	TSubclassOf<AActor> GetSpawnActor()
+	{
+		return WhatToSpawn;
+	}
+
+	int32 GetSpawnAmount()
+	{
+		return SpawnAmount;
+	}
+
+	FGearSpawn()
+	{
+		WhatToSpawn = NULL;
+		SpawnAmount = 1;
+	}
+};
+
 UCLASS()
 class TAC_API AGearSpawnVolume : public AActor
 {
@@ -20,7 +47,7 @@ protected:
 
 public:	
 	UPROPERTY(Category = Spawning, EditAnywhere, BlueprintReadOnly)
-	TArray<TSubclassOf<AActor>> WhatToSpawn;
+	TArray<FGearSpawn> SpawnStructs;
 	UPROPERTY(Category = Spawning, VisibleAnywhere, BlueprintReadOnly)
 	UBoxComponent* SpawnVolume;
 	

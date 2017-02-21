@@ -15,4 +15,8 @@ class TAC_API ATacGameModeBase : public AGameModeBase
 public:
 	ATacGameModeBase();
 
+	virtual void BeginPlay() override;
+
+private:
+	TArray<class AGearSpawnVolume*> SpawnVolumeActors;
 };

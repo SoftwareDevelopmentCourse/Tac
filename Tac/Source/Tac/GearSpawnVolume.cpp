@@ -18,16 +18,7 @@ AGearSpawnVolume::AGearSpawnVolume()
 void AGearSpawnVolume::BeginPlay()
 {
 	Super::BeginPlay();
-	if (!ensure(WhatToSpawn.IsValidIndex(0))) { return; }
-	for (auto Spawn : WhatToSpawn)
-	{
-		auto World = GetWorld();
-		if (!ensure(World)) { return; }
-		auto SpawnLocation = GetRandomPointInVolume();
-		auto SpawnRotation = FRotator(FMath::FRand() * 360.f, FMath::FRand() * 360.f, FMath::FRand() * 360.f);
-		World->SpawnActor<AActor>(Spawn, SpawnLocation, SpawnRotation);
-		UE_LOG(LogTemp, Log, TEXT("%s"), *Spawn->GetName());
-	}
+
 }
 
 FVector AGearSpawnVolume::GetRandomPointInVolume()
@@ -39,15 +30,16 @@ FVector AGearSpawnVolume::GetRandomPointInVolume()
 
 void AGearSpawnVolume::SpawnActors()
 {
-	if (!ensure(WhatToSpawn.IsValidIndex(0))) { return; }
-	for (auto Spawn : WhatToSpawn)
+	auto World = GetWorld();
+	if (!ensure(World)) { return; }
+	for (auto Spawn : SpawnStructs)
 	{
-		auto World = GetWorld();
-		if (!ensure(World)) { return; }
-		auto SpawnLocation = GetRandomPointInVolume();
-		auto SpawnRotation = FRotator(FMath::FRand() * 360.f, FMath::FRand() * 360.f, FMath::FRand() * 360.f);
-		World->SpawnActor<AActor>(Spawn, SpawnLocation, SpawnRotation);
-		UE_LOG(LogTemp, Log, TEXT("%s"), *Spawn->GetName());
+		for (int32 iSpawn = 0; iSpawn < Spawn.GetSpawnAmount(); iSpawn++)
+		{
+			auto SpawnLocation = GetRandomPointInVolume();
+			auto SpawnRotation = FRotator(FMath::FRand() * 360.f, FMath::FRand() * 360.f, FMath::FRand() * 360.f);
+			World->SpawnActor<AActor>(Spawn.GetSpawnActor(), SpawnLocation, SpawnRotation);
+		}
 	}
 }
 
