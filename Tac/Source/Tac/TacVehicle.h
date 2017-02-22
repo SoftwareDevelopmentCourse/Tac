@@ -14,6 +14,32 @@ class USpringArmComponent;
 class UInputComponent;
 class UCapsuleComponent;
 
+UENUM(BlueprintType)
+enum class EGearSocket : uint8
+{
+	ELeft,
+	ERight,
+	EBack
+};
+
+USTRUCT()
+struct FGear
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	TSubclassOf<AActor> Gear;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	EGearSocket Socket;
+
+	FGear()
+	{
+		Gear = NULL;
+		Socket = EGearSocket::EBack;
+	}
+
+};
+
 UCLASS()
 class TAC_API ATacVehicle : public AWheeledVehicle
 {
@@ -51,8 +77,6 @@ public:
 	/** Try to pick up ejector and take it */
 	void GetEjector();
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Setup")
-	float BoostSpeed;
 
 public:
 	FORCEINLINE USpringArmComponent* GetSpringArm() const { return SpringArm; }
@@ -60,4 +84,11 @@ public:
 
 private:
 	bool bHasEjector;	
+
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Setup")
+	float BoostSpeed;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gear")
+	TArray<FGear> Gears;
 };

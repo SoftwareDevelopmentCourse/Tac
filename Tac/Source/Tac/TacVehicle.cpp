@@ -66,7 +66,7 @@ ATacVehicle::ATacVehicle()
 	SpringArm->bEnableCameraLag = false;
 	SpringArm->bEnableCameraRotationLag = false;
 	SpringArm->bInheritPitch = false;
-	SpringArm->bInheritYaw = true;
+	SpringArm->bInheritYaw = false;
 	SpringArm->bInheritRoll = false;
 
 	// Create the chase camera component 
@@ -86,6 +86,7 @@ ATacVehicle::ATacVehicle()
 
 	BoostSpeed = 400.f;
 	bHasEjector = false;
+
 }
 
 void ATacVehicle::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
@@ -143,6 +144,11 @@ void ATacVehicle::GetEjector()
 	UStaticMesh* EjectorMesh = Cast<UStaticMesh>(StaticLoadObject(UStaticMesh::StaticClass(), NULL, TEXT("StaticMesh'/Game/Geometry/SM_Ejector.SM_Ejector'")));
 	if (!EjectorMesh) { return; }
 	Ejector->SetStaticMesh(EjectorMesh);
+	FGear EjectorGear;
+	EjectorGear.Gear = AEjector::StaticClass();
+	EjectorGear.Socket = EGearSocket::EBack;
+	Gears.Add(EjectorGear);
+	UE_LOG(LogTemp, Log, TEXT("%s"), *Gears[0].Gear->GetName());
 	bHasEjector = true;
 }
 

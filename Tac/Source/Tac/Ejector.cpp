@@ -2,7 +2,7 @@
 
 #include "Tac.h"
 #include "Ejector.h"
-
+#include "GearSpawnVolume.h"
 
 // Sets default values
 AEjector::AEjector()
@@ -31,22 +31,35 @@ AEjector::AEjector()
 	InterpFunction.BindUFunction(this, FName{ TEXT("EjectorFloat") });
 
 	FloatRange = 5.f;
+	bShouldFloat = false;
 }
 
 // Called when the game starts or when spawned
 void AEjector::BeginPlay()
 {
 	Super::BeginPlay();
-	
-	Timeline->AddInterpFloat(TimelineCurve, InterpFunction);
-	Timeline->PlayFromStart();
+
+	auto VolumeEjector = Cast<AGearSpawnVolume>(GetOwner());
+	if (VolumeEjector)
+	{
+		bShouldFloat = true;
+		Timeline->AddInterpFloat(TimelineCurve, InterpFunction);
+		Timeline->PlayFromStart();
+	}
+	else
+	{
+		bShouldFloat = false;
+	}
 }
 
 // Called every frame
 void AEjector::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	Ejector->AddRelativeRotation(FRotator(0.f, 5.f, 0.f));
+	if (bShouldFloat)
+	{
+		Ejector->AddRelativeRotation(FRotator(0.f, 5.f, 0.f));
+	}
 }
 
 void AEjector::EjectorFloat(float val)
@@ -55,7 +68,6 @@ void AEjector::EjectorFloat(float val)
 	auto NewLocationZ =CurrentLocation.Z  + val * FloatRange;
 	auto NewLoaction = FVector(CurrentLocation.X, CurrentLocation.Y, NewLocationZ);
 	Ejector->SetRelativeLocation(NewLoaction);
-	//UE_LOG(LogTemp, Log, TEXT("%s"), *NewLoaction.ToString());
 
 }
 

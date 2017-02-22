@@ -32,13 +32,16 @@ void AGearSpawnVolume::SpawnActors()
 {
 	auto World = GetWorld();
 	if (!ensure(World)) { return; }
+	FActorSpawnParameters SpawnParams;
+	SpawnParams.Owner = this;
+	SpawnParams.Instigator = Instigator;
 	for (auto Spawn : SpawnStructs)
 	{
 		for (int32 iSpawn = 0; iSpawn < Spawn.GetSpawnAmount(); iSpawn++)
 		{
 			auto SpawnLocation = GetRandomPointInVolume();
-			auto SpawnRotation = FRotator(FMath::FRand() * 360.f, FMath::FRand() * 360.f, FMath::FRand() * 360.f);
-			World->SpawnActor<AActor>(Spawn.GetSpawnActor(), SpawnLocation, SpawnRotation);
+			auto SpawnRotation = FRotator(0.f, FMath::FRand() * 360.f, 0.f);
+			World->SpawnActor<AActor>(Spawn.GetSpawnActor(), SpawnLocation, SpawnRotation, SpawnParams);
 		}
 	}
 }

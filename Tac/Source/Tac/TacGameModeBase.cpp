@@ -7,9 +7,12 @@
 
 ATacGameModeBase::ATacGameModeBase()
 {
-	static ConstructorHelpers::FClassFinder<APawn> TacBP(TEXT("/Game/Tac/MyTacVehicle"));
-	DefaultPawnClass = TacBP.Class;
-
+	static ConstructorHelpers::FClassFinder<APawn> TacPawnBP(TEXT("/Game/Tac/MyTacVehicle"));
+	if (!ensure(TacPawnBP.Succeeded())) { return; }
+	DefaultPawnClass = TacPawnBP.Class;
+	static ConstructorHelpers::FClassFinder<AController> TacController(TEXT("Class'/Script/Tac.TacController'"));
+	if (!ensure(TacController.Succeeded())) { return; }
+	PlayerControllerClass = TacController.Class;
 }
 
 void ATacGameModeBase::BeginPlay()
@@ -22,6 +25,5 @@ void ATacGameModeBase::BeginPlay()
 		AGearSpawnVolume* SpawnVolumeActor = Cast<AGearSpawnVolume>(Actor);
 		if (!ensure(SpawnVolumeActor)) { return; }
 		SpawnVolumeActor->SpawnActors();
-		UE_LOG(LogTemp, Log, TEXT("%s"), *Actor->GetName());
 	}
 }
