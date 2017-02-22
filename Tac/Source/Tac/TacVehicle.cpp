@@ -10,6 +10,7 @@
 #include "WheeledVehicleMovementComponent4W.h"
 #include "Engine/SkeletalMesh.h"
 #include "Ejector.h"
+#include "EjectorComponent.h"
 
 ATacVehicle::ATacVehicle()
 {
@@ -84,6 +85,7 @@ ATacVehicle::ATacVehicle()
 	CollectCapsule->SetCapsuleRadius(350.f);
 	CollectCapsule->SetRelativeRotation(FRotator(90.f, 0.f, 0.f));
 
+
 	BoostSpeed = 400.f;
 	bHasEjector = false;
 
@@ -137,17 +139,19 @@ void ATacVehicle::GetEjector()
 	AEjector* EjectorActor = Cast<AEjector>(EjectorInRange[0]);
 	EjectorActor->Destroy();
 	EjectorInRange.Empty();
-	UStaticMeshComponent* Ejector = NewObject<UStaticMeshComponent>(this);
+	FGear EjectorGear;
+	EjectorGear.Gear = UEjectorComponent::StaticClass();
+	EjectorGear.Socket = EGearSocket::EBack;
+	SpawnGear(EjectorGear);
+}
+
+void ATacVehicle::SpawnGear(FGear GearToSet)
+{
+	auto Ejector = NewObject<GearToSet.Gear>(this);
 	Ejector->SetupAttachment(GetRootComponent(), TEXT("Ejector"));
 	Ejector->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	Ejector->RegisterComponent();
-	UStaticMesh* EjectorMesh = Cast<UStaticMesh>(StaticLoadObject(UStaticMesh::StaticClass(), NULL, TEXT("StaticMesh'/Game/Geometry/SM_Ejector.SM_Ejector'")));
-	if (!EjectorMesh) { return; }
-	Ejector->SetStaticMesh(EjectorMesh);
-	FGear EjectorGear;
-	EjectorGear.Gear = AEjector::StaticClass();
-	EjectorGear.Socket = EGearSocket::EBack;
-	Gears.Add(EjectorGear);
+	Gears.Add(GearToSet);
 	UE_LOG(LogTemp, Log, TEXT("%s"), *Gears[0].Gear->GetName());
 	bHasEjector = true;
 }

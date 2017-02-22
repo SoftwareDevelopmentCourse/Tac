@@ -13,6 +13,7 @@ class UCameraComponent;
 class USpringArmComponent;
 class UInputComponent;
 class UCapsuleComponent;
+class UEjectorComponent;
 
 UENUM(BlueprintType)
 enum class EGearSocket : uint8
@@ -27,9 +28,9 @@ struct FGear
 {
 	GENERATED_BODY()
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	TSubclassOf<AActor> Gear;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UPROPERTY(VisibleAnywhere)
+	TSubclassOf<UStaticMeshComponent> Gear;
+	UPROPERTY(VisibleAnywhere)
 	EGearSocket Socket;
 
 	FGear()
@@ -89,6 +90,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Setup")
 	float BoostSpeed;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gear")
+	UPROPERTY(VisibleAnywhere, Category = "Gear")
 	TArray<FGear> Gears;
+
+	void SpawnGear(FGear GearToSet);
 };

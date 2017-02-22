@@ -35,8 +35,5 @@ public:
 
 	UPROPERTY(Category = Gear, EditAnywhere)
 	float FloatRange;
-
-private:
-	bool bShouldFloat;
 	
 };

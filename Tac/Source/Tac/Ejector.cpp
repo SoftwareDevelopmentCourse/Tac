@@ -31,7 +31,6 @@ AEjector::AEjector()
 	InterpFunction.BindUFunction(this, FName{ TEXT("EjectorFloat") });
 
 	FloatRange = 5.f;
-	bShouldFloat = false;
 }
 
 // Called when the game starts or when spawned
@@ -40,26 +39,16 @@ void AEjector::BeginPlay()
 	Super::BeginPlay();
 
 	auto VolumeEjector = Cast<AGearSpawnVolume>(GetOwner());
-	if (VolumeEjector)
-	{
-		bShouldFloat = true;
-		Timeline->AddInterpFloat(TimelineCurve, InterpFunction);
-		Timeline->PlayFromStart();
-	}
-	else
-	{
-		bShouldFloat = false;
-	}
+	Timeline->AddInterpFloat(TimelineCurve, InterpFunction);
+	Timeline->PlayFromStart();
 }
 
 // Called every frame
 void AEjector::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	if (bShouldFloat)
-	{
-		Ejector->AddRelativeRotation(FRotator(0.f, 5.f, 0.f));
-	}
+
+	Ejector->AddRelativeRotation(FRotator(0.f, 5.f, 0.f));
 }
 
 void AEjector::EjectorFloat(float val)
