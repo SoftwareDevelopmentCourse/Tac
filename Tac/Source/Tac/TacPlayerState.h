@@ -3,6 +3,7 @@
 #pragma once
 
 #include "GameFramework/PlayerState.h"
+#include "TacVehicle.h"
 #include "TacPlayerState.generated.h"
 
 /**
@@ -13,7 +14,9 @@ class TAC_API ATacPlayerState : public APlayerState
 {
 	GENERATED_BODY()
 	
-	
+public:
+	UPROPERTY(VisibleAnywhere, Category = "Gear")
+	TArray<FGear> Gears;
 	
 	
 };

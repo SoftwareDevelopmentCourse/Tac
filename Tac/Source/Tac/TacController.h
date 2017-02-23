@@ -3,6 +3,7 @@
 #pragma once
 
 #include "GameFramework/PlayerController.h"
+#include "TacVehicle.h"
 #include "TacController.generated.h"
 
 /**
@@ -23,5 +24,6 @@ public:
 	void LoadGame();
 	/** Player name */
 	FString MyPlayerName;
+
 	
 };

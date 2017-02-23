@@ -3,6 +3,7 @@
 #pragma once
 
 #include "GameFramework/SaveGame.h"
+#include "TacVehicle.h"
 #include "TacSaveGame.generated.h"
 
 /**
@@ -22,6 +23,9 @@ public:
 
 	UPROPERTY(VisibleAnywhere, Category = Save)
 	uint32 UserIndex;
+
+	UPROPERTY(VisibleAnywhere, Category = Save)
+	TArray<FGear> Gears;
 
 	UTacSaveGame();
 	

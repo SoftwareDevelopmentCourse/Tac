@@ -11,6 +11,7 @@
 #include "Engine/SkeletalMesh.h"
 #include "Ejector.h"
 #include "EjectorComponent.h"
+#include "TacPlayerState.h"
 
 ATacVehicle::ATacVehicle()
 {
@@ -86,6 +87,7 @@ ATacVehicle::ATacVehicle()
 	CollectCapsule->SetRelativeRotation(FRotator(90.f, 0.f, 0.f));
 
 
+
 	BoostSpeed = 400.f;
 	bHasEjector = false;
 
@@ -143,6 +145,7 @@ void ATacVehicle::GetEjector()
 	EjectorGear.Gear = UEjectorComponent::StaticClass();
 	EjectorGear.Socket = EGearSocket::EBack;
 	SpawnGear(EjectorGear);
+	AddToState(EjectorGear);
 }
 
 void ATacVehicle::SpawnGear(FGear GearToSet)
@@ -151,9 +154,13 @@ void ATacVehicle::SpawnGear(FGear GearToSet)
 	Ejector->SetupAttachment(GetRootComponent(), FName(*GearToSet.GetSocketName()));
 	Ejector->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	Ejector->RegisterComponent();
-	Gears.Add(GearToSet);
-	UE_LOG(LogTemp, Log, TEXT("%s"), *Gears[0].GetSocketName());
 	bHasEjector = true;
+}
+
+void ATacVehicle::AddToState(FGear GearToSet)
+{
+	ATacPlayerState* TacPS = Cast<ATacPlayerState>(PlayerState);
+	TacPS->Gears.Add(GearToSet);
 }
 
 void ATacVehicle::RotateCamera(float val)

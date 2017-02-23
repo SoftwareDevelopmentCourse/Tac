@@ -8,6 +8,6 @@ UI：菜单、状态、地图
 世界地图：Fix -> 平滑地形，倍增场地，使用 WorldEngine 生成大地形
 车辆模型：Fix -> 对称，UV，材质，骨骼动画
 	Add -> 挂载处，添加配件，添加Gear类
-车辆控制：Fix -> GearManagementComponent
+车辆控制：Fix -> GearManagementComponent，refactoring code，simplifing header
 	Add -> CapsuleSensorComponent
 NPC/AI：Fix -> Ejector float into the ground.

@@ -97,8 +97,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Setup")
 	float BoostSpeed;
 
-	UPROPERTY(VisibleAnywhere, Category = "Gear")
-	TArray<FGear> Gears;
-
 	void SpawnGear(FGear GearToSet);
+	void AddToState(FGear GearToSet);
 };
