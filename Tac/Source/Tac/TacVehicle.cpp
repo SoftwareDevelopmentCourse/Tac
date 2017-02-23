@@ -147,7 +147,7 @@ void ATacVehicle::GetEjector()
 
 void ATacVehicle::SpawnGear(FGear GearToSet)
 {
-	auto Ejector = NewObject<GearToSet.Gear>(this);
+	auto Ejector = NewObject<UStaticMeshComponent>(this, GearToSet.Gear);
 	Ejector->SetupAttachment(GetRootComponent(), TEXT("Ejector"));
 	Ejector->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	Ejector->RegisterComponent();
