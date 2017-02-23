@@ -33,6 +33,13 @@ struct FGear
 	UPROPERTY(VisibleAnywhere)
 	EGearSocket Socket;
 
+	FString GetSocketName()
+	{
+		const UEnum* EnumPtr = FindObject<UEnum>(ANY_PACKAGE, TEXT("EGearSocket"), true);
+		if (!EnumPtr) return FString("Invalid");
+		return EnumPtr->GetEnumName((int32)Socket);
+	}
+
 	FGear()
 	{
 		Gear = NULL;

@@ -148,11 +148,11 @@ void ATacVehicle::GetEjector()
 void ATacVehicle::SpawnGear(FGear GearToSet)
 {
 	auto Ejector = NewObject<UStaticMeshComponent>(this, GearToSet.Gear);
-	Ejector->SetupAttachment(GetRootComponent(), TEXT("Ejector"));
+	Ejector->SetupAttachment(GetRootComponent(), FName(*GearToSet.GetSocketName()));
 	Ejector->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	Ejector->RegisterComponent();
 	Gears.Add(GearToSet);
-	UE_LOG(LogTemp, Log, TEXT("%s"), *Gears[0].Gear->GetName());
+	UE_LOG(LogTemp, Log, TEXT("%s"), *Gears[0].GetSocketName());
 	bHasEjector = true;
 }
 
