@@ -5,11 +5,17 @@
 #include "TacSaveGame.h"
 #include "Kismet/GameplayStatics.h"
 #include "TacPlayerState.h"
-#include "TacVehicle.h"
 
 ATacController::ATacController()
 {
 	MyPlayerName = TEXT("PlayerOne");
+
+}
+
+void ATacController::BeginPlay()
+{
+	Super::BeginPlay();
+	LoadGame();
 }
 
 void ATacController::SetupInputComponent()
@@ -31,14 +37,7 @@ void ATacController::SaveGame()
 void ATacController::LoadGame()
 {
 	UTacSaveGame* LoadGameInstance = Cast<UTacSaveGame>(UGameplayStatics::CreateSaveGameObject(UTacSaveGame::StaticClass()));
+	ATacPlayerState* TacPS = Cast<ATacPlayerState>(PlayerState);
 	LoadGameInstance = Cast<UTacSaveGame>(UGameplayStatics::LoadGameFromSlot(LoadGameInstance->SaveSlotName, LoadGameInstance->UserIndex));
-	/*
-	FString PlayerNameToDisplay = LoadGameInstance->Gears[0].GetSocketName();
-	if (GEngine)
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, PlayerNameToDisplay);
-	}
-	*/
-	ATacVehicle* TacPawn = Cast<ATacVehicle>(GetPawn());
-	TacPawn->SpawnGear(LoadGameInstance->Gears[0]);
+	TacPS->Gears = LoadGameInstance->Gears;
 }

@@ -16,6 +16,7 @@ class TAC_API ATacController : public APlayerController
 	
 public:
 	ATacController();
+	virtual void BeginPlay() override;
 	virtual void SetupInputComponent() override;
 
 	/** Save the game */

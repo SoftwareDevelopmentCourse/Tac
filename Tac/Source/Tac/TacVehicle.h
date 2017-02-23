@@ -67,6 +67,7 @@ class TAC_API ATacVehicle : public AWheeledVehicle
 public:
 	ATacVehicle();
 	
+	virtual void BeginPlay() override;
 	virtual void SetupPlayerInputComponent(UInputComponent* InputComponent) override;
 	/** Handle pressing forwards */
 	void MoveForward(float val);
@@ -90,8 +91,6 @@ public:
 	FORCEINLINE USpringArmComponent* GetSpringArm() const { return SpringArm; }
 	FORCEINLINE UCameraComponent* GetCamera() const { return Camera; }
 
-private:
-	bool bHasEjector;	
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Setup")
@@ -99,4 +98,5 @@ public:
 
 	void SpawnGear(FGear GearToSet);
 	void AddToState(FGear GearToSet);
+	void InitialGear();
 };

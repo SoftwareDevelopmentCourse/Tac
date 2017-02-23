@@ -86,11 +86,14 @@ ATacVehicle::ATacVehicle()
 	CollectCapsule->SetCapsuleRadius(350.f);
 	CollectCapsule->SetRelativeRotation(FRotator(90.f, 0.f, 0.f));
 
-
-
 	BoostSpeed = 400.f;
-	bHasEjector = false;
 
+}
+
+void ATacVehicle::BeginPlay()
+{
+	Super::BeginPlay();
+	InitialGear();
 }
 
 void ATacVehicle::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
@@ -134,7 +137,11 @@ void ATacVehicle::OnHandbrakeReleased()
 
 void ATacVehicle::GetEjector()
 {
-	if (bHasEjector) { return; }
+	if (FindComponentByClass<UEjectorComponent>()) 
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Has EjectorComponent"));
+		return; 
+	}
 	TArray<AActor*> EjectorInRange;
 	CollectCapsule->GetOverlappingActors(EjectorInRange, AEjector::StaticClass());
 	if (!EjectorInRange.IsValidIndex(0)) { return; }
@@ -154,13 +161,21 @@ void ATacVehicle::SpawnGear(FGear GearToSet)
 	Ejector->SetupAttachment(GetRootComponent(), FName(*GearToSet.GetSocketName()));
 	Ejector->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	Ejector->RegisterComponent();
-	bHasEjector = true;
 }
 
 void ATacVehicle::AddToState(FGear GearToSet)
 {
 	ATacPlayerState* TacPS = Cast<ATacPlayerState>(PlayerState);
 	TacPS->Gears.Add(GearToSet);
+}
+
+void ATacVehicle::InitialGear()
+{
+	ATacPlayerState* TacPS = Cast<ATacPlayerState>(PlayerState);
+	for (auto Gear : TacPS->Gears)
+	{
+		SpawnGear(Gear);
+	}
 }
 
 void ATacVehicle::RotateCamera(float val)
@@ -175,13 +190,9 @@ void ATacVehicle::ZoomCamera(float val)
 
 void ATacVehicle::Boost()
 {
-	if (bHasEjector)
+	if (FindComponentByClass<UEjectorComponent>())
 	{
 		auto Boost = GetMesh()->GetForwardVector() * BoostSpeed;
-		/*
-		auto CurrentVelocity = GetMesh()->GetPhysicsLinearVelocity();
-		GetMesh()->SetPhysicsLinearVelocity(CurrentVelocity + Boost);
-		*/
 		GetMesh()->AddImpulse(Boost, NAME_None, true);		
 	}
 	else
