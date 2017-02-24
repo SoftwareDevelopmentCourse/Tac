@@ -23,6 +23,8 @@ public:
 	void SaveGame();
 	/** Load the game */
 	void LoadGame();
+	/** Clear game records */
+	void EmptyGame();
 	/** Player name */
 	FString MyPlayerName;
 

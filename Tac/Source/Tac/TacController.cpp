@@ -23,6 +23,7 @@ void ATacController::SetupInputComponent()
 	Super::SetupInputComponent();
 	InputComponent->BindAction("Save", IE_Pressed, this, &ATacController::SaveGame);
 	InputComponent->BindAction("Load", IE_Pressed, this, &ATacController::LoadGame);
+	InputComponent->BindAction("Empty", IE_Pressed, this, &ATacController::EmptyGame);
 }
 
 void ATacController::SaveGame()
@@ -40,4 +41,11 @@ void ATacController::LoadGame()
 	ATacPlayerState* TacPS = Cast<ATacPlayerState>(PlayerState);
 	LoadGameInstance = Cast<UTacSaveGame>(UGameplayStatics::LoadGameFromSlot(LoadGameInstance->SaveSlotName, LoadGameInstance->UserIndex));
 	TacPS->Gears = LoadGameInstance->Gears;
+}
+
+void ATacController::EmptyGame()
+{
+	ATacPlayerState* TacPS = Cast<ATacPlayerState>(PlayerState);
+	TacPS->Gears.Empty();
+	SaveGame();
 }
