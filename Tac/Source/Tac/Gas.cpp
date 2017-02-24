@@ -3,6 +3,7 @@
 #include "Tac.h"
 #include "Gas.h"
 #include "TacController.h"
+#include "TacPlayerState.h"
 
 // Sets default values
 AGas::AGas()
@@ -36,7 +37,12 @@ void AGas::BeginPlay()
 
 void AGas::OverlapperSave(UPrimitiveComponent * OverlappedComp, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
 {
-	ATacController* OverlapController = Cast<ATacController>(OtherActor->GetInstigatorController());
-	OverlapController->SaveGame();
-	UE_LOG(LogTemp, Warning, TEXT("Gas save"));	
+	if (Cast<USkeletalMeshComponent>(OtherComp))
+	{
+		ATacController* OverlapController = Cast<ATacController>(OtherActor->GetInstigatorController());
+		ATacPlayerState* TacPS = Cast<ATacPlayerState>(OverlapController->PlayerState);
+		TacPS->SetTacTransform(OverlapController->GetPawn()->GetActorTransform());
+		OverlapController->SaveGame();
+		UE_LOG(LogTemp, Warning, TEXT("Gas save"));
+	}
 }

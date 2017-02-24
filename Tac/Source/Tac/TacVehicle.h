@@ -75,6 +75,8 @@ public:
 	void MoveRight(float val);
 	/** Rotate Camera to adjust the view */
 	void RotateCamera(float val);
+	/** Lift Camera to adjust the view */
+	void LiftCamera(float val);
 	/** Zoom camera to adjust the view */
 	void ZoomCamera(float val);
 	/** Boost the vehicle */
@@ -97,6 +99,6 @@ public:
 	float BoostSpeed;
 
 	void SpawnGear(FGear GearToSet);
-	void AddToState(FGear GearToSet);
+	void AddToState(FGear GearToAdd);
 	void InitialGear();
 };

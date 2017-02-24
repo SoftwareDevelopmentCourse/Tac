@@ -9,5 +9,5 @@ UI：菜单、状态、地图
 车辆模型：Fix -> 对称，UV，材质，骨骼动画
 	Add -> 挂载处，添加配件，添加Gear类
 车辆控制：Fix -> GearManagementComponent，refactoring code，simplifing header，Crazy Spin
-	Add -> CapsuleSensorComponent
+	Add -> CapsuleSensorComponent，Health，Armor，Energy
 NPC/AI：Fix -> Ejector float into the ground，Gas save twice.

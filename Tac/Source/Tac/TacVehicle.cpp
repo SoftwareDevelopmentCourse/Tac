@@ -88,6 +88,7 @@ ATacVehicle::ATacVehicle()
 
 	BoostSpeed = 400.f;
 
+
 }
 
 void ATacVehicle::BeginPlay()
@@ -106,6 +107,7 @@ void ATacVehicle::SetupPlayerInputComponent(class UInputComponent* PlayerInputCo
 	PlayerInputComponent->BindAxis("MoveForward", this, &ATacVehicle::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &ATacVehicle::MoveRight);
 	PlayerInputComponent->BindAxis("LookRight", this, &ATacVehicle::RotateCamera);
+	PlayerInputComponent->BindAxis("LookUp", this, &ATacVehicle::LiftCamera);
 	PlayerInputComponent->BindAxis("Zoom", this, &ATacVehicle::ZoomCamera);
 
 	PlayerInputComponent->BindAction("Boost", IE_Pressed, this, &ATacVehicle::Boost);
@@ -163,24 +165,31 @@ void ATacVehicle::SpawnGear(FGear GearToSet)
 	Ejector->RegisterComponent();
 }
 
-void ATacVehicle::AddToState(FGear GearToSet)
+void ATacVehicle::AddToState(FGear GearToAdd)
 {
 	ATacPlayerState* TacPS = Cast<ATacPlayerState>(PlayerState);
-	TacPS->Gears.Add(GearToSet);
+	TacPS->AddGear(GearToAdd);
 }
 
 void ATacVehicle::InitialGear()
 {
 	ATacPlayerState* TacPS = Cast<ATacPlayerState>(PlayerState);
-	for (auto Gear : TacPS->Gears)
+	for (auto Gear : TacPS->GetGears())
 	{
 		SpawnGear(Gear);
 	}
+	SetActorTransform(TacPS->GetTacTransform(), false, nullptr, ETeleportType::TeleportPhysics);
+	UE_LOG(LogTemp, Log, TEXT("%s"), *TacPS->GetTacTransform().ToString());
 }
 
 void ATacVehicle::RotateCamera(float val)
 {
 	SpringArm->AddRelativeRotation(FRotator(0.f, val, 0.f));
+}
+
+void ATacVehicle::LiftCamera(float val)
+{
+	SpringArm->AddRelativeRotation(FRotator(val, 0.f, 0.f));
 }
 
 void ATacVehicle::ZoomCamera(float val)

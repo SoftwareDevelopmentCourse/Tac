@@ -31,7 +31,8 @@ void ATacController::SaveGame()
 	UTacSaveGame* SaveGameInstance = Cast<UTacSaveGame>(UGameplayStatics::CreateSaveGameObject(UTacSaveGame::StaticClass()));
 	ATacPlayerState* TacPS = Cast<ATacPlayerState>(PlayerState);
 	SaveGameInstance->PlayerName = MyPlayerName;
-	SaveGameInstance->Gears = TacPS->Gears;
+	SaveGameInstance->Gears = TacPS->GetGears();
+	SaveGameInstance->TacTransform = TacPS->GetTacTransform();
 	UGameplayStatics::SaveGameToSlot(SaveGameInstance, SaveGameInstance->SaveSlotName, SaveGameInstance->UserIndex);
 }
 
@@ -40,12 +41,13 @@ void ATacController::LoadGame()
 	UTacSaveGame* LoadGameInstance = Cast<UTacSaveGame>(UGameplayStatics::CreateSaveGameObject(UTacSaveGame::StaticClass()));
 	ATacPlayerState* TacPS = Cast<ATacPlayerState>(PlayerState);
 	LoadGameInstance = Cast<UTacSaveGame>(UGameplayStatics::LoadGameFromSlot(LoadGameInstance->SaveSlotName, LoadGameInstance->UserIndex));
-	TacPS->Gears = LoadGameInstance->Gears;
+	TacPS->SetGears(LoadGameInstance->Gears);
+	TacPS->SetTacTransform(LoadGameInstance->TacTransform);
 }
 
 void ATacController::EmptyGame()
 {
 	ATacPlayerState* TacPS = Cast<ATacPlayerState>(PlayerState);
-	TacPS->Gears.Empty();
+	TacPS->EmptyGears();
 	SaveGame();
 }

@@ -27,6 +27,9 @@ public:
 	UPROPERTY(VisibleAnywhere, Category = Save)
 	TArray<FGear> Gears;
 
+	UPROPERTY(VisibleAnywhere, Category = Save)
+	FTransform TacTransform;
+
 	UTacSaveGame();
 	
 };
