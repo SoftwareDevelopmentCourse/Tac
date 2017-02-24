@@ -63,6 +63,7 @@ class TAC_API ATacVehicle : public AWheeledVehicle
 
 	UPROPERTY(Category = Vehicle, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	UCapsuleComponent* CollectCapsule;
+
 	
 public:
 	ATacVehicle();

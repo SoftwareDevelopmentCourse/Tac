@@ -59,6 +59,7 @@ ATacVehicle::ATacVehicle()
 		Vehicle4W->DifferentialSetup.DifferentialType = EVehicleDifferential4W::LimitedSlip_4W;
 	}
 
+	
 	// Create a spring arm component for our chase camera
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
 	SpringArm->SetRelativeLocation(FVector(80.0f, 0.0f, 108.0f));
@@ -67,8 +68,8 @@ ATacVehicle::ATacVehicle()
 	SpringArm->TargetArmLength = 250.0f;
 	SpringArm->bEnableCameraLag = false;
 	SpringArm->bEnableCameraRotationLag = false;
-	SpringArm->bInheritPitch = false;
-	SpringArm->bInheritYaw = false;
+	SpringArm->bInheritPitch = true;
+	SpringArm->bInheritYaw = true;
 	SpringArm->bInheritRoll = false;
 
 	// Create the chase camera component 
@@ -189,6 +190,10 @@ void ATacVehicle::RotateCamera(float val)
 
 void ATacVehicle::LiftCamera(float val)
 {
+	auto LiftAngle = SpringArm->RelativeRotation.Pitch;
+	UE_LOG(LogTemp, Log, TEXT("%f"), LiftAngle);
+	if (LiftAngle < -80.f && val < 0.f) { return; }
+	if (LiftAngle > 5.f && val > 0.f) { return; }
 	SpringArm->AddRelativeRotation(FRotator(val, 0.f, 0.f));
 }
 
