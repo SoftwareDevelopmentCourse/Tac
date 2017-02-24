@@ -12,6 +12,7 @@
 #include "Ejector.h"
 #include "EjectorComponent.h"
 #include "TacPlayerState.h"
+#include "TacAIController.h"
 
 ATacVehicle::ATacVehicle()
 {
@@ -28,6 +29,12 @@ ATacVehicle::ATacVehicle()
 	{
 		GetMesh()->SetAnimationMode(EAnimationMode::AnimationBlueprint);
 		GetMesh()->SetAnimInstanceClass(TacAnim.Class);
+	}
+
+	static ConstructorHelpers::FClassFinder<ATacAIController> TacAI(TEXT("Class'/Script/Tac.TacAIController'"));
+	if (TacAI.Class)
+	{
+		AIControllerClass = TacAI.Class;
 	}
 
 	UWheeledVehicleMovementComponent4W* Vehicle4W = CastChecked<UWheeledVehicleMovementComponent4W>(GetVehicleMovement());
@@ -191,7 +198,6 @@ void ATacVehicle::RotateCamera(float val)
 void ATacVehicle::LiftCamera(float val)
 {
 	auto LiftAngle = SpringArm->RelativeRotation.Pitch;
-	UE_LOG(LogTemp, Log, TEXT("%f"), LiftAngle);
 	if (LiftAngle < -80.f && val < 0.f) { return; }
 	if (LiftAngle > 5.f && val > 0.f) { return; }
 	SpringArm->AddRelativeRotation(FRotator(val, 0.f, 0.f));
