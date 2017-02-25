@@ -66,7 +66,7 @@ class TAC_API ATacVehicle : public AWheeledVehicle
 
 	
 public:
-	ATacVehicle();
+	ATacVehicle(const FObjectInitializer& ObjectInitializer);
 	
 	virtual void BeginPlay() override;
 	virtual void SetupPlayerInputComponent(UInputComponent* InputComponent) override;

@@ -8,13 +8,13 @@
 #include "Camera/CameraComponent.h"
 #include "Components/InputComponent.h"
 #include "WheeledVehicleMovementComponent4W.h"
+#include "../Public/TacMovementComponent4W.h"
 #include "Engine/SkeletalMesh.h"
 #include "Ejector.h"
 #include "EjectorComponent.h"
 #include "TacPlayerState.h"
-#include "TacAIController.h"
 
-ATacVehicle::ATacVehicle()
+ATacVehicle::ATacVehicle(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer.SetDefaultSubobjectClass<UTacMovementComponent4W>(VehicleMovementComponentName))
 {
 	PrimaryActorTick.bCanEverTick = false;
 
@@ -31,11 +31,7 @@ ATacVehicle::ATacVehicle()
 		GetMesh()->SetAnimInstanceClass(TacAnim.Class);
 	}
 
-	static ConstructorHelpers::FClassFinder<ATacAIController> TacAI(TEXT("Class'/Script/Tac.TacAIController'"));
-	if (TacAI.Class)
-	{
-		AIControllerClass = TacAI.Class;
-	}
+
 
 	UWheeledVehicleMovementComponent4W* Vehicle4W = CastChecked<UWheeledVehicleMovementComponent4W>(GetVehicleMovement());
 
@@ -102,7 +98,7 @@ ATacVehicle::ATacVehicle()
 void ATacVehicle::BeginPlay()
 {
 	Super::BeginPlay();
-	InitialGear();
+	//InitialGear();
 }
 
 void ATacVehicle::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
@@ -187,7 +183,6 @@ void ATacVehicle::InitialGear()
 		SpawnGear(Gear);
 	}
 	SetActorTransform(TacPS->GetTacTransform(), false, nullptr, ETeleportType::TeleportPhysics);
-	UE_LOG(LogTemp, Log, TEXT("%s"), *TacPS->GetTacTransform().ToString());
 }
 
 void ATacVehicle::RotateCamera(float val)

@@ -41,8 +41,16 @@ void ATacController::LoadGame()
 	UTacSaveGame* LoadGameInstance = Cast<UTacSaveGame>(UGameplayStatics::CreateSaveGameObject(UTacSaveGame::StaticClass()));
 	ATacPlayerState* TacPS = Cast<ATacPlayerState>(PlayerState);
 	LoadGameInstance = Cast<UTacSaveGame>(UGameplayStatics::LoadGameFromSlot(LoadGameInstance->SaveSlotName, LoadGameInstance->UserIndex));
-	TacPS->SetGears(LoadGameInstance->Gears);
-	TacPS->SetTacTransform(LoadGameInstance->TacTransform);
+	if (LoadGameInstance)
+	{
+		TacPS->SetGears(LoadGameInstance->Gears);
+		TacPS->SetTacTransform(LoadGameInstance->TacTransform);
+	}
+	else
+	{
+		TacPS->EmptyGears();
+		TacPS->SetTacTransform(FTransform(FTransform(FRotator(0.f, -90.f, 0.f), FVector(141.f, 0.f, 192.f), FVector(1.f))));
+	}
 }
 
 void ATacController::EmptyGame()

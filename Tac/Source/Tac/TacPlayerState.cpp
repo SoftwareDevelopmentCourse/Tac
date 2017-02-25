@@ -4,11 +4,6 @@
 #include "TacPlayerState.h"
 #include "Kismet/GameplayStatics.h"
 
-ATacPlayerState::ATacPlayerState()
-{
-
-}
-
 TArray<FGear> ATacPlayerState::GetGears()
 {
 	return Gears;
