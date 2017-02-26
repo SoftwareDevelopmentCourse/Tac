@@ -5,17 +5,29 @@
 #include "TacSaveGame.h"
 #include "Kismet/GameplayStatics.h"
 #include "TacPlayerState.h"
+#include "Blueprint/UserWidget.h"
 
 ATacController::ATacController()
 {
 	MyPlayerName = TEXT("PlayerOne");
 
+	static ConstructorHelpers::FClassFinder<UUserWidget> Widget(TEXT("/Game/UMG/UMG_PlayerView"));
+	if (Widget.Succeeded())
+	{
+		PlayerView = Widget.Class;
+	}
 }
 
 void ATacController::BeginPlay()
 {
 	Super::BeginPlay();
 	LoadGame();
+
+	TacView = CreateWidget<UUserWidget>(this, PlayerView);
+	if (TacView)
+	{
+		TacView->AddToViewport();
+	}
 }
 
 void ATacController::SetupInputComponent()

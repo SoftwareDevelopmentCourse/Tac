@@ -11,3 +11,4 @@ UI：菜单、状态、地图
 车辆控制：Fix -> GearManagementComponent，refactoring code，simplifing header，Crazy Spin
 	Add -> CapsuleSensorComponent，Health，Armor，Energy
 NPC/AI：Fix -> Ejector float into the ground，Gas save twice.
+	Add -> AI could patrol, using behavior tree. Enemy base model. Enemy randomly spawned in range.

@@ -19,6 +19,10 @@ public:
 	virtual void BeginPlay() override;
 	virtual void SetupInputComponent() override;
 
+
+	// Variable to hold the widget After Creating it.
+	class UUserWidget* TacView;
+
 	/** Save the game */
 	void SaveGame();
 	/** Load the game */
@@ -28,5 +32,7 @@ public:
 	/** Player name */
 	FString MyPlayerName;
 
+private:
+	TSubclassOf<class UUserWidget> PlayerView;
 	
 };
