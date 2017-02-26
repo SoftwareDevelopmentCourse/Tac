@@ -9,7 +9,6 @@
 
 ATacController::ATacController()
 {
-	MyPlayerName = TEXT("PlayerOne");
 
 	static ConstructorHelpers::FClassFinder<UUserWidget> Widget(TEXT("/Game/UMG/UMG_PlayerView"));
 	if (Widget.Succeeded())
@@ -42,7 +41,7 @@ void ATacController::SaveGame()
 {
 	UTacSaveGame* SaveGameInstance = Cast<UTacSaveGame>(UGameplayStatics::CreateSaveGameObject(UTacSaveGame::StaticClass()));
 	ATacPlayerState* TacPS = Cast<ATacPlayerState>(PlayerState);
-	SaveGameInstance->PlayerName = MyPlayerName;
+	SaveGameInstance->PlayerName = TacPS->GetPlayerName();
 	SaveGameInstance->Gears = TacPS->GetGears();
 	SaveGameInstance->TacTransform = TacPS->GetTacTransform();
 	UGameplayStatics::SaveGameToSlot(SaveGameInstance, SaveGameInstance->SaveSlotName, SaveGameInstance->UserIndex);
@@ -55,11 +54,13 @@ void ATacController::LoadGame()
 	LoadGameInstance = Cast<UTacSaveGame>(UGameplayStatics::LoadGameFromSlot(LoadGameInstance->SaveSlotName, LoadGameInstance->UserIndex));
 	if (LoadGameInstance)
 	{
+		TacPS->SetPlayerName(LoadGameInstance->PlayerName);
 		TacPS->SetGears(LoadGameInstance->Gears);
 		TacPS->SetTacTransform(LoadGameInstance->TacTransform);
 	}
 	else
 	{
+		TacPS->SetPlayerName(FString(TEXT("NULL")));
 		TacPS->EmptyGears();
 		TacPS->SetTacTransform(FTransform(FTransform(FRotator(0.f, -90.f, 0.f), FVector(141.f, 0.f, 192.f), FVector(1.f))));
 	}

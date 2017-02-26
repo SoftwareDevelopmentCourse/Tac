@@ -28,9 +28,9 @@ struct FGear
 {
 	GENERATED_BODY()
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Gear)
 	TSubclassOf<UStaticMeshComponent> Gear;
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Gear)
 	EGearSocket Socket;
 
 	FString GetSocketName()

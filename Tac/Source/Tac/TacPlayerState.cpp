@@ -9,6 +9,21 @@ TArray<FGear> ATacPlayerState::GetGears()
 	return Gears;
 }
 
+FGear ATacPlayerState::GetGear(int32 GearIndex)
+{
+	if (Gears.IsValidIndex(GearIndex))
+	{
+		return Gears[GearIndex];
+	}
+	else
+	{
+		FGear Default;
+		Default.Gear = UStaticMeshComponent::StaticClass();
+		Default.Socket = EGearSocket::ELeft;
+		return Default;
+	}
+}
+
 void ATacPlayerState::SetGears(TArray<FGear> GearsToSet)
 {
 	Gears = GearsToSet;
@@ -32,4 +47,14 @@ FTransform ATacPlayerState::GetTacTransform()
 void ATacPlayerState::SetTacTransform(FTransform TransformToSet)
 {
 	TacTransform = TransformToSet;
+}
+
+FString ATacPlayerState::GetPlayerName()
+{
+	return MyPlayerName;
+}
+
+void ATacPlayerState::SetName(FString NameToSet)
+{
+	MyPlayerName = NameToSet;
 }

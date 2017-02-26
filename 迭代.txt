@@ -12,3 +12,4 @@ UI£º²Ëµ¥¡¢×´Ì¬¡¢µØÍ¼
 	Add -> CapsuleSensorComponent£¬Health£¬Armor£¬Energy
 NPC/AI£ºFix -> Ejector float into the ground£¬Gas save twice.
 	Add -> AI could patrol, using behavior tree. Enemy base model. Enemy randomly spawned in range.
+UI£ºAdd -> Gears invertory£¬put on & off whenever players want, health, armor & energy£¬menu UMG

@@ -29,8 +29,6 @@ public:
 	void LoadGame();
 	/** Clear game records */
 	void EmptyGame();
-	/** Player name */
-	FString MyPlayerName;
 
 private:
 	TSubclassOf<class UUserWidget> PlayerView;
