@@ -10,6 +10,6 @@ UI：菜单、状态、地图
 	Add -> 挂载处，添加配件，添加Gear类
 车辆控制：Fix -> GearManagementComponent，refactoring code，simplifing header，Crazy Spin
 	Add -> CapsuleSensorComponent，Health，Armor，Energy
-NPC/AI：Fix -> Ejector float into the ground，Gas save twice.
+NPC/AI：Fix -> Ejector float into the ground，Gas save twice，AI chase target only using head，when saving game AI should be saved.
 	Add -> AI could patrol, using behavior tree. Enemy base model. Enemy randomly spawned in range.
 UI：Add -> Gears invertory，put on & off whenever players want, health, armor & energy，menu UMG

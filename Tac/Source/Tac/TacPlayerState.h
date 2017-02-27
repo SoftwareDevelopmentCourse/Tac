@@ -20,6 +20,8 @@ public:
 	TArray<FGear> GetGears();
 	UFUNCTION(BlueprintPure, Category = State)
 	FGear GetGear(int32 GearIndex);
+	UFUNCTION(BlueprintPure, Category = State)
+	FString GetSocketName(int32 SocketIndex);
 	UFUNCTION(BlueprintCallable, Category = State)
 	void SetGears(TArray<FGear> GearsToSet);
 	UFUNCTION(BlueprintCallable, Category = State)

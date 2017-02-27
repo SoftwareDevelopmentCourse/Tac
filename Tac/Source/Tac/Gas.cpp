@@ -41,7 +41,6 @@ void AGas::OverlapperSave(UPrimitiveComponent * OverlappedComp, AActor * OtherAc
 	{
 		ATacController* OverlapController = Cast<ATacController>(OtherActor->GetInstigatorController());
 		ATacPlayerState* TacPS = Cast<ATacPlayerState>(OverlapController->PlayerState);
-		TacPS->SetTacTransform(OverlapController->GetPawn()->GetActorTransform());
 		OverlapController->SaveGame();
 		UE_LOG(LogTemp, Warning, TEXT("Gas save"));
 	}

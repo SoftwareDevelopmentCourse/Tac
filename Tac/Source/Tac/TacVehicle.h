@@ -18,6 +18,7 @@ class UEjectorComponent;
 UENUM(BlueprintType)
 enum class EGearSocket : uint8
 {
+	ENull,
 	ELeft,
 	ERight,
 	EBack
@@ -32,7 +33,6 @@ struct FGear
 	TSubclassOf<UStaticMeshComponent> Gear;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Gear)
 	EGearSocket Socket;
-
 	FString GetSocketName()
 	{
 		const UEnum* EnumPtr = FindObject<UEnum>(ANY_PACKAGE, TEXT("EGearSocket"), true);
@@ -101,5 +101,5 @@ public:
 
 	void SpawnGear(FGear GearToSet);
 	void AddToState(FGear GearToAdd);
-	void InitialGear();
+	void UpdateState();
 };

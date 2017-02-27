@@ -6,6 +6,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "TacPlayerState.h"
 #include "Blueprint/UserWidget.h"
+#include "TacVehicle.h"
 
 ATacController::ATacController()
 {
@@ -41,6 +42,7 @@ void ATacController::SaveGame()
 {
 	UTacSaveGame* SaveGameInstance = Cast<UTacSaveGame>(UGameplayStatics::CreateSaveGameObject(UTacSaveGame::StaticClass()));
 	ATacPlayerState* TacPS = Cast<ATacPlayerState>(PlayerState);
+	TacPS->SetTacTransform(GetPawn()->GetActorTransform());
 	SaveGameInstance->PlayerName = TacPS->GetPlayerName();
 	SaveGameInstance->Gears = TacPS->GetGears();
 	SaveGameInstance->TacTransform = TacPS->GetTacTransform();
@@ -64,11 +66,14 @@ void ATacController::LoadGame()
 		TacPS->EmptyGears();
 		TacPS->SetTacTransform(FTransform(FTransform(FRotator(0.f, -90.f, 0.f), FVector(141.f, 0.f, 192.f), FVector(1.f))));
 	}
+	ATacVehicle* Tac = Cast<ATacVehicle>(GetPawn());
+	Tac->UpdateState();
 }
 
 void ATacController::EmptyGame()
 {
 	ATacPlayerState* TacPS = Cast<ATacPlayerState>(PlayerState);
 	TacPS->EmptyGears();
+	TacPS->SetTacTransform(FTransform(FTransform(FRotator(0.f, -90.f, 0.f), FVector(141.f, 0.f, 192.f), FVector(1.f))));
 	SaveGame();
 }

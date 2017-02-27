@@ -19,9 +19,16 @@ FGear ATacPlayerState::GetGear(int32 GearIndex)
 	{
 		FGear Default;
 		Default.Gear = UStaticMeshComponent::StaticClass();
-		Default.Socket = EGearSocket::ELeft;
+		Default.Socket = EGearSocket::ENull;
 		return Default;
 	}
+}
+
+FString ATacPlayerState::GetSocketName(int32 SocketIndex)
+{
+	const UEnum* EnumPtr = FindObject<UEnum>(ANY_PACKAGE, TEXT("EGearSocket"), true);
+	if (!EnumPtr) return FString("Invalid");
+	return EnumPtr->GetEnumName(SocketIndex);
 }
 
 void ATacPlayerState::SetGears(TArray<FGear> GearsToSet)

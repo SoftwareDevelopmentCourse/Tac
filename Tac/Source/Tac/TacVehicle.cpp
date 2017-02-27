@@ -98,7 +98,6 @@ ATacVehicle::ATacVehicle(const FObjectInitializer& ObjectInitializer) : Super(Ob
 void ATacVehicle::BeginPlay()
 {
 	Super::BeginPlay();
-	//InitialGear();
 }
 
 void ATacVehicle::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
@@ -123,7 +122,6 @@ void ATacVehicle::SetupPlayerInputComponent(class UInputComponent* PlayerInputCo
 void ATacVehicle::MoveForward(float Val)
 {
 	GetVehicleMovementComponent()->SetThrottleInput(Val);
-
 }
 
 void ATacVehicle::MoveRight(float Val)
@@ -175,7 +173,7 @@ void ATacVehicle::AddToState(FGear GearToAdd)
 	TacPS->AddGear(GearToAdd);
 }
 
-void ATacVehicle::InitialGear()
+void ATacVehicle::UpdateState()
 {
 	ATacPlayerState* TacPS = Cast<ATacPlayerState>(PlayerState);
 	for (auto Gear : TacPS->GetGears())
