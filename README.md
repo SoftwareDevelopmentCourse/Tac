@@ -20,7 +20,7 @@ A machanical vehicle battle game:grinning:.
 - Adding -> Gear slots. 
 - Adding -> Modeling more gears. 
 - Adding -> Gear class.
-- Problems ->
+- Problems -> Emptying gears should delete gears immediately.
 - Solutions ->
 - [ ] **Controller:** 
 - Adding -> GearManagementComponent to manage gears.
@@ -28,7 +28,7 @@ A machanical vehicle battle game:grinning:.
 - Adding -> Trinity( Health, armor and energy) factors. 
 - Fixing -> Refactoring code, simplifing header files.
 - Fixing -> The crazy spin.
-- Problems ->
+- Problems -> Boosting should last a period of time.
 - Solutions ->
 - [ ] **NPC/AI:** 
 - Fixing -> Ejector floats into the ground.

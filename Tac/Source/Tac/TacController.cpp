@@ -72,8 +72,23 @@ void ATacController::LoadGame()
 
 void ATacController::EmptyGame()
 {
+	UTacSaveGame* SaveGameInstance = Cast<UTacSaveGame>(UGameplayStatics::CreateSaveGameObject(UTacSaveGame::StaticClass()));
 	ATacPlayerState* TacPS = Cast<ATacPlayerState>(PlayerState);
+	TArray<AActor*> FoundActors;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), APlayerStart::StaticClass(), FoundActors);
 	TacPS->EmptyGears();
-	TacPS->SetTacTransform(FTransform(FTransform(FRotator(0.f, -90.f, 0.f), FVector(141.f, 0.f, 192.f), FVector(1.f))));
-	SaveGame();
+	for (auto Actor : FoundActors)
+	{
+		APlayerStart* SpawnStart = Cast<APlayerStart>(Actor);
+		if (!ensure(SpawnStart)) 
+		{
+			TacPS->SetTacTransform(FTransform());
+			return; 
+		}
+		TacPS->SetTacTransform(SpawnStart->GetActorTransform());
+	}
+	SaveGameInstance->PlayerName = TacPS->GetPlayerName();
+	SaveGameInstance->Gears = TacPS->GetGears();
+	SaveGameInstance->TacTransform = TacPS->GetTacTransform();
+	UGameplayStatics::SaveGameToSlot(SaveGameInstance, SaveGameInstance->SaveSlotName, SaveGameInstance->UserIndex);
 }
