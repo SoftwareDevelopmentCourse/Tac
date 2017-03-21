@@ -1,0 +1,9 @@
+Gears
+SpawnVolume spawns gears who's level depends on time, players need to pay for the installation.
+Players could buy gears at base but the gears' level are lower than those spawned by SV.
+Players get paid by killing enemies.
+
+GameMode
+Players destroy other team's base for winning.
+There are 3 respawn places at map for players to take up so as to spawn there.
+Respawn place could be re-taken up.
