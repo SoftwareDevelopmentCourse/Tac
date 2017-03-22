@@ -9,17 +9,19 @@ Players destroy other team's base for winning.
 
 Bridge
 There are 2 bridges which connect 2 continents at the top and bottom of map.
+Constructing bridge cost a little money.
 Bridge could be deployed once a game each side.
 Bridge could be destroyed by a bomb.
 
 Bomb
-Bomb spawns at the weak team whose whole respawn places be taken up by other team.
+Bomb spawns at the weak team whose whole respawn places be taken up by other team per 30 seconds.
 Bomb spawns once per half minute.
 Only 2 bomb could exist in the world meanwhile.
 Bomb is used to destroy bridge and base.
 Bomb spawns at weak team's base, player could pick up it or discard it. Other team's player connot pick it up.
 Bomb explodes after being planted 10 seconds.
 Bomb could be diffused in 5 seconds.
+Enemy could take down bomb carrier but not allow picking up bomb.
 
 River
 River kills everyone who trys to dive into it.
