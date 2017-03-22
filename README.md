@@ -12,7 +12,7 @@ A machanical vehicle battle game:grinning:.
 #### Iteration Two
 - [ ] **Terrain:** 
 - Adding -> Making an organic terrain with WorldEngine.
-- Fixing -> Smoothing the terrain, amplifying the terrain.
+- Fixing -> Smoothing the terrain, using a small arena terrain.
 - Problems ->
 - Solutions ->
 - [ ] **Vehicle:** 
