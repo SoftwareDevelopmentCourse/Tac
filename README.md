@@ -13,7 +13,7 @@ A machanical vehicle battle game:grinning:.
 - [x] **Terrain:** 
 - Adding -> Making an organic terrain with [WorldMachine](http://www.world-machine.com/).
 - Fixing -> Smoothing the terrain, using a small arena terrain.
-- Problems -> [Recommended Landscape Sizes](https://docs.unrealengine.com/latest/INT/Engine/Landscape/TechnicalGuide/#recommendedlandscapesizes)and World Machine Tutorials
+- Problems -> [Recommended Landscape Sizes](https://docs.unrealengine.com/latest/INT/Engine/Landscape/TechnicalGuide/#recommendedlandscapesizes) and World Machine Tutorials
 - Solutions -> 
 - [ ] **Vehicle:** 
 - Fixing -> Making model symmetic, unwraping UV, applying materials, ameliorating skeletal animation. 

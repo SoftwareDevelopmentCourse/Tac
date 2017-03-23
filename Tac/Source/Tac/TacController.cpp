@@ -83,9 +83,11 @@ void ATacController::EmptyGame()
 		if (!ensure(SpawnStart)) 
 		{
 			TacPS->SetTacTransform(FTransform());
-			return; 
+			break; 
 		}
 		TacPS->SetTacTransform(SpawnStart->GetActorTransform());
+		UE_LOG(LogTemp, Error, TEXT("%s"), *SpawnStart->GetName());
+		break;
 	}
 	SaveGameInstance->PlayerName = TacPS->GetPlayerName();
 	SaveGameInstance->Gears = TacPS->GetGears();
