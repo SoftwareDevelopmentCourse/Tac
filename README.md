@@ -1,4 +1,4 @@
-# Tac
+# [Tac](https://github.com/Trevor802/Tac/blob/master/GameDesignDocument.md)
 A machanical vehicle battle game:grinning:.
 
 ### Log
@@ -10,11 +10,11 @@ A machanical vehicle battle game:grinning:.
 - [x] **UI:** Making the HUD. - *Health, armor, energy, local map*
 
 #### Iteration Two
-- [ ] **Terrain:** 
-- Adding -> Making an organic terrain with WorldEngine.
+- [x] **Terrain:** 
+- Adding -> Making an organic terrain with [WorldMachine](http://www.world-machine.com/).
 - Fixing -> Smoothing the terrain, using a small arena terrain.
-- Problems ->
-- Solutions ->
+- Problems -> [Recommended Landscape Sizes](https://docs.unrealengine.com/latest/INT/Engine/Landscape/TechnicalGuide/#recommendedlandscapesizes)and World Machine Tutorials
+- Solutions -> 
 - [ ] **Vehicle:** 
 - Fixing -> Making model symmetic, unwraping UV, applying materials, ameliorating skeletal animation. 
 - Adding -> Gear slots. 
