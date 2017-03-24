@@ -11,4 +11,4 @@
 
 ## Protector
 
-## [Enhancement](https://github.com/Trevor802/Tac/blob/master/GameDesignDocument/Gears/Player/Enhancement.md)
+## [Enhancement](https://github.com/Trevor802/Tac/blob/master/GameDesignDocument/Player/Gears/Enhancement.md)
