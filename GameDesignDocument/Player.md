@@ -14,5 +14,9 @@
 - Player gets money from killing other people and being given by system.
 - Player uses money to update gears or buildings.
 
+## [Gears](https://github.com/Trevor802/Tac/blob/master/GameDesignDocument/Player/Gears.md)
+- SpawnVolume spawns gears who's level depends on time, players need to pay for the installation.
+- Players could buy gears at base but the gears' level are lower than those spawned by SV.
+
 ## [Sockets](https://github.com/Trevor802/Tac/blob/master/GameDesignDocument/Player/Sockets.md)
 - Player has some fixed sockets for installing gears.

@@ -5,4 +5,4 @@
 - Hitbox of tac consists of **3** parts. - *Engine, Body, Wheels*.
 - Engine takes 200% damage.
 - Body takes 100% damage.
-- Wheels takes 150% damage.
+- Wheels takes 75% damage.

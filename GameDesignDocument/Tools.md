@@ -1,4 +1,4 @@
-#Tools
+# Tools
 ## Bomb
 - Bomb spawns at the weak team whose whole respawn places be taken up by other team per **30** seconds.
 - Bomb spawns **once per half minute**.

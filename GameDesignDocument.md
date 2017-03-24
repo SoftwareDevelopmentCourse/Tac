@@ -12,10 +12,6 @@
 ## [Damage](https://github.com/Trevor802/Tac/blob/master/GameDesignDocument/Damage.md)
 - Using hitbox system to calculate damage.
 
-## [Gears](https://github.com/Trevor802/Tac/blob/master/GameDesignDocument/Gears.md)
-- SpawnVolume spawns gears who's level depends on time, players need to pay for the installation.
-- Players could buy gears at base but the gears' level are lower than those spawned by SV.
-
 ## [Buildings](https://github.com/Trevor802/Tac/blob/master/GameDesignDocument/Buildings.md)
 - Buildings are the fixed functional items in the world.
 

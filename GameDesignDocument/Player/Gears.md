@@ -5,10 +5,10 @@
 - The maximum amount enhancement could be installed depens on the enhancement's status.
 - Gears' costs differ from where they are purchased. As usual, gears at base are more expensive than those outdoors.
 
-## [Weapon](https://github.com/Trevor802/Tac/blob/master/GameDesignDocument/Gears/Weapon.md)
+## [Weapon](https://github.com/Trevor802/Tac/blob/master/GameDesignDocument/Player/Gears/Weapon.md)
 - Weapon consists of active weapon and passive weapon.
 - Weapon could apply damage to enemies or their [buildings](https://github.com/Trevor802/Tac/blob/master/GameDesignDocument/Buildings.md).
 
-## Armor
+## Protector
 
-## [Enhancement](https://github.com/Trevor802/Tac/blob/master/GameDesignDocument/Gears/Enhancement.md)
+## [Enhancement](https://github.com/Trevor802/Tac/blob/master/GameDesignDocument/Gears/Player/Enhancement.md)
