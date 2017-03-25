@@ -67,3 +67,4 @@ DerivedDataCache/*
 *.r16
 *.raw
 *.session
+*.mel

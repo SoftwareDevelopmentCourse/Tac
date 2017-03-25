@@ -9,5 +9,5 @@
 - Bomb spawns at weak team's base, player could pick up it or discard it. Other team's player connot pick it up.
 - Bomb takes **5** seconds for planting.
 - Bomb explodes after being planted **10** seconds.
-- Bomb could be diffused in **5** seconds.
+- Bomb could be defused in **5** seconds.
 - Enemy could take down bomb carrier but not allow picking up bomb.
