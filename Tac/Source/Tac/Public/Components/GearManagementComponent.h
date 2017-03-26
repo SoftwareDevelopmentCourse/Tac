@@ -8,6 +8,8 @@
 
 class ATacVehicle;
 class ATacPlayerState;
+class UGearComponent;
+class AGears;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class TAC_API UGearManagementComponent : public UActorComponent
@@ -29,11 +31,11 @@ public:
 	/** Called every frame */
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 	/** Spawn gear to tac */
-	void SpawnGear(FGear GearToSet);
+	void SpawnGear(TSubclassOf<AGears> GearToSet);
 	/** Update tac state */
-	void UpdateData(FGear GearToAdd);
+	void UpdateData(TSubclassOf<AGears> GearToAdd);
 	/** Try to add gear to vehicle */
-	void TryAddGear(FGear GearToAdd);
+	void TryAddGear(TSubclassOf<AGears> GearToAdd);
 	
 public:
 	/*============================
@@ -52,5 +54,20 @@ public:
 	void OnKeyQHit();
 
 private:
-	TArray<FGear> OwnedGears;
+	TArray<TSubclassOf<AGears>> OwnedGears;
+
+	bool bShiftBind;
+	bool bSpaceBind;
+	bool bKeyQBind;
+	bool bLClickBind;
+	bool bRClickBind;
+	bool bMouseBind;
+
+	bool bHasFront;
+	bool bHasBack;
+	bool bHasLeft;
+	bool bHasRight;
+
+private:
+	void JudgeSocket(AGears* GearToJudge);
 };

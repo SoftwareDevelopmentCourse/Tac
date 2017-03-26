@@ -16,11 +16,7 @@ UPickupComponent::UPickupComponent()
 	PrimaryComponentTick.bCanEverTick = true;
 
 	// ...
-	PickupCapsule = CreateDefaultSubobject<UCapsuleComponent>(TEXT("PickupCapsule"));
-	PickupCapsule->SetupAttachment(this);
-	PickupCapsule->SetCapsuleHalfHeight(750.f);
-	PickupCapsule->SetCapsuleRadius(350.f);
-	PickupCapsule->SetRelativeRotation(FRotator(90.f, 0.f, 0.f));
+	OwnerVehicle = Cast<ATacVehicle>(GetOwner());
 
 }
 
@@ -31,6 +27,7 @@ void UPickupComponent::BeginPlay()
 	Super::BeginPlay();
 
 	// ...
+	PickupCapsule = OwnerVehicle->PickupCapsule;
 }
 
 
@@ -49,7 +46,6 @@ void UPickupComponent::Pickup()
 	if (!ActorsInRange.IsValidIndex(0)) { return; }
 	AGears* Gear = Cast<AGears>(ActorsInRange[0]);
 	ActorsInRange.Empty();
-	ATacVehicle* Owner = Cast<ATacVehicle>(GetOwner());
-	UGearManagementComponent* Manager = Cast<UGearManagementComponent>(Owner->GetGearManager());
-	Manager->TryAddGear(Gear->Gear);
+	UGearManagementComponent* Manager = Cast<UGearManagementComponent>(OwnerVehicle->GetGearManager());
+	Manager->TryAddGear(Gear->GetClass());
 }

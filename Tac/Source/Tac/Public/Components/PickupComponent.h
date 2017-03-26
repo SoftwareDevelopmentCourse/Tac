@@ -7,18 +7,19 @@
 
 
 class UGearManagementComponent;
+class ATacVehicle;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class TAC_API UPickupComponent : public USceneComponent
+class TAC_API UPickupComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
-	//UPROPERTY(Category = Vehicle, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	UCapsuleComponent* PickupCapsule;
 
 public:	
 	// Sets default values for this component's properties
 	UPickupComponent();
+
+	ATacVehicle* OwnerVehicle;
 
 protected:
 	// Called when the game starts
@@ -29,5 +30,7 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 	/** Try to pick up gears and take it */
 	void Pickup();
+	
+	UCapsuleComponent* PickupCapsule;
 	
 };

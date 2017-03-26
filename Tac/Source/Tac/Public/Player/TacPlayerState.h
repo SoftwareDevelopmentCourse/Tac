@@ -7,6 +7,8 @@
 #include "TacHeader.h"
 #include "TacPlayerState.generated.h"
 
+
+class AGears;
 /**
  * 
  */
@@ -18,15 +20,15 @@ class TAC_API ATacPlayerState : public APlayerState
 public:
 
 	UFUNCTION(BlueprintPure, Category = State)
-	TArray<FGear> GetGears();
+	TArray<TSubclassOf<AGears>> GetGears();
 	UFUNCTION(BlueprintPure, Category = State)
-	FGear GetGear(int32 GearIndex);
+	TSubclassOf<AGears> GetGear(int32 GearIndex);
 	UFUNCTION(BlueprintPure, Category = State)
 	FString GetSocketName(int32 SocketIndex);
 	UFUNCTION(BlueprintCallable, Category = State)
-	void SetGears(TArray<FGear> GearsToSet);
+	void SetGears(TArray<TSubclassOf<AGears>> GearsToSet);
 	UFUNCTION(BlueprintCallable, Category = State)
-	void AddGear(FGear GearToAdd);
+	void AddGear(TSubclassOf<AGears> GearToAdd);
 	UFUNCTION(BlueprintCallable, Category = State)
 	void EmptyGears();
 	UFUNCTION(BlueprintPure, Category = State)
@@ -39,7 +41,7 @@ public:
 	void SetName(FString NameToSet);
 
 private:
-	TArray<FGear> Gears;
+	TArray<TSubclassOf<AGears>> Gears;
 	FTransform TacTransform;
 	FString MyPlayerName = TEXT("Tacky");
 	

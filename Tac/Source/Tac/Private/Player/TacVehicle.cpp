@@ -12,6 +12,7 @@
 #include "TacPlayerState.h"
 #include "PickupComponent.h"
 #include "GearManagementComponent.h"
+#include "Gears.h"
 #include "TacHeader.h"// TODO Adjust headers' order
 
 ATacVehicle::ATacVehicle(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer.SetDefaultSubobjectClass<UTacMovementComponent4W>(VehicleMovementComponentName))
@@ -81,13 +82,37 @@ ATacVehicle::ATacVehicle(const FObjectInitializer& ObjectInitializer) : Super(Ob
 	Camera->bUsePawnControlRotation = false;
 	Camera->FieldOfView = 90.f;
 
+	PickupCapsule = CreateDefaultSubobject<UCapsuleComponent>(TEXT("PickupCapsule"));
+	PickupCapsule->SetupAttachment(RootComponent);
+	PickupCapsule->SetCapsuleHalfHeight(750.f);
+	PickupCapsule->SetCapsuleRadius(350.f);
+	PickupCapsule->SetRelativeRotation(FRotator(90.f, 0.f, 0.f));
+
 	// Create the gear management component
 	GearManager = CreateDefaultSubobject<UGearManagementComponent>(TEXT("GearManager"));
 
 	PickupVolume = CreateDefaultSubobject<UPickupComponent>(TEXT("PickupVolume"));
-	PickupVolume->SetupAttachment(RootComponent);
 	BoostSpeed = 400.f;
 
+	GearActorFront = CreateDefaultSubobject<UChildActorComponent>(TEXT("GearFront"));
+	//GearActorFront->SetChildActorClass(AGears::StaticClass());
+	//GearActorFront->CreateChildActor();
+	GearActorFront->SetupAttachment(RootComponent, TEXT("EFront"));
+
+	GearActorBack = CreateDefaultSubobject<UChildActorComponent>(TEXT("GearBack"));
+	//GearActorBack->SetChildActorClass(AGears::StaticClass());
+	//GearActorBack->CreateChildActor();
+	GearActorBack->SetupAttachment(RootComponent, TEXT("EBack"));
+
+	GearActorLeft = CreateDefaultSubobject<UChildActorComponent>(TEXT("GearLeft"));
+	//GearActorLeft->SetChildActorClass(AGears::StaticClass());
+	//GearActorLeft->CreateChildActor();
+	GearActorLeft->SetupAttachment(RootComponent, TEXT("ELeft"));
+
+	GearActorRight = CreateDefaultSubobject<UChildActorComponent>(TEXT("GearRight"));
+	//GearActorRight->SetChildActorClass(AGears::StaticClass());
+	//GearActorRight->CreateChildActor();
+	GearActorRight->SetupAttachment(RootComponent, TEXT("ERight"));
 }
 
 void ATacVehicle::BeginPlay()

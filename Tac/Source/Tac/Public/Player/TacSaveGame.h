@@ -7,6 +7,7 @@
 #include "TacHeader.h"
 #include "TacSaveGame.generated.h"
 
+class AGears;
 /**
  * 
  */
@@ -26,7 +27,7 @@ public:
 	uint32 UserIndex;
 
 	UPROPERTY(VisibleAnywhere, Category = Save)
-	TArray<FGear> Gears;
+	TArray<TSubclassOf<AGears>> Gears;
 
 	UPROPERTY(VisibleAnywhere, Category = Save)
 	FTransform TacTransform;

@@ -3,7 +3,6 @@
 #include "Tac.h"
 #include "Gears.h"
 #include "TacHeader.h"
-#include "GearComponent.h"
 
 // Sets default values
 AGears::AGears()
@@ -14,8 +13,8 @@ AGears::AGears()
 	/*==========================================
 		Gear component initialize
 	===========================================*/
-	GearComp = CreateDefaultSubobject<UGearComponent>(TEXT("GearComponent"));
-	RootComponent = GearComp;
+	GearMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("GearMesh"));
+	RootComponent = GearMesh;
 
 	/*==========================================
 		Timeline triggered event initialize
@@ -35,10 +34,9 @@ AGears::AGears()
 	============================================*/
 	FloatRange = 5.f;
 	
-	Gear.Socket = EGearSocket::EBack;
-	Gear.GearName = TEXT("Debug");
-	Gear.Type = EGearType::EBoost;
-	Gear.GearComp = GearComp;
+	GearSocket = EGearSocket::EBack;
+	GearName = TEXT("Debug");
+	GearType = EGearType::EBoost;
 	SpawnRate = 3;
 	MaxExistenceBase = -1;
 	MaxExistenceOutdoors = 5;
@@ -71,10 +69,10 @@ void AGears::Tick(float DeltaTime)
 // Gears hover 
 void AGears::GearsHover(float val)
 {
-	auto CurrentLocation = GearComp->GetComponentLocation(); // TODO Add actor location
+	auto CurrentLocation = GearMesh->GetComponentLocation(); // TODO Add actor location
 	auto NewLocationZ = CurrentLocation.Z + val * FloatRange;
 	auto NewLoaction = FVector(CurrentLocation.X, CurrentLocation.Y, NewLocationZ);
-	GearComp->SetRelativeLocation(NewLoaction);
+	GearMesh->SetRelativeLocation(NewLoaction);
 }
 
 void AGears::OnPickedup()
@@ -88,6 +86,6 @@ void AGears::OnPickedup()
 // Add gears rotation
 void AGears::AddGearRotation()
 {
-	GearComp->AddRelativeRotation(FRotator(0.f, 5.f, 0.f));
+	GearMesh->AddRelativeRotation(FRotator(0.f, 5.f, 0.f));
 }
 
