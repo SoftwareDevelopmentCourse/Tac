@@ -52,12 +52,6 @@ public:
 	void ZoomCamera(float val);
 	/** Pick up surrounding gear */
 	void PickupGear();
-	/** When hitting spacebar */
-	void OnHitSpace();
-	/** When hitting left shift */
-	void OnHitShift();
-	/** When hitting key Q */
-	void OnHitKeyQ();
 
 public:
 

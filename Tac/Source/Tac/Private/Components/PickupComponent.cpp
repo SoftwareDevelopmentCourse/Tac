@@ -48,13 +48,8 @@ void UPickupComponent::Pickup()
 	PickupCapsule->GetOverlappingActors(ActorsInRange, AGears::StaticClass());
 	if (!ActorsInRange.IsValidIndex(0)) { return; }
 	AGears* Gear = Cast<AGears>(ActorsInRange[0]);
-	Gear->Destroy();
 	ActorsInRange.Empty();
-	FGear GearToSet;
-	GearToSet.Gear = AGears::StaticClass();
-	GearToSet.Socket = EGearSocket::EBack;
 	ATacVehicle* Owner = Cast<ATacVehicle>(GetOwner());
 	UGearManagementComponent* Manager = Cast<UGearManagementComponent>(Owner->GetGearManager());
-	Manager->SpawnGear(GearToSet);
-	Manager->UpdateData(GearToSet);
+	Manager->TryAddGear(Gear->Gear);
 }

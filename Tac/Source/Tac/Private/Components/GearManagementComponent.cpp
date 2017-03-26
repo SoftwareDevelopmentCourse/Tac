@@ -4,6 +4,7 @@
 #include "Components/GearManagementComponent.h"
 #include "TacHeader.h"
 #include "TacVehicle.h"
+#include "GearComponent.h"
 #include "TacPlayerState.h"
 
 
@@ -24,10 +25,17 @@ UGearManagementComponent::UGearManagementComponent()
 void UGearManagementComponent::BeginPlay()
 {
 	Super::BeginPlay();
-
+	OwnerPS = Cast<ATacPlayerState>(OwnerVehicle->PlayerState);
+	
 	// ...
+	OwnerVehicle->InputComponent->BindAxis("LookUp", this, &UGearManagementComponent::OnLookUp);
+	OwnerVehicle->InputComponent->BindAxis("LookRight", this, &UGearManagementComponent::OnLookRight);
+	OwnerVehicle->InputComponent->BindAction("SpaceBar", IE_Pressed, this, &UGearManagementComponent::OnSpaceHit);
+	OwnerVehicle->InputComponent->BindAction("Shift", IE_Pressed, this, &UGearManagementComponent::OnShiftHit);
+	//OwnerVehicle->InputComponent->BindAction("Shift", IE_Released, this, &UGearManagementComponent::);
+	OwnerVehicle->InputComponent->BindAction("KeyQ", IE_Pressed, this, &UGearManagementComponent::OnKeyQHit);
+	//OwnerVehicle->InputComponent->BindAction("KeyQ", IE_Released, this, &UGearManagementComponent::);
 }
-
 
 // Called every frame
 void UGearManagementComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
@@ -39,16 +47,30 @@ void UGearManagementComponent::TickComponent(float DeltaTime, ELevelTick TickTyp
 
 void UGearManagementComponent::SpawnGear(FGear GearToSet)
 {
-	auto Gear = NewObject<UStaticMeshComponent>(OwnerVehicle, GearToSet.Gear);
-	Gear->SetupAttachment(OwnerVehicle->GetRootComponent(), FName(*GearToSet.GetSocketName()));
-	Gear->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	Gear->RegisterComponent();
+	/*
+		auto Gear = NewObject<UGearComponent>(OwnerVehicle, GearToSet.GearComp);
+		Gear->SetupAttachment(OwnerVehicle->GetRootComponent(), FName(*GearToSet.GetSocketName()));
+		Gear->GetGearMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		Gear->RegisterComponent();
+	*/
+
 }
 
 void UGearManagementComponent::UpdateData(FGear GearToAdd)
 {
-	ATacPlayerState* OwnerPS = Cast<ATacPlayerState>(OwnerVehicle->PlayerState);
 	OwnerPS->AddGear(GearToAdd);
+}
+
+void UGearManagementComponent::TryAddGear(FGear GearToAdd)
+{
+}
+
+void UGearManagementComponent::OnLookUp(float val)
+{
+}
+
+void UGearManagementComponent::OnLookRight(float val)
+{
 }
 
 void UGearManagementComponent::OnSpaceHit()

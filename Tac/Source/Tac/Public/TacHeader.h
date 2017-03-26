@@ -14,16 +14,32 @@ enum class EGearSocket : uint8
 	EBack
 };
 
-USTRUCT()
+UENUM(BlueprintType)
+enum class EGearType : uint8
+{
+	EProtector,
+	EShoot,
+	EThrow,
+	EBoost,
+	EJump
+};
+
+USTRUCT(BlueprintType)
 struct FGear
 {
 	GENERATED_BODY()
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Gear)
+	FName GearName;
+		
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Gear)
-	TSubclassOf<UGearComponent> Gear;
+	UGearComponent* GearComp;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Gear)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Gear)
 	EGearSocket Socket;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Gear)
+	EGearType Type;
 
 	FString GetSocketName()
 	{
@@ -34,8 +50,10 @@ struct FGear
 
 	FGear()
 	{
-		Gear = NULL;
+		GearName = TEXT("NULL");
+		GearComp = NULL;
 		Socket = EGearSocket::EBack;
+		Type = EGearType::EProtector;
 	}
 
 };

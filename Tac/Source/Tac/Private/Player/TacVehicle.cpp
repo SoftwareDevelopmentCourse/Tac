@@ -109,11 +109,6 @@ void ATacVehicle::SetupPlayerInputComponent(class UInputComponent* PlayerInputCo
 	PlayerInputComponent->BindAxis("Zoom", this, &ATacVehicle::ZoomCamera);
 
 	PlayerInputComponent->BindAction("Use", IE_Pressed, this, &ATacVehicle::PickupGear);
-	PlayerInputComponent->BindAction("Shift", IE_Pressed, this, &ATacVehicle::OnHitShift);
-	//PlayerInputComponent->BindAction("Shift", IE_Released, this, &ATacVehicle::OnReleaseShift);
-	PlayerInputComponent->BindAction("SpaceBar", IE_Pressed, this, &ATacVehicle::OnHitSpace);
-	//PlayerInputComponent->BindAction("SpaceBar", IE_Released, this, &ATacVehicle::OnReleaseSpace);
-	PlayerInputComponent->BindAction("KeyQ", IE_Pressed, this, &ATacVehicle::OnHitKeyQ);
 }
 
 void ATacVehicle::MoveForward(float Val)
@@ -130,21 +125,6 @@ void ATacVehicle::MoveRight(float Val)
 void ATacVehicle::PickupGear()
 {
 	PickupVolume->Pickup();
-}
-
-void ATacVehicle::OnHitSpace()
-{
-	GearManager->OnSpaceHit();
-}
-
-void ATacVehicle::OnHitShift()
-{
-	GearManager->OnShiftHit();
-}
-
-void ATacVehicle::OnHitKeyQ()
-{
-	GearManager->OnKeyQHit();
 }
 
 void ATacVehicle::UpdateState()

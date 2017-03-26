@@ -6,14 +6,17 @@
 #include "TacHeader.h"
 #include "Gears.generated.h"
 
+class UGearComponent;
 
 UCLASS()
 class TAC_API AGears : public AActor
 {
 	GENERATED_BODY()
-	
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Gear, meta = (AllowPrivateAccess = "true"))
-	UStaticMeshComponent* GearMesh;
+	UGearComponent* GearComp;
+
+
 public:	
 	// Sets default values for this actor's properties
 	AGears();
@@ -42,10 +45,6 @@ public:
 	UPROPERTY(Category = Gear, EditAnywhere)
 	int32 SpawnRate;
 
-	/** Gear's installation position */
-	UPROPERTY(Category = Gear, EditAnywhere)
-	EGearSocket GearSocket;
-
 	/** Gear's maximum existence at base */
 	UPROPERTY(Category = Gear, EditAnywhere)
 	int32 MaxExistenceBase;
@@ -62,6 +61,10 @@ public:
 	UPROPERTY(Category = Gear, EditAnywhere)
 	int32 CostOutdoors;
 
+	/** Gear's struct */
+	UPROPERTY(Category = Gear, EditAnywhere)
+	FGear Gear;
+
 public:
 	/** Called by timeline, neet UFUNCTION() */
 	UFUNCTION()
@@ -69,6 +72,9 @@ public:
 	
 	/** When gear is being picked up */
 	void OnPickedup();
+
+	/** Return gear component that gear using */
+	FORCEINLINE UGearComponent* GetGearComp() const { return GearComp; }
 
 private:
 	/** Add gears rotation */

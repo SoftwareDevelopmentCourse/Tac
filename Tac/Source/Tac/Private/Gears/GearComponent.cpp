@@ -12,6 +12,14 @@ UGearComponent::UGearComponent()
 	PrimaryComponentTick.bCanEverTick = true;
 
 	// ...
+	GearMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("GearMesh"));
+	GearMesh->SetupAttachment(this);
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> EjectorMesh(TEXT("StaticMesh'/Game/Tac/Art/Gears/SM_Ejector.SM_Ejector'"));
+	if (EjectorMesh.Object)
+	{
+		GearMesh->SetStaticMesh(EjectorMesh.Object);
+		GearMesh->BodyInstance.SetCollisionProfileName(TEXT("OverlapAllDynamic"));
+	}
 }
 
 

@@ -3,6 +3,7 @@
 #include "Tac.h"
 #include "Gears.h"
 #include "TacHeader.h"
+#include "GearComponent.h"
 
 // Sets default values
 AGears::AGears()
@@ -11,16 +12,10 @@ AGears::AGears()
 	PrimaryActorTick.bCanEverTick = true;
 	
 	/*==========================================
-		Gear mesh initialize
+		Gear component initialize
 	===========================================*/
-	GearMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("GearMesh"));
-	RootComponent = GearMesh;
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> EjectorMesh(TEXT("StaticMesh'/Game/Tac/Art/Gears/SM_Ejector.SM_Ejector'"));
-	if (EjectorMesh.Object)
-	{
-		GearMesh->SetStaticMesh(EjectorMesh.Object);
-		GearMesh->BodyInstance.SetCollisionProfileName(TEXT("OverlapAllDynamic"));
-	}
+	GearComp = CreateDefaultSubobject<UGearComponent>(TEXT("GearComponent"));
+	RootComponent = GearComp;
 
 	/*==========================================
 		Timeline triggered event initialize
@@ -39,7 +34,11 @@ AGears::AGears()
 		Properties initialize
 	============================================*/
 	FloatRange = 5.f;
-	GearSocket = EGearSocket::EBack;
+	
+	Gear.Socket = EGearSocket::EBack;
+	Gear.GearName = TEXT("Debug");
+	Gear.Type = EGearType::EBoost;
+	Gear.GearComp = GearComp;
 	SpawnRate = 3;
 	MaxExistenceBase = -1;
 	MaxExistenceOutdoors = 5;
@@ -72,10 +71,10 @@ void AGears::Tick(float DeltaTime)
 // Gears hover 
 void AGears::GearsHover(float val)
 {
-	auto CurrentLocation = GearMesh->GetComponentLocation();
+	auto CurrentLocation = GearComp->GetComponentLocation(); // TODO Add actor location
 	auto NewLocationZ = CurrentLocation.Z + val * FloatRange;
 	auto NewLoaction = FVector(CurrentLocation.X, CurrentLocation.Y, NewLocationZ);
-	GearMesh->SetRelativeLocation(NewLoaction);
+	GearComp->SetRelativeLocation(NewLoaction);
 }
 
 void AGears::OnPickedup()
@@ -89,6 +88,6 @@ void AGears::OnPickedup()
 // Add gears rotation
 void AGears::AddGearRotation()
 {
-	GearMesh->AddRelativeRotation(FRotator(0.f, 5.f, 0.f));
+	GearComp->AddRelativeRotation(FRotator(0.f, 5.f, 0.f));
 }
 

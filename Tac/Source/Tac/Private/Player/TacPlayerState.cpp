@@ -18,8 +18,10 @@ FGear ATacPlayerState::GetGear(int32 GearIndex)
 	else
 	{
 		FGear Default;
-		Default.Gear = UStaticMeshComponent::StaticClass();
+		Default.GearComp = NULL;
 		Default.Socket = EGearSocket::ENull;
+		Default.GearName = TEXT("NULL");
+		Default.Type = EGearType::EProtector;
 		return Default;
 	}
 }
