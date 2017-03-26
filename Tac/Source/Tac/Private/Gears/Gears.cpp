@@ -11,16 +11,10 @@ AGears::AGears()
 	PrimaryActorTick.bCanEverTick = true;
 	
 	/*==========================================
-		Gear mesh initialize
+		Gear component initialize
 	===========================================*/
 	GearMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("GearMesh"));
 	RootComponent = GearMesh;
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> EjectorMesh(TEXT("StaticMesh'/Game/Tac/Art/Gears/SM_Ejector.SM_Ejector'"));
-	if (EjectorMesh.Object)
-	{
-		GearMesh->SetStaticMesh(EjectorMesh.Object);
-		GearMesh->BodyInstance.SetCollisionProfileName(TEXT("OverlapAllDynamic"));
-	}
 
 	/*==========================================
 		Timeline triggered event initialize
@@ -39,7 +33,10 @@ AGears::AGears()
 		Properties initialize
 	============================================*/
 	FloatRange = 5.f;
+	
 	GearSocket = EGearSocket::EBack;
+	GearName = TEXT("Debug");
+	GearType = EGearType::EBoost;
 	SpawnRate = 3;
 	MaxExistenceBase = -1;
 	MaxExistenceOutdoors = 5;
@@ -72,7 +69,7 @@ void AGears::Tick(float DeltaTime)
 // Gears hover 
 void AGears::GearsHover(float val)
 {
-	auto CurrentLocation = GearMesh->GetComponentLocation();
+	auto CurrentLocation = GearMesh->GetComponentLocation(); // TODO Add actor location
 	auto NewLocationZ = CurrentLocation.Z + val * FloatRange;
 	auto NewLoaction = FVector(CurrentLocation.X, CurrentLocation.Y, NewLocationZ);
 	GearMesh->SetRelativeLocation(NewLoaction);

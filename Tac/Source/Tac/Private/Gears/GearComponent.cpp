@@ -12,6 +12,9 @@ UGearComponent::UGearComponent()
 	PrimaryComponentTick.bCanEverTick = true;
 
 	// ...
+	//GearMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("GearMesh"));
+	//GearMesh->SetupAttachment(this);
+	//GearMesh->BodyInstance.SetCollisionProfileName(TEXT("OverlapAllDynamic"));
 }
 
 

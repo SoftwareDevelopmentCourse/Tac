@@ -1,7 +1,6 @@
 ﻿// Copyright by GameDream.
 
 #pragma once
-#include "GearComponent.h"
 #include "TacHeader.generated.h"
 
 UENUM(BlueprintType)
@@ -14,16 +13,30 @@ enum class EGearSocket : uint8
 	EBack
 };
 
-USTRUCT()
-struct FGear
+UENUM(BlueprintType)
+enum class EGearType : uint8
+{
+	EProtector,
+	EShoot,
+	EThrow,
+	EBoost,
+	EJump
+};
+
+/*
+	USTRUCT(BlueprintType)
+struct TSubclassOf<AGears>
 {
 	GENERATED_BODY()
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Gear)
-	TSubclassOf<UGearComponent> Gear;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Gear)
+	FName GearName;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Gear)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Gear)
 	EGearSocket Socket;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Gear)
+	EGearType Type;
 
 	FString GetSocketName()
 	{
@@ -32,10 +45,12 @@ struct FGear
 		return EnumPtr->GetEnumName((int32)Socket);
 	}
 
-	FGear()
+	TSubclassOf<AGears>()
 	{
-		Gear = NULL;
+		GearName = TEXT("NULL");
 		Socket = EGearSocket::EBack;
+		Type = EGearType::EProtector;
 	}
 
 };
+*/

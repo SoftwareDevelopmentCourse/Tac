@@ -34,10 +34,20 @@ class TAC_API ATacVehicle : public AWheeledVehicle
 	UPROPERTY(Category = Gear, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	UGearManagementComponent* GearManager;
 
-
 public:
 	ATacVehicle(const FObjectInitializer& ObjectInitializer);
 	
+	UPROPERTY(Category = Vehicle, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	UCapsuleComponent* PickupCapsule;
+	UPROPERTY(Category = Gear, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	UChildActorComponent* GearActorFront;
+	UPROPERTY(Category = Gear, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	UChildActorComponent* GearActorBack;
+	UPROPERTY(Category = Gear, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	UChildActorComponent* GearActorLeft;
+	UPROPERTY(Category = Gear, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	UChildActorComponent* GearActorRight;
+
 	virtual void BeginPlay() override;
 	virtual void SetupPlayerInputComponent(UInputComponent* InputComponent) override;
 	/** Handle pressing forwards */
@@ -52,12 +62,6 @@ public:
 	void ZoomCamera(float val);
 	/** Pick up surrounding gear */
 	void PickupGear();
-	/** When hitting spacebar */
-	void OnHitSpace();
-	/** When hitting left shift */
-	void OnHitShift();
-	/** When hitting key Q */
-	void OnHitKeyQ();
 
 public:
 

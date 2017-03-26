@@ -2,14 +2,15 @@
 
 #include "Tac.h"
 #include "TacPlayerState.h"
+#include "Gears.h"
 #include "Kismet/GameplayStatics.h"
 
-TArray<FGear> ATacPlayerState::GetGears()
+TArray<TSubclassOf<AGears>> ATacPlayerState::GetGears()
 {
 	return Gears;
 }
 
-FGear ATacPlayerState::GetGear(int32 GearIndex)
+TSubclassOf<AGears> ATacPlayerState::GetGear(int32 GearIndex)
 {
 	if (Gears.IsValidIndex(GearIndex))
 	{
@@ -17,10 +18,7 @@ FGear ATacPlayerState::GetGear(int32 GearIndex)
 	}
 	else
 	{
-		FGear Default;
-		Default.Gear = UStaticMeshComponent::StaticClass();
-		Default.Socket = EGearSocket::ENull;
-		return Default;
+		return AGears::StaticClass();
 	}
 }
 
@@ -31,12 +29,12 @@ FString ATacPlayerState::GetSocketName(int32 SocketIndex)
 	return EnumPtr->GetEnumName(SocketIndex);
 }
 
-void ATacPlayerState::SetGears(TArray<FGear> GearsToSet)
+void ATacPlayerState::SetGears(TArray<TSubclassOf<AGears>> GearsToSet)
 {
 	Gears = GearsToSet;
 }
 
-void ATacPlayerState::AddGear(FGear GearToAdd)
+void ATacPlayerState::AddGear(TSubclassOf<AGears> GearToAdd)
 {
 	Gears.Add(GearToAdd);
 }

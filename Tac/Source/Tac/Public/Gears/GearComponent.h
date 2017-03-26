@@ -7,9 +7,13 @@
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class TAC_API UGearComponent : public UActorComponent
+class TAC_API UGearComponent : public USceneComponent
 {
 	GENERATED_BODY()
+
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Gear, meta = (AllowPrivateAccess = "true"))
+	UStaticMeshComponent* GearMesh;
 
 public:	
 	// Sets default values for this component's properties
@@ -23,6 +27,6 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-		
+	FORCEINLINE UStaticMeshComponent* GetGearMesh() const { return GearMesh; }
 	
 };
