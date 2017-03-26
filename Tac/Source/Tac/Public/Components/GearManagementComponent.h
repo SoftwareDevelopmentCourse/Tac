@@ -70,4 +70,5 @@ private:
 
 private:
 	void JudgeSocket(AGears* GearToJudge);
+	void JudgeType(AGears* GearToJudge);
 };

@@ -81,34 +81,7 @@ void UGearManagementComponent::UpdateData(TSubclassOf<AGears> GearToAdd)
 void UGearManagementComponent::TryAddGear(TSubclassOf<AGears> GearToAdd)
 {
 	AGears* GearObj = Cast<AGears>(GearToAdd->GetDefaultObject());
-	switch (GearObj->GearType)
-	{
-	case EGearType::EBoost:
-		if (bShiftBind) { break; }
-		bShiftBind = true;
-		JudgeSocket(GearObj);
-		break;
-	case EGearType::EJump:
-		if (bSpaceBind) { break; }
-		bSpaceBind = true;
-		JudgeSocket(GearObj);
-		break;
-	case EGearType::EProtector:
-		JudgeSocket(GearObj);
-		break;
-	case EGearType::EShoot:
-		if (bLClickBind) { break; }
-		bLClickBind = true;
-		JudgeSocket(GearObj);
-		break;
-	case EGearType::EThrow:
-		if (bKeyQBind) { break; }
-		bKeyQBind = true;
-		JudgeSocket(GearObj);
-		break;
-	default:
-		break;
-	}
+	JudgeType(GearObj);
 }
 
 void UGearManagementComponent::OnLookUp(float val)
@@ -160,6 +133,38 @@ void UGearManagementComponent::JudgeSocket(AGears* GearToJudge)
 		bHasBack = true;
 		OwnerVehicle->GearActorBack->SetChildActorClass(GearToJudge->StaticClass());
 		OwnerVehicle->GearActorBack->CreateChildActor();
+		break;
+	default:
+		break;
+	}
+}
+
+void UGearManagementComponent::JudgeType(AGears * GearToJudge)
+{
+	switch (GearToJudge->GearType)
+	{
+	case EGearType::EBoost:
+		if (bShiftBind) { break; }
+		bShiftBind = true;
+		JudgeSocket(GearToJudge);
+		break;
+	case EGearType::EJump:
+		if (bSpaceBind) { break; }
+		bSpaceBind = true;
+		JudgeSocket(GearToJudge);
+		break;
+	case EGearType::EProtector:
+		JudgeSocket(GearToJudge);
+		break;
+	case EGearType::EShoot:
+		if (bLClickBind) { break; }
+		bLClickBind = true;
+		JudgeSocket(GearToJudge);
+		break;
+	case EGearType::EThrow:
+		if (bKeyQBind) { break; }
+		bKeyQBind = true;
+		JudgeSocket(GearToJudge);
 		break;
 	default:
 		break;
