@@ -15,18 +15,17 @@ UPickupComponent::UPickupComponent()
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
 
-	// ...
+	// Initialize owner vehicle, for some reason, the GetOwner() function can only be used once in Constructor
 	OwnerVehicle = Cast<ATacVehicle>(GetOwner());
 
 }
-
 
 // Called when the game starts
 void UPickupComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// ...
+	// Initialize here, GetOwner() could be used here
 	PickupCapsule = OwnerVehicle->PickupCapsule;
 }
 
@@ -41,11 +40,13 @@ void UPickupComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 
 void UPickupComponent::Pickup()
 {
+	// Try to get gear in range
 	TArray<AActor*> ActorsInRange;
 	PickupCapsule->GetOverlappingActors(ActorsInRange, AGears::StaticClass());
 	if (!ActorsInRange.IsValidIndex(0)) { return; }
 	AGears* Gear = Cast<AGears>(ActorsInRange[0]);
 	ActorsInRange.Empty();
+	// Try to add the gear to tac
 	UGearManagementComponent* Manager = Cast<UGearManagementComponent>(OwnerVehicle->GetGearManager());
-	Manager->TryAddGear(Gear->GetClass());
+	Manager->TryAddGear(Gear->GetClass()); // TODO Try add gear reference 
 }

@@ -22,35 +22,3 @@ enum class EGearType : uint8
 	EBoost,
 	EJump
 };
-
-/*
-	USTRUCT(BlueprintType)
-struct TSubclassOf<AGears>
-{
-	GENERATED_BODY()
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Gear)
-	FName GearName;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Gear)
-	EGearSocket Socket;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Gear)
-	EGearType Type;
-
-	FString GetSocketName()
-	{
-		const UEnum* EnumPtr = FindObject<UEnum>(ANY_PACKAGE, TEXT("EGearSocket"), true);
-		if (!EnumPtr) return FString("Invalid");
-		return EnumPtr->GetEnumName((int32)Socket);
-	}
-
-	TSubclassOf<AGears>()
-	{
-		GearName = TEXT("NULL");
-		Socket = EGearSocket::EBack;
-		Type = EGearType::EProtector;
-	}
-
-};
-*/

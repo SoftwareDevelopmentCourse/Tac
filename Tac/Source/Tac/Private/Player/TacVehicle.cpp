@@ -146,7 +146,6 @@ void ATacVehicle::MoveRight(float Val)
 	GetVehicleMovementComponent()->SetSteeringInput(Val);
 }
 
-
 void ATacVehicle::PickupGear()
 {
 	PickupVolume->Pickup();

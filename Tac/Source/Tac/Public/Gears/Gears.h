@@ -69,6 +69,22 @@ public:
 	int32 CostOutdoors;
 
 public:
+	/** When mouse move up */
+	virtual void OnLookUp(float val);
+	/** When mouse move right */
+	virtual void OnLookRight(float val);
+	/** When hitting spacebar */
+	virtual void OnSpaceHit();
+	/** When hitting left shift */
+	virtual void OnShiftHit();
+	/** When hitting key Q */
+	virtual void OnKeyQHit();
+	/** When hitting left mouse button */
+	virtual void OnLClickHit();
+	/** When hitting right mouse button */
+	virtual void OnRClickHit();
+
+public:
 	/** Called by timeline, neet UFUNCTION() */
 	UFUNCTION()
 	void GearsHover(float val);

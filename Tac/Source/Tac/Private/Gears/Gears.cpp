@@ -89,3 +89,30 @@ void AGears::AddGearRotation()
 	GearMesh->AddRelativeRotation(FRotator(0.f, 5.f, 0.f));
 }
 
+void AGears::OnLookUp(float val)
+{
+}
+
+void AGears::OnLookRight(float val)
+{
+}
+
+void AGears::OnSpaceHit()
+{
+}
+
+void AGears::OnShiftHit()
+{
+}
+
+void AGears::OnKeyQHit()
+{
+}
+
+void AGears::OnLClickHit()
+{
+}
+
+void AGears::OnRClickHit()
+{
+}
