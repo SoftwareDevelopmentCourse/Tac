@@ -6,6 +6,7 @@
 
 UTacMovementComponent4W::UTacMovementComponent4W()
 {
+	// Initialize speed
 	ForwardSpeed = 1.f;
 	RightSpeed = 1.f;
 }
@@ -15,6 +16,10 @@ void UTacMovementComponent4W::RequestDirectMove(const FVector& MoveVelocity, boo
 {
 	// No need to call Super as we're replacing the functionality
 
+	/*============================================================================
+		Calculates AI's move by RequestDirectMove(), reference:
+		https://www.udemy.com/unrealcourse/learn/v4/t/lecture/5373076?start=0
+	============================================================================*/
 	auto TankForward = GetOwner()->GetActorForwardVector().GetSafeNormal();
 	auto AIForwardIntention = MoveVelocity.GetSafeNormal();
 	auto ForwardThrow = FVector::DotProduct(TankForward, AIForwardIntention);

@@ -20,6 +20,7 @@ public:
 	// Sets default values for this component's properties
 	UGearManagementComponent();
 	
+	/** Sets owner's properties for component's use */
 	ATacVehicle* OwnerVehicle;
 	ATacPlayerState* OwnerPS;
 
@@ -31,10 +32,10 @@ public:
 	/** Called every frame */
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 	/** Spawn gear to tac */
-	void SpawnGear(TSubclassOf<AGears> GearToSet);
-	/** Update tac state */
+	void SpawnGear(TSubclassOf<AGears> GearToSpawn);
+	/** Update player's gears state and locall gears state */
 	void UpdateData(TSubclassOf<AGears> GearToAdd);
-	/** Try to add gear to vehicle */
+	/** Try to add gear to vehicle when picking up gears */
 	void TryAddGear(TSubclassOf<AGears> GearToAdd);
 	
 public:
@@ -43,32 +44,46 @@ public:
 	============================*/
 	/** When mouse looking up */
 	void OnLookUp(float val);
+
 	/** When mouse looking right */
 	void OnLookRight(float val);
 	
 	/** When hitting spacebar */
 	void OnSpaceHit();
+
 	/** When hitting left shift */
 	void OnShiftHit();
+
 	/** When hitting key Q */
 	void OnKeyQHit();
 
-private:
-	TArray<TSubclassOf<AGears>> OwnedGears;
+	/** When hitting left mouse button */
+	void OnLClickHit();
 
+	/** When hitting right mouse button */
+	void OnRClickHit();
+
+private:
+	/*==============================================
+		Private variables for component's use
+	==============================================*/
+	TArray<AGears*> OwnedGears;
+	/** For judging by gear type */
 	bool bShiftBind;
 	bool bSpaceBind;
 	bool bKeyQBind;
 	bool bLClickBind;
 	bool bRClickBind;
 	bool bMouseBind;
-
+	/** For judging by gear socket */
 	bool bHasFront;
 	bool bHasBack;
 	bool bHasLeft;
 	bool bHasRight;
 
 private:
-	void JudgeSocket(AGears* GearToJudge);
-	void JudgeType(AGears* GearToJudge);
+	/** Judge by gear socket */
+	void JudgeBySocket(AGears* GearToJudge);
+	/** Judge by gear type */
+	void JudgeByType(AGears* GearToJudge);
 };

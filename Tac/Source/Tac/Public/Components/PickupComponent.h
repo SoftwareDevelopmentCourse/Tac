@@ -5,7 +5,6 @@
 #include "Components/ActorComponent.h"
 #include "PickupComponent.generated.h"
 
-
 class UGearManagementComponent;
 class ATacVehicle;
 
@@ -14,11 +13,11 @@ class TAC_API UPickupComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
-
 public:	
 	// Sets default values for this component's properties
 	UPickupComponent();
 
+	/** Sets owner's properties for component's use */
 	ATacVehicle* OwnerVehicle;
 
 protected:
@@ -31,6 +30,7 @@ public:
 	/** Try to pick up gears and take it */
 	void Pickup();
 	
+	/** For storaging owner tac's pick up capsule */
 	UCapsuleComponent* PickupCapsule;
 	
 };

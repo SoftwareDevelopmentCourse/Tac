@@ -19,6 +19,7 @@ public:
 	// Called from the pathfinding logic by the AI controllers
 	virtual void RequestDirectMove(const FVector& MoveVelocity, bool bForceMaxSpeed) override;
 	
+	/** Gets the vehicle forward speed and right speed, due to traditional functions are designed for character */
 	UPROPERTY(VisibleAnywhere, Category = Setup)
 	float ForwardSpeed;
 	UPROPERTY(VisibleAnywhere, Category = Setup)
