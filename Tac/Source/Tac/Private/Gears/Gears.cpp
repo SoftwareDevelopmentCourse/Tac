@@ -13,8 +13,8 @@ AGears::AGears()
 	/*==========================================
 		Gear component initialize
 	===========================================*/
-	GearMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("GearMesh"));
-	RootComponent = GearMesh;
+	Root = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
+	RootComponent = Root;
 
 	/*==========================================
 		Timeline triggered event initialize
@@ -33,7 +33,6 @@ AGears::AGears()
 		Properties initialize
 	============================================*/
 	FloatRange = 5.f;
-	
 	GearSocket = EGearSocket::EBack;
 	GearName = TEXT("Debug");
 	GearType = EGearType::EBoost;
@@ -42,7 +41,7 @@ AGears::AGears()
 	MaxExistenceOutdoors = 5;
 	CostBase = 150;
 	CostOutdoors = 100;
-	bPickedup = false;
+	bShouldRotate = false;
 
 }
 
@@ -50,9 +49,7 @@ AGears::AGears()
 void AGears::BeginPlay()
 {
 	Super::BeginPlay();
-	// Initialize timeline
-	Timeline->AddInterpFloat(TimelineCurve, InterpFunction);
-	Timeline->PlayFromStart();
+
 }
 
 // Called every frame
@@ -60,7 +57,8 @@ void AGears::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (!bPickedup)
+	// Add gear's rotation judged by whether gear is be picked up
+	if (bShouldRotate)
 	{
 		AddGearRotation();
 	}
@@ -69,50 +67,59 @@ void AGears::Tick(float DeltaTime)
 // Gears hover 
 void AGears::GearsHover(float val)
 {
-	auto CurrentLocation = GearMesh->GetComponentLocation(); // TODO Add actor location
+	auto CurrentLocation = Root->GetComponentLocation(); // TODO Add actor location
 	auto NewLocationZ = CurrentLocation.Z + val * FloatRange;
 	auto NewLoaction = FVector(CurrentLocation.X, CurrentLocation.Y, NewLocationZ);
-	GearMesh->SetRelativeLocation(NewLoaction);
+	Root->SetRelativeLocation(NewLoaction);
 }
 
-void AGears::OnPickedup()
+// Called from GearSpawnVolume
+void AGears::WorldSpawn()
 {
-	bPickedup = true;
-	Timeline->Stop();
-	//Destroy();
-	// TODO Destroy actor when being picked up
+	bShouldRotate = true;
+	// Initialize timeline
+	Timeline->AddInterpFloat(TimelineCurve, InterpFunction);
+	Timeline->PlayFromStart();
+	UE_LOG(LogTemp, Error, TEXT("%s"), *this->GetName());
 }
 
 // Add gears rotation
 void AGears::AddGearRotation()
 {
-	GearMesh->AddRelativeRotation(FRotator(0.f, 5.f, 0.f));
+	Root->AddRelativeRotation(FRotator(0.f, 5.f, 0.f));
 }
 
 void AGears::OnLookUp(float val)
 {
+	// For overridden by child class
 }
 
 void AGears::OnLookRight(float val)
 {
+	// For overridden by child class
 }
 
 void AGears::OnSpaceHit()
 {
+	// For overridden by child class
 }
 
 void AGears::OnShiftHit()
 {
+	// For overridden by child class
 }
 
 void AGears::OnKeyQHit()
 {
+	// For overridden by child class
 }
 
 void AGears::OnLClickHit()
 {
+	// For overridden by child class
 }
 
 void AGears::OnRClickHit()
 {
+	// For overridden by child class
 }

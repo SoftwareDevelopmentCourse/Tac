@@ -3,34 +3,8 @@
 #pragma once
 
 #include "GameFramework/Actor.h"
+#include "TacHeader.h"
 #include "GearSpawnVolume.generated.h"
-
-USTRUCT()
-struct FGearSpawn
-{
-	GENERATED_BODY()
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	TSubclassOf<AActor> WhatToSpawn;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	int32 SpawnAmount;
-
-	TSubclassOf<AActor> GetSpawnActor()
-	{
-		return WhatToSpawn;
-	}
-
-	int32 GetSpawnAmount()
-	{
-		return SpawnAmount;
-	}
-
-	FGearSpawn()
-	{
-		WhatToSpawn = NULL;
-		SpawnAmount = 1;
-	}
-};
 
 UCLASS()
 class TAC_API AGearSpawnVolume : public AActor
@@ -46,14 +20,17 @@ protected:
 	virtual void BeginPlay() override;
 
 public:	
+	/** Gear spawning type and amount */
 	UPROPERTY(Category = Spawning, EditAnywhere, BlueprintReadOnly)
 	TArray<FGearSpawn> SpawnStructs;
+	/** Spawning box volume component */
 	UPROPERTY(Category = Spawning, VisibleAnywhere, BlueprintReadOnly)
 	UBoxComponent* SpawnVolume;
-	
+	/** Spawning function */
 	UFUNCTION(Category = Spawning, BlueprintCallable)
 	void SpawnActors();
 
 private:
+	/** Function of generating random point to spawn */
 	FVector GetRandomPointInVolume();
 };

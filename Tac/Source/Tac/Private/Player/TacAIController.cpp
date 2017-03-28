@@ -16,5 +16,6 @@ void ATacAIController::Tick(float DeltaTime)
 	
 	auto PlayerControlledTac = GetWorld()->GetFirstPlayerController()->GetPawn();
 	if (!ensure(PlayerControlledTac)) { return; }
+	// Uses inherent function
 	MoveToActor(PlayerControlledTac, AcceptanceRadius);
 }

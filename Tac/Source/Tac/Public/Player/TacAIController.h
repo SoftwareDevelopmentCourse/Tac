@@ -14,6 +14,7 @@ class TAC_API ATacAIController : public AAIController
 	GENERATED_BODY()
 	
 protected:
+	/** Radius that AI could stop when chasing player */
 	UPROPERTY(EditDefaultsOnly, Category = "Setup")
 	float AcceptanceRadius;
 

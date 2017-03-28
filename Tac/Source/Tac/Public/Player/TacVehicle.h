@@ -28,17 +28,23 @@ class TAC_API ATacVehicle : public AWheeledVehicle
 	UPROPERTY(Category = Camera, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	UCameraComponent* Camera;
 
+	/** Pickup component deals with interations between Tac and world */
 	UPROPERTY(Category = Gear, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	UPickupComponent* PickupVolume;
 	
+	/** Gear manager to manage gears */
 	UPROPERTY(Category = Gear, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	UGearManagementComponent* GearManager;
 
 public:
 	ATacVehicle(const FObjectInitializer& ObjectInitializer);
 	
+	/*===========================
+		Tac's using component
+	===========================*/
 	UPROPERTY(Category = Vehicle, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	UCapsuleComponent* PickupCapsule;
+	/** Uses child components for spawning gears */
 	UPROPERTY(Category = Gear, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	UChildActorComponent* GearActorFront;
 	UPROPERTY(Category = Gear, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
@@ -72,7 +78,7 @@ public:
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Setup")
 	float BoostSpeed;
-
+	/** Called from player controller to update tac's state */
 	void UpdateState();
 
 };

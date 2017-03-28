@@ -22,3 +22,31 @@ enum class EGearType : uint8
 	EBoost,
 	EJump
 };
+
+USTRUCT()
+struct FGearSpawn
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	TSubclassOf<AActor> WhatToSpawn;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	int32 SpawnAmount;
+
+	TSubclassOf<AActor> GetSpawnActor()
+	{
+		return WhatToSpawn;
+	}
+
+	int32 GetSpawnAmount()
+	{
+		return SpawnAmount;
+	}
+
+	FGearSpawn()
+	{
+		WhatToSpawn = NULL;
+		SpawnAmount = 1;
+	}
+};

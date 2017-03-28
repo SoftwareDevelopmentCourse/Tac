@@ -21,8 +21,9 @@ ATacController::ATacController()
 void ATacController::BeginPlay()
 {
 	Super::BeginPlay();
+	// Load game when begin play game
 	LoadGame();
-
+	// Create widget and add to player viewport
 	TacView = CreateWidget<UUserWidget>(this, PlayerView);
 	if (TacView)
 	{
@@ -30,6 +31,7 @@ void ATacController::BeginPlay()
 	}
 }
 
+// Directly uses input component in controller
 void ATacController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
@@ -38,11 +40,15 @@ void ATacController::SetupInputComponent()
 	InputComponent->BindAction("Empty", IE_Pressed, this, &ATacController::EmptyGame);
 }
 
+/*========================================================================================================
+	Saving game reference: https://docs.unrealengine.com/latest/INT/Gameplay/SaveGame/Code/index.html
+========================================================================================================*/
 void ATacController::SaveGame()
 {
 	UTacSaveGame* SaveGameInstance = Cast<UTacSaveGame>(UGameplayStatics::CreateSaveGameObject(UTacSaveGame::StaticClass()));
 	ATacPlayerState* TacPS = Cast<ATacPlayerState>(PlayerState);
 	TacPS->SetTacTransform(GetPawn()->GetActorTransform());
+	// Saves player's name, gears and transform
 	SaveGameInstance->PlayerName = TacPS->GetPlayerName();
 	SaveGameInstance->Gears = TacPS->GetGears();
 	SaveGameInstance->TacTransform = TacPS->GetTacTransform();
@@ -54,19 +60,20 @@ void ATacController::LoadGame()
 	UTacSaveGame* LoadGameInstance = Cast<UTacSaveGame>(UGameplayStatics::CreateSaveGameObject(UTacSaveGame::StaticClass()));
 	ATacPlayerState* TacPS = Cast<ATacPlayerState>(PlayerState);
 	LoadGameInstance = Cast<UTacSaveGame>(UGameplayStatics::LoadGameFromSlot(LoadGameInstance->SaveSlotName, LoadGameInstance->UserIndex));
-	if (LoadGameInstance)
+	if (LoadGameInstance) // Could load from the previous GameInstance
 	{
 		TacPS->SetPlayerName(LoadGameInstance->PlayerName);
 		TacPS->SetGears(LoadGameInstance->Gears);
 		TacPS->SetTacTransform(LoadGameInstance->TacTransform);
 	}
-	else
+	else // If there's no GameInstance exists
 	{
 		TacPS->SetPlayerName(FString(TEXT("NULL")));
 		TacPS->EmptyGears();
 		TacPS->SetTacTransform(FTransform(FTransform(FRotator(0.f, -90.f, 0.f), FVector(141.f, 0.f, 192.f), FVector(1.f))));
 	}
 	ATacVehicle* Tac = Cast<ATacVehicle>(GetPawn());
+	// Spawns gears which player already had
 	Tac->UpdateState();
 }
 
@@ -74,8 +81,10 @@ void ATacController::EmptyGame()
 {
 	UTacSaveGame* SaveGameInstance = Cast<UTacSaveGame>(UGameplayStatics::CreateSaveGameObject(UTacSaveGame::StaticClass()));
 	ATacPlayerState* TacPS = Cast<ATacPlayerState>(PlayerState);
+	// Reset player respawn location at PlayerStart
 	TArray<AActor*> FoundActors;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), APlayerStart::StaticClass(), FoundActors);
+	// Empty player state and save to GameInstance
 	TacPS->EmptyGears();
 	for (auto Actor : FoundActors)
 	{

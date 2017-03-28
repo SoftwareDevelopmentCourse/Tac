@@ -19,6 +19,9 @@ ATacVehicle::ATacVehicle(const FObjectInitializer& ObjectInitializer) : Super(Ob
 {
 	PrimaryActorTick.bCanEverTick = false;
 
+	/*=======================================================================================================
+		Initialize Tac's mesh, ainmation, movement component, camera, pickup component and gear component
+	=======================================================================================================*/
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh> TacMesh(TEXT("SkeletalMesh'/Game/Tac/Characters/SK_Tac.SK_Tac'"));
 	if (TacMesh.Object)
 	{
@@ -34,7 +37,7 @@ ATacVehicle::ATacVehicle(const FObjectInitializer& ObjectInitializer) : Super(Ob
 
 	UTacMovementComponent4W* Vehicle4W = CastChecked<UTacMovementComponent4W>(GetVehicleMovement());
 
-	check(Vehicle4W->WheelSetups.Num() == 4);
+	check(Vehicle4W->WheelSetups.Num() == 4); // Vehicle wheel's amount needs to be 4 when using WheeledVehicleMovementComponent
 
 	static ConstructorHelpers::FClassFinder<UVehicleWheel> FrontWheel(TEXT("/Game/Tac/Core/Characters/BP_TacWheel_Front"));
 	static ConstructorHelpers::FClassFinder<UVehicleWheel> RearWheel(TEXT("/Game/Tac/Core/Characters/BP_TacWheel_Rear"));
@@ -61,7 +64,6 @@ ATacVehicle::ATacVehicle(const FObjectInitializer& ObjectInitializer) : Super(Ob
 		Vehicle4W->DifferentialSetup.DifferentialType = EVehicleDifferential4W::LimitedSlip_4W;
 	}
 
-	
 	// Create a spring arm component for our chase camera
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
 	SpringArm->SetRelativeLocation(FVector(80.0f, 0.0f, 108.0f));
@@ -82,6 +84,7 @@ ATacVehicle::ATacVehicle(const FObjectInitializer& ObjectInitializer) : Super(Ob
 	Camera->bUsePawnControlRotation = false;
 	Camera->FieldOfView = 90.f;
 
+	// Create the pickup capsule
 	PickupCapsule = CreateDefaultSubobject<UCapsuleComponent>(TEXT("PickupCapsule"));
 	PickupCapsule->SetupAttachment(RootComponent);
 	PickupCapsule->SetCapsuleHalfHeight(750.f);
@@ -91,9 +94,12 @@ ATacVehicle::ATacVehicle(const FObjectInitializer& ObjectInitializer) : Super(Ob
 	// Create the gear management component
 	GearManager = CreateDefaultSubobject<UGearManagementComponent>(TEXT("GearManager"));
 
+	// Create the pickup component
 	PickupVolume = CreateDefaultSubobject<UPickupComponent>(TEXT("PickupVolume"));
 	BoostSpeed = 400.f;
 
+	// Initialization for ChildActorComponent
+	// Reference: https://forums.unrealengine.com/showthread.php?53823-c-equivalent-of-Add-ChildActorComponent
 	GearActorFront = CreateDefaultSubobject<UChildActorComponent>(TEXT("GearFront"));
 	//GearActorFront->SetChildActorClass(AGears::StaticClass());
 	//GearActorFront->CreateChildActor();
@@ -124,7 +130,7 @@ void ATacVehicle::SetupPlayerInputComponent(class UInputComponent* PlayerInputCo
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
-	// set up gameplay key bindings
+	// Set up gameplay key bindings
 	check(PlayerInputComponent);
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &ATacVehicle::MoveForward);
@@ -151,6 +157,7 @@ void ATacVehicle::PickupGear()
 	PickupVolume->Pickup();
 }
 
+// Update player states which consists of OwnedGears and Transform
 void ATacVehicle::UpdateState()
 {
 	ATacPlayerState* TacPS = Cast<ATacPlayerState>(PlayerState);
@@ -169,6 +176,7 @@ void ATacVehicle::RotateCamera(float val)
 void ATacVehicle::LiftCamera(float val)
 {
 	auto LiftAngle = SpringArm->RelativeRotation.Pitch;
+	// Lift angle need to be limited from 0 deg to -90 deg
 	if (LiftAngle < -80.f && val < 0.f) { return; }
 	if (LiftAngle > 5.f && val > 0.f) { return; }
 	SpringArm->AddRelativeRotation(FRotator(val, 0.f, 0.f));

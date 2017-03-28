@@ -35,8 +35,8 @@ public:
 	void SpawnGear(TSubclassOf<AGears> GearToSpawn);
 	/** Update player's gears state and locall gears state */
 	void UpdateData(TSubclassOf<AGears> GearToAdd);
-	/** Try to add gear to vehicle when picking up gears */
-	void TryAddGear(TSubclassOf<AGears> GearToAdd);
+	/** Try to pick up gear */
+	void TryPickup(AGears* GearToPickup);
 	
 public:
 	/*============================
@@ -81,9 +81,11 @@ private:
 	bool bHasLeft;
 	bool bHasRight;
 
+	bool bShouldDestroy;
+
 private:
 	/** Judge by gear socket */
-	void JudgeBySocket(AGears* GearToJudge);
+	void JudgeBySocket(TSubclassOf<AGears> GearToJudge);
 	/** Judge by gear type */
-	void JudgeByType(AGears* GearToJudge);
+	void JudgeByType(TSubclassOf<AGears> GearToJudge);
 };

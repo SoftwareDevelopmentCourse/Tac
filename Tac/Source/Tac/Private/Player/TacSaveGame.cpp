@@ -5,6 +5,7 @@
 
 UTacSaveGame::UTacSaveGame()
 {
+	// Initialize save slot
 	SaveSlotName = TEXT("TestSaveSlot");
 	UserIndex = 0;
 }

@@ -28,9 +28,8 @@ UGearManagementComponent::UGearManagementComponent()
 	bHasBack = false;
 	bHasLeft = false;
 	bHasRight = false;
-	
+	bShouldDestroy = false;
 }
-
 
 // Called when the game starts
 void UGearManagementComponent::BeginPlay()
@@ -41,7 +40,6 @@ void UGearManagementComponent::BeginPlay()
 		be used in BeginPlay()
 	======================================*/
 	OwnerPS = Cast<ATacPlayerState>(OwnerVehicle->PlayerState);
-
 
 	/*====================================
 		Bind input	
@@ -67,8 +65,9 @@ void UGearManagementComponent::TickComponent(float DeltaTime, ELevelTick TickTyp
 
 void UGearManagementComponent::SpawnGear(TSubclassOf<AGears> GearToSpawn)
 {
-	AGears* GearObj = Cast<AGears>(GearToSpawn->GetDefaultObject());
-	JudgeByType(GearObj);
+	AGears* GearObj = Cast<AGears>(GearToSpawn->GetDefaultObject()); // TODO Tac spawns child gear
+	JudgeByType(GearToSpawn);
+	OwnedGears.Add(GearObj);
 }
 
 void UGearManagementComponent::UpdateData(TSubclassOf<AGears> GearToAdd)
@@ -78,10 +77,10 @@ void UGearManagementComponent::UpdateData(TSubclassOf<AGears> GearToAdd)
 	OwnedGears.Add(GearObj);
 }
 
-void UGearManagementComponent::TryAddGear(TSubclassOf<AGears> GearToAdd)
+void UGearManagementComponent::TryPickup(AGears * GearToPickup)
 {
-	SpawnGear(GearToAdd);
-	UpdateData(GearToAdd);
+	TSubclassOf<AGears> GearClass = GearToPickup->GetClass();
+
 }
 
 /*========================================================
@@ -175,34 +174,34 @@ void UGearManagementComponent::OnRClickHit()
 /*================================================================
 	Judges by gear's socket and type, and spawns gear to tac
 ================================================================*/
-void UGearManagementComponent::JudgeBySocket(AGears* GearToJudge)
+void UGearManagementComponent::JudgeBySocket(TSubclassOf<AGears> GearToJudge)
 {
-	switch (GearToJudge->GearSocket)
+	switch (GearToJudge->GetDefaultObject<AGears>()->GearSocket)
 	{
 	case EGearSocket::ENull:
 		break;
 	case EGearSocket::ELeft:
 		if (bHasLeft) { break; }
 		bHasLeft = true;
-		OwnerVehicle->GearActorLeft->SetChildActorClass(GearToJudge->StaticClass());
+		OwnerVehicle->GearActorLeft->SetChildActorClass(GearToJudge);
 		OwnerVehicle->GearActorLeft->CreateChildActor();
 		break;
 	case EGearSocket::ERight:
 		if (bHasRight) { break; }
 		bHasRight = true;
-		OwnerVehicle->GearActorRight->SetChildActorClass(GearToJudge->StaticClass());
+		OwnerVehicle->GearActorRight->SetChildActorClass(GearToJudge);
 		OwnerVehicle->GearActorRight->CreateChildActor();
 		break;
 	case EGearSocket::EFront:
 		if (bHasFront) { break; }
 		bHasFront = true;
-		OwnerVehicle->GearActorFront->SetChildActorClass(GearToJudge->StaticClass());
+		OwnerVehicle->GearActorFront->SetChildActorClass(GearToJudge);
 		OwnerVehicle->GearActorFront->CreateChildActor();
 		break;
 	case EGearSocket::EBack:
 		if (bHasBack) { break; }
 		bHasBack = true;
-		OwnerVehicle->GearActorBack->SetChildActorClass(GearToJudge->StaticClass());
+		OwnerVehicle->GearActorBack->SetChildActorClass(GearToJudge);
 		OwnerVehicle->GearActorBack->CreateChildActor();
 		break;
 	default:
@@ -210,9 +209,9 @@ void UGearManagementComponent::JudgeBySocket(AGears* GearToJudge)
 	}
 }
 
-void UGearManagementComponent::JudgeByType(AGears * GearToJudge)
+void UGearManagementComponent::JudgeByType(TSubclassOf<AGears> GearToJudge)
 {
-	switch (GearToJudge->GearType)
+	switch (GearToJudge->GetDefaultObject<AGears>()->GearType)
 	{
 	case EGearType::EBoost:
 		if (bShiftBind) { break; }

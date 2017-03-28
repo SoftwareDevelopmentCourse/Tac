@@ -29,7 +29,6 @@ void UPickupComponent::BeginPlay()
 	PickupCapsule = OwnerVehicle->PickupCapsule;
 }
 
-
 // Called every frame
 void UPickupComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
@@ -43,10 +42,14 @@ void UPickupComponent::Pickup()
 	// Try to get gear in range
 	TArray<AActor*> ActorsInRange;
 	PickupCapsule->GetOverlappingActors(ActorsInRange, AGears::StaticClass());
-	if (!ActorsInRange.IsValidIndex(0)) { return; }
+	if (!ActorsInRange.IsValidIndex(0)) 
+	{
+		UE_LOG(LogTemp, Error, TEXT("No gears in range"));
+		return; 
+	}
 	AGears* Gear = Cast<AGears>(ActorsInRange[0]);
 	ActorsInRange.Empty();
 	// Try to add the gear to tac
 	UGearManagementComponent* Manager = Cast<UGearManagementComponent>(OwnerVehicle->GetGearManager());
-	Manager->TryAddGear(Gear->GetClass()); // TODO Try add gear reference 
+	Manager->TryPickup(Gear);
 }

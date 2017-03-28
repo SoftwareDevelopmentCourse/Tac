@@ -18,5 +18,6 @@ public:
 	virtual void BeginPlay() override;
 
 private:
+	/** Volumes that spawns gears */
 	TArray<class AGearSpawnVolume*> SpawnVolumeActors;
 };

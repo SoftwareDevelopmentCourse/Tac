@@ -7,6 +7,9 @@
 
 ATacGameModeBase::ATacGameModeBase()
 {
+	/*============================================
+		Initialize for the Pawn and Controller
+	============================================*/
 	static ConstructorHelpers::FClassFinder<APawn> TacPawnBP(TEXT("/Game/Tac/Core/Characters/BP_Tac"));
 	if (!ensure(TacPawnBP.Succeeded())) { return; }
 	DefaultPawnClass = TacPawnBP.Class;
@@ -18,6 +21,9 @@ ATacGameModeBase::ATacGameModeBase()
 void ATacGameModeBase::BeginPlay()
 {
 	Super::BeginPlay();
+	/*================================
+		Spawn all GearSpawnVolumes
+	================================*/
 	TArray<AActor*> FoundActors;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AGearSpawnVolume::StaticClass(), FoundActors);
 	for (auto Actor : FoundActors)

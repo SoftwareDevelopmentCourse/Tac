@@ -3,7 +3,6 @@
 #include "Tac.h"
 #include "Gas.h"
 #include "TacController.h"
-#include "TacPlayerState.h"
 
 // Sets default values
 AGas::AGas()
@@ -11,6 +10,7 @@ AGas::AGas()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 
+	// Initialize mesh and volume
 	GasMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("GasMesh"));
 	RootComponent = GasMesh;
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> Mesh(TEXT("StaticMesh'/Game/Tac/Art/Tools/SM_Gas.SM_Gas'"));
@@ -39,8 +39,9 @@ void AGas::OverlapperSave(UPrimitiveComponent * OverlappedComp, AActor * OtherAc
 {
 	if (Cast<USkeletalMeshComponent>(OtherComp))
 	{
+		// Saves player state by calling player controller's function
 		ATacController* OverlapController = Cast<ATacController>(OtherActor->GetInstigatorController());
-		ATacPlayerState* TacPS = Cast<ATacPlayerState>(OverlapController->PlayerState);
+		//ATacPlayerState* TacPS = Cast<ATacPlayerState>(OverlapController->PlayerState);
 		OverlapController->SaveGame();
 		UE_LOG(LogTemp, Warning, TEXT("Gas save"));
 	}

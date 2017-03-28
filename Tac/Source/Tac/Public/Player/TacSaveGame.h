@@ -17,6 +17,7 @@ class TAC_API UTacSaveGame : public USaveGame
 	GENERATED_BODY()
 	
 public:
+	/** Player's states that will be saved */
 	UPROPERTY(VisibleAnywhere, Category = Save)
 	FString PlayerName;
 	

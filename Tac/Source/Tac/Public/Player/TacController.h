@@ -31,6 +31,7 @@ public:
 	void EmptyGame();
 
 private:
+	/** Widget blueprint's reference */
 	TSubclassOf<class UUserWidget> PlayerView;
 	
 };
