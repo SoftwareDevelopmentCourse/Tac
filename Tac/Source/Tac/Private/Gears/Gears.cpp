@@ -33,9 +33,9 @@ AGears::AGears()
 		Properties initialize
 	============================================*/
 	FloatRange = 5.f;
-	GearSocket = EGearSocket::EBack;
-	GearName = TEXT("Debug");
-	GearType = EGearType::EBoost;
+	GearSocket = EGearSocket::ENull;
+	GearName = TEXT("DEFAULT_NAME");
+	GearType = EGearType::EProtector;
 	SpawnRate = 3;
 	MaxExistenceBase = -1;
 	MaxExistenceOutdoors = 5;
@@ -80,7 +80,7 @@ void AGears::WorldSpawn()
 	// Initialize timeline
 	Timeline->AddInterpFloat(TimelineCurve, InterpFunction);
 	Timeline->PlayFromStart();
-	UE_LOG(LogTemp, Error, TEXT("%s"), *this->GetName());
+	//UE_LOG(LogTemp, Error, TEXT("%s"), *this->GetName());
 }
 
 // Add gears rotation

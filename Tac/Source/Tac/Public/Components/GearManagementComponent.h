@@ -32,11 +32,13 @@ public:
 	/** Called every frame */
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 	/** Spawn gear to tac */
-	void SpawnGear(AGears* GearToSpawn);
+	void InitializeGear(AGears* GearToSpawn);
 	/** Update player's gears state and locall gears state */
 	void UpdateData(AGears* GearToAdd);
 	/** Try to pick up gear */
 	void TryPickup(AGears* GearToPickup);
+	/** Reset tac gears as class AGears */
+	void ResetGears();
 	
 public:
 	/*============================
@@ -86,4 +88,6 @@ private:
 	bool JudgeBySocket(AGears* GearToJudge);
 	/** Judge by gear type */
 	bool JudgeByType(AGears* GearToJudge);
+	/** Initialize gear's boolean states */
+	void InitializeState();
 };

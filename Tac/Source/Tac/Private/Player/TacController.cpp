@@ -7,6 +7,7 @@
 #include "TacPlayerState.h"
 #include "Blueprint/UserWidget.h"
 #include "TacVehicle.h"
+#include "GearManagementComponent.h"
 
 ATacController::ATacController()
 {
@@ -85,7 +86,11 @@ void ATacController::EmptyGame()
 	TArray<AActor*> FoundActors;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), APlayerStart::StaticClass(), FoundActors);
 	// Empty player state and save to GameInstance
+	TacPS->SetName(TEXT("DEFAULT"));
 	TacPS->EmptyGears();
+	ATacVehicle* Tac = Cast<ATacVehicle>(GetPawn());
+	UGearManagementComponent* Manager = Cast<UGearManagementComponent>(Tac->GetGearManager());
+	Manager->ResetGears();
 	for (auto Actor : FoundActors)
 	{
 		APlayerStart* SpawnStart = Cast<APlayerStart>(Actor);
@@ -95,7 +100,7 @@ void ATacController::EmptyGame()
 			break; 
 		}
 		TacPS->SetTacTransform(SpawnStart->GetActorTransform());
-		UE_LOG(LogTemp, Error, TEXT("%s"), *SpawnStart->GetName());
+		//UE_LOG(LogTemp, Error, TEXT("%s"), *SpawnStart->GetName());
 		break;
 	}
 	SaveGameInstance->PlayerName = TacPS->GetPlayerName();

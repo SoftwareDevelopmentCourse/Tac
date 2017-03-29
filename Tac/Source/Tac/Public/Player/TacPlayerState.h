@@ -3,11 +3,11 @@
 #pragma once
 
 #include "GameFramework/PlayerState.h"
-#include "TacVehicle.h"
 #include "TacHeader.h"
 #include "TacPlayerState.generated.h"
 
 class AGears;
+class ATacVehicle;
 /**
  * 
  */
@@ -50,5 +50,6 @@ private:
 	TArray<TSubclassOf<AGears>> Gears;
 	FTransform TacTransform;
 	FString MyPlayerName = TEXT("Tacky");
+	int32 GearsAmount;
 	
 };

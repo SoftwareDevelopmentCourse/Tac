@@ -163,7 +163,8 @@ void ATacVehicle::UpdateState()
 	ATacPlayerState* TacPS = Cast<ATacPlayerState>(PlayerState);
 	for (auto Gear : TacPS->GetGears())
 	{
-		GearManager->SpawnGear(Gear.GetDefaultObject());
+		GearManager->InitializeGear(Gear.GetDefaultObject());
+		//UE_LOG(LogTemp, Log, TEXT("%s"), *Gear->GetName());
 	}
 	SetActorTransform(TacPS->GetTacTransform(), false, nullptr, ETeleportType::TeleportPhysics);
 }

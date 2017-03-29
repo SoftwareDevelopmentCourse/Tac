@@ -60,12 +60,18 @@ void ATacPlayerState::SetGears(TArray<TSubclassOf<AGears>> GearsToSet)
 
 void ATacPlayerState::AddGear(TSubclassOf<AGears> GearToAdd)
 {
-	Gears.Add(GearToAdd);
+	Gears[GearsAmount++] = GearToAdd;
 }
 
 void ATacPlayerState::EmptyGears()
 {
-	Gears.Empty();
+	Gears.SetNum(4);
+	GearsAmount = 0;
+	for (int32 i = 0; i < 4; i++)
+	{
+		//UE_LOG(LogTemp, Log, TEXT("%s"), *Gears[i]->GetName());
+		Gears[i] = AGears::StaticClass();
+	}
 }
 
 FTransform ATacPlayerState::GetTacTransform()
