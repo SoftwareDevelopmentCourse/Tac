@@ -1,13 +1,13 @@
 ﻿# Tac
 A machanical vehicle battle game:grinning:.
-- [GameDesignDocument](https://github.com/Trevor802/Tac/blob/master/GameDesignDocument.md)
-- [游戏设计文档](https://github.com/Trevor802/Tac/blob/master/游戏设计文档.md)
+- [GameDesignDocument](https://github.com/306b/Tac/blob/master/GameDesignDocument.md)
+- [游戏设计文档](https://github.com/306b/Tac/blob/master/游戏设计文档.md)
 
 ## Log
-### [Iteration One](https://github.com/Trevor802/Tac/blob/master/Iterations/IterationOne.md)
+### [Iteration One](https://github.com/306b/Tac/blob/master/Iterations/IterationOne.md)
 
-### [Iteration Two](https://github.com/Trevor802/Tac/blob/master/Iterations/IterationTwo.md)
+### [Iteration Two](https://github.com/306b/Tac/blob/master/Iterations/IterationTwo.md)
 - Project's contributor added:sunglasses:.
 - Ypixel here.
 - 306b organization established:office:.
-- Trevor802 welcomes you.
+- 306b welcomes you.
