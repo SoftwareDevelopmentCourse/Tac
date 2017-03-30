@@ -101,29 +101,31 @@ ATacVehicle::ATacVehicle(const FObjectInitializer& ObjectInitializer) : Super(Ob
 	// Initialization for ChildActorComponent
 	// Reference: https://forums.unrealengine.com/showthread.php?53823-c-equivalent-of-Add-ChildActorComponent
 	GearActorFront = CreateDefaultSubobject<UChildActorComponent>(TEXT("GearFront"));
+	GearActorFront->SetupAttachment(RootComponent, TEXT("EFront"));
 	//GearActorFront->SetChildActorClass(AGears::StaticClass());
 	//GearActorFront->CreateChildActor();
-	GearActorFront->SetupAttachment(RootComponent, TEXT("EFront"));
 
 	GearActorBack = CreateDefaultSubobject<UChildActorComponent>(TEXT("GearBack"));
+	GearActorBack->SetupAttachment(RootComponent, TEXT("EBack"));
 	//GearActorBack->SetChildActorClass(AGears::StaticClass());
 	//GearActorBack->CreateChildActor();
-	GearActorBack->SetupAttachment(RootComponent, TEXT("EBack"));
 
 	GearActorLeft = CreateDefaultSubobject<UChildActorComponent>(TEXT("GearLeft"));
+	GearActorLeft->SetupAttachment(RootComponent, TEXT("ELeft"));
 	//GearActorLeft->SetChildActorClass(AGears::StaticClass());
 	//GearActorLeft->CreateChildActor();
-	GearActorLeft->SetupAttachment(RootComponent, TEXT("ELeft"));
 
 	GearActorRight = CreateDefaultSubobject<UChildActorComponent>(TEXT("GearRight"));
+	GearActorRight->SetupAttachment(RootComponent, TEXT("ERight"));
 	//GearActorRight->SetChildActorClass(AGears::StaticClass());
 	//GearActorRight->CreateChildActor();
-	GearActorRight->SetupAttachment(RootComponent, TEXT("ERight"));
+
 }
 
 void ATacVehicle::BeginPlay()
 {
 	Super::BeginPlay();
+
 }
 
 void ATacVehicle::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)

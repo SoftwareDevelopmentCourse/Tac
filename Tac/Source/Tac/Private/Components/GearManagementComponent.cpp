@@ -64,16 +64,21 @@ void UGearManagementComponent::TickComponent(float DeltaTime, ELevelTick TickTyp
 
 void UGearManagementComponent::InitializeGear(AGears* GearToSpawn)
 {
-	//UE_LOG(LogTemp, Log, TEXT("Spawns : %s"), *GearToSpawn->GetName());
-	JudgeByType(GearToSpawn);
-	OwnedGears.Add(GearToSpawn);
+
+	InitializeState();
+	
+	if (!JudgeByType(GearToSpawn))
+	{
+
+	}
+	
+	//OwnedGears = OwnerPS->GetGears();
 }
 
 void UGearManagementComponent::UpdateData(AGears* GearToAdd)
 {
 	OwnerPS->AddGear(GearToAdd->GetClass());
-	//UE_LOG(LogTemp, Log, TEXT("Update data : %s"), *GearToAdd->GetName());
-	OwnedGears.Add(GearToAdd);
+
 }
 
 void UGearManagementComponent::TryPickup(AGears * GearToPickup)
@@ -87,60 +92,79 @@ void UGearManagementComponent::TryPickup(AGears * GearToPickup)
 
 void UGearManagementComponent::ResetGears()
 {
-	OwnerVehicle->GearActorLeft->SetChildActorClass(AGears::StaticClass());
-	OwnerVehicle->GearActorLeft->CreateChildActor();
-	OwnerVehicle->GearActorRight->SetChildActorClass(AGears::StaticClass());
-	OwnerVehicle->GearActorRight->CreateChildActor();
-	OwnerVehicle->GearActorFront->SetChildActorClass(AGears::StaticClass());
-	OwnerVehicle->GearActorFront->CreateChildActor();
-	OwnerVehicle->GearActorBack->SetChildActorClass(AGears::StaticClass());
-	OwnerVehicle->GearActorBack->CreateChildActor();
+
+	auto Left = OwnerVehicle->GearActorLeft;
+	auto Right = OwnerVehicle->GearActorRight;
+	auto Front = OwnerVehicle->GearActorFront;
+	auto Back = OwnerVehicle->GearActorBack;
+
+	TacGears.Empty();
+	Left->SetChildActorClass(AGears::StaticClass());
+	//Left->CreateChildActor();
+	
+	Right->SetChildActorClass(AGears::StaticClass());
+	//Right->CreateChildActor();
+	
+	Front->SetChildActorClass(AGears::StaticClass());
+	//Front->CreateChildActor();
+	
+	Back->SetChildActorClass(AGears::StaticClass());
+	//Back->CreateChildActor();
+	
 	InitializeState();
 }
 
 /*========================================================
 	Calls different functions depends on gear's type
-========================================================*/
+======================================================*/
 void UGearManagementComponent::OnLookUp(float val)
 {
 	if (!bMouseBind) { return; }
-	for (auto Gear : OwnedGears)
+	/*
+	for (auto Gear : OwnerPS->GetGears())
 	{
-		if (Gear->GearType == EGearType::EShoot)
+		if (Gear.GetDefaultObject()->GearType == EGearType::EShoot)
 		{
-			Gear->OnLookUp(val);
+			Gear.GetDefaultObject()->OnLookUp(val);
 		}
 	}
+	*/
+
 }
 
 void UGearManagementComponent::OnLookRight(float val)
 {
 	if (!bMouseBind) { return; }
-	for (auto Gear : OwnedGears)
+	/*
+	for (auto Gear : OwnerPS->GetGears())
 	{
-		if (Gear->GearType == EGearType::EShoot)
+		if (Gear.GetDefaultObject()->GearType == EGearType::EShoot)
 		{
-			Gear->OnLookRight(val);
+			Gear.GetDefaultObject()->OnLookRight(val);
 		}
 	}
+	*/
 }
 
 void UGearManagementComponent::OnSpaceHit()
 {
 	if (!bSpaceBind) { return; }
-	for (auto Gear : OwnedGears)
+	/*
+	for (auto Actor : TacGears)
 	{
+		auto Gear = Cast<AGears>(Actor);
 		if (Gear->GearType == EGearType::EJump)
 		{
 			Gear->OnSpaceHit();
 		}
 	}
+	*/
 }
 
 void UGearManagementComponent::OnShiftHit()
 {
 	if (!bShiftBind) { return; }
-	for (auto Gear : OwnedGears)
+	for (auto Gear : TacGears)
 	{
 		if (Gear->GearType == EGearType::EBoost)
 		{
@@ -152,6 +176,7 @@ void UGearManagementComponent::OnShiftHit()
 void UGearManagementComponent::OnKeyQHit()
 {
 	if (!bKeyQBind) { return; }
+	/*
 	for (auto Gear : OwnedGears)
 	{
 		if (Gear->GearType == EGearType::EThrow)
@@ -159,30 +184,36 @@ void UGearManagementComponent::OnKeyQHit()
 			Gear->OnKeyQHit();
 		}
 	}
+	*/
 }
 
 void UGearManagementComponent::OnLClickHit()
 {
 	if (!bLClickBind) { return; }
-	for (auto Gear : OwnedGears)
+	/*
+		for (auto Gear : OwnedGears)
 	{
 		if (Gear->GearType == EGearType::EShoot)
 		{
 			Gear->OnLClickHit();
 		}
 	}
+	*/
+
 }
 
 void UGearManagementComponent::OnRClickHit()
 {
 	if (!bRClickBind) { return; }
-	for (auto Gear : OwnedGears)
+	/*
+		for (auto Gear : OwnedGears)
 	{
 		if (Gear->GearType == EGearType::EShoot)
 		{
 			Gear->OnRClickHit();
 		}
 	}
+	*/
 }
 
 /*================================================================
@@ -193,35 +224,39 @@ bool UGearManagementComponent::JudgeBySocket(AGears* GearToJudge)
 	switch (GearToJudge->GearSocket)
 	{
 	case EGearSocket::ENull:
-		//UE_LOG(LogTemp, Log, TEXT("Child class is : %s"), *GearToJudge->GetClass()->GetName());
-		return true;
+		//UE_LOG(LogTemp, Log, TEXT("Null class is : %s"), *GearToJudge->GetClass()->GetName());
+		return false;
 	case EGearSocket::ELeft:
 		if (bHasLeft) { return false; }
 		bHasLeft = true;
 		OwnerVehicle->GearActorLeft->SetChildActorClass(GearToJudge->GetClass());
-		//UE_LOG(LogTemp, Log, TEXT("Child class is : %s"), *GearToJudge->GetClass()->GetName());
+		//UE_LOG(LogTemp, Log, TEXT("Left class is : %s"), *GearToJudge->GetClass()->GetName());
 		OwnerVehicle->GearActorLeft->CreateChildActor();
+		TacGears.Push(Cast<AGears>(OwnerVehicle->GearActorLeft->GetChildActor()));
 		return true;
 	case EGearSocket::ERight:
 		if (bHasRight) { return false; }
 		bHasRight = true;
 		OwnerVehicle->GearActorRight->SetChildActorClass(GearToJudge->GetClass());
-		//UE_LOG(LogTemp, Log, TEXT("Child class is : %s"), *GearToJudge->GetClass()->GetName());
+		//UE_LOG(LogTemp, Log, TEXT("Right class is : %s"), *GearToJudge->GetClass()->GetName());
 		OwnerVehicle->GearActorRight->CreateChildActor();
+		TacGears.Push(Cast<AGears>(OwnerVehicle->GearActorRight->GetChildActor()));
 		return true;
 	case EGearSocket::EFront:
 		if (bHasFront) { return false; }
 		bHasFront = true;
 		OwnerVehicle->GearActorFront->SetChildActorClass(GearToJudge->GetClass());
-		//UE_LOG(LogTemp, Log, TEXT("Child class is : %s"), *GearToJudge->GetClass()->GetName());
+		//UE_LOG(LogTemp, Log, TEXT("Front class is : %s"), *GearToJudge->GetClass()->GetName());
 		OwnerVehicle->GearActorFront->CreateChildActor();
+		TacGears.Push(Cast<AGears>(OwnerVehicle->GearActorFront->GetChildActor()));
 		return true;
 	case EGearSocket::EBack:
 		if (bHasBack) { return false; }
 		bHasBack = true;
 		OwnerVehicle->GearActorBack->SetChildActorClass(GearToJudge->GetClass());
-		//UE_LOG(LogTemp, Log, TEXT("Child class is : %s"), *GearToJudge->GetClass()->GetName());
+		//UE_LOG(LogTemp, Log, TEXT("Back class is : %s"), *GearToJudge->GetClass()->GetName());
 		OwnerVehicle->GearActorBack->CreateChildActor();
+		TacGears.Push(Cast<AGears>(OwnerVehicle->GearActorBack->GetChildActor()));
 		return true;
 	default:
 		return false;

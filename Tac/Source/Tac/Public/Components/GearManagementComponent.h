@@ -69,7 +69,7 @@ private:
 	/*==============================================
 		Private variables for component's use
 	==============================================*/
-	TArray<AGears*> OwnedGears;
+	//TArray<TSubclassOf<AGears>> OwnedGears;
 	/** For judging by gear type */
 	bool bShiftBind;
 	bool bSpaceBind;
@@ -90,4 +90,7 @@ private:
 	bool JudgeByType(AGears* GearToJudge);
 	/** Initialize gear's boolean states */
 	void InitializeState();
+
+	TArray<AGears*> TacGears;
+
 };

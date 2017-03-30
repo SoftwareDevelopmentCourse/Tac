@@ -2,6 +2,7 @@
 
 #include "Tac.h"
 #include "Gears.h"
+#include "TacVehicle.h"
 #include "TacHeader.h"
 
 // Sets default values
@@ -15,6 +16,8 @@ AGears::AGears()
 	===========================================*/
 	Root = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
 	RootComponent = Root;
+
+	OwnerVehicle = Cast<ATacVehicle>(GetOwner());
 
 	/*==========================================
 		Timeline triggered event initialize
@@ -106,11 +109,13 @@ void AGears::OnSpaceHit()
 
 void AGears::OnShiftHit()
 {
+	UE_LOG(LogTemp, Error, TEXT("%s"), *OwnerVehicle->GetName());
 	// For overridden by child class
 }
 
 void AGears::OnKeyQHit()
 {
+	UE_LOG(LogTemp, Error, TEXT("%s"), *OwnerVehicle->GetName());
 	// For overridden by child class
 }
 

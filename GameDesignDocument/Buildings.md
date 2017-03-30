@@ -1,8 +1,13 @@
 # Building
+
 ## Base
+
 - Game over when base is destroyed.
+
 - Base could provide self side's players' constant health recovery.
+
 - At base, players could purchase gears whose level depends on time.
+
 - Base is the initial respawn place.
 
 ## [Bridge](https://github.com/Trevor802/Tac/blob/master/GameDesignDocument/Buildings/Bridge.md)

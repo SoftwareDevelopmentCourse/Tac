@@ -6,6 +6,8 @@
 #include "TacHeader.h"
 #include "Gears.generated.h"
 
+class ATacVehicle;
+
 UCLASS()
 class TAC_API AGears : public AActor
 {
@@ -103,4 +105,6 @@ private:
 	
 	/** Whether the gear is picked up */
 	bool bShouldRotate;
+
+	ATacVehicle* OwnerVehicle;
 };
