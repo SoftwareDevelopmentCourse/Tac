@@ -68,3 +68,4 @@ DerivedDataCache/*
 *.raw
 *.session
 *.mel
+*_BuiltDate.uasset
