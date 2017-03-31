@@ -32,7 +32,7 @@ public:
 	/** Called every frame */
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 	/** Spawn gear to tac */
-	void InitializeGear(AGears* GearToSpawn);
+	void InitializeGear(TArray<TSubclassOf<AGears>> OwnedGears);
 	/** Update player's gears state and locall gears state */
 	void UpdateData(AGears* GearToAdd);
 	/** Try to pick up gear */
@@ -69,7 +69,6 @@ private:
 	/*==============================================
 		Private variables for component's use
 	==============================================*/
-	//TArray<TSubclassOf<AGears>> OwnedGears;
 	/** For judging by gear type */
 	bool bShiftBind;
 	bool bSpaceBind;
@@ -90,7 +89,7 @@ private:
 	bool JudgeByType(AGears* GearToJudge);
 	/** Initialize gear's boolean states */
 	void InitializeState();
-
-	TArray<AGears*> TacGears;
+	/** Storages every socket's gear */
+	TArray<AActor*> TacGears;
 
 };

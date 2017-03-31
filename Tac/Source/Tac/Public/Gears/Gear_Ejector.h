@@ -15,6 +15,6 @@ class TAC_API AGear_Ejector : public AGears
 
 	
 public:
-	
+	virtual void OnShiftHit(AActor* Target) override;
 	
 };

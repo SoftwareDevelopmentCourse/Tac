@@ -72,15 +72,15 @@ public:
 	/** When mouse move right */
 	virtual void OnLookRight(float val);
 	/** When hitting spacebar */
-	virtual void OnSpaceHit();
+	virtual void OnSpaceHit(AActor* Target);
 	/** When hitting left shift */
-	virtual void OnShiftHit();
+	virtual void OnShiftHit(AActor* Target);
 	/** When hitting key Q */
-	virtual void OnKeyQHit();
+	virtual void OnKeyQHit(AActor* Target);
 	/** When hitting left mouse button */
-	virtual void OnLClickHit();
+	virtual void OnLClickHit(AActor* Target);
 	/** When hitting right mouse button */
-	virtual void OnRClickHit();
+	virtual void OnRClickHit(AActor* Target);
 
 public:
 	/** Called by timeline, neet UFUNCTION() */
@@ -106,5 +106,4 @@ private:
 	/** Whether the gear is picked up */
 	bool bShouldRotate;
 
-	ATacVehicle* OwnerVehicle;
 };

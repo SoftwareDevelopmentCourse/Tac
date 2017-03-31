@@ -14,8 +14,8 @@
 - [ ] Problems/Solutions -> Emptying gears should delete gears immediately.
 
 - **Controller** 
-- [ ] Adding -> GearManagementComponent to manage gears.
-- [ ] Adding -> CapsuleSensorComponent to interacting with the world.
+- [x] Adding -> GearManagementComponent to manage gears.
+- [x] Adding -> CapsuleSensorComponent to interacting with the world.
 - [ ] Adding -> Trinity( Health, armor and energy) factors. 
 - [ ] Fixing -> Refactoring code, simplifing header files.
 - [ ] Fixing -> The crazy spin.
