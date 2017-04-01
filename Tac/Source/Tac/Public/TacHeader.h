@@ -23,6 +23,14 @@ enum class EGearType : uint8
 	EJump
 };
 
+UENUM(BlueprintType)
+enum class EArmorType : uint8
+{
+	EEngine,
+	EBody,
+	EWheel
+};
+
 USTRUCT()
 struct FGearSpawn
 {
