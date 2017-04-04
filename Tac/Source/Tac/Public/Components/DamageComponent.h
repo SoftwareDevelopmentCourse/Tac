@@ -42,7 +42,12 @@ public:
 	UFUNCTION(BlueprintCallable, Category = State)
 	void StopRecoverArmor();
 	UFUNCTION(BlueprintCallable, Category = State)
-	void RecoverHealth();
+	void RecoverHealth(int32 val);
 	
-	void HandleDamage();
+	void HandleDamage(int32 DamageVal);
+
+private:
+	
+	int32 MaxHealth;
+	int32 MaxArmor;
 };

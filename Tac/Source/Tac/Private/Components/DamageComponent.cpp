@@ -12,6 +12,10 @@ UDamageComponent::UDamageComponent()
 	PrimaryComponentTick.bCanEverTick = true;
 
 	// ...
+	MaxHealth = 100;
+	MaxArmor = 100;
+	Health = MaxHealth;
+	Armor = MaxArmor;
 }
 
 
@@ -41,11 +45,13 @@ void UDamageComponent::StopRecoverArmor()
 {
 }
 
-void UDamageComponent::RecoverHealth()
+void UDamageComponent::RecoverHealth(int32 val)
 {
+	Health = FMath::Clamp<int32>(Health + val, val, MaxHealth);
 }
 
-void UDamageComponent::HandleDamage()
+void UDamageComponent::HandleDamage(int32 DamageVal)
 {
+
 }
 
