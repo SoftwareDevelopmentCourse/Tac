@@ -63,7 +63,7 @@ Intermediate/*
 
 # Cache files for the editor to use
 DerivedDataCache/*
-*.umap
+
 *.r16
 *.raw
 *.session
