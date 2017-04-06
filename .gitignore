@@ -69,3 +69,4 @@ DerivedDataCache/*
 *.session
 *.mel
 *_BuiltData.uasset
+*.iff
