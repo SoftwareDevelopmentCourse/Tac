@@ -228,28 +228,28 @@ bool UGearManagementComponent::JudgeBySocket(AGears* GearToJudge)
 		bHasLeft = true;
 		Left->SetChildActorClass(GearToJudge->GetClass());
 		Left->CreateChildActor();
-		TacGears[0] = GearToJudge;
+		TacGears[0] = Left->GetChildActor();
 		return true;
 	case EGearSocket::ERight:
 		if (bHasRight) { return false; }
 		bHasRight = true;
 		Right->SetChildActorClass(GearToJudge->GetClass());
 		Right->CreateChildActor();
-		TacGears[1] = GearToJudge;
+		TacGears[1] = Right->GetChildActor();
 		return true;
 	case EGearSocket::EFront:
 		if (bHasFront) { return false; }
 		bHasFront = true;
 		Front->SetChildActorClass(GearToJudge->GetClass());
 		Front->CreateChildActor();
-		TacGears[2] = GearToJudge;
+		TacGears[2] = Front->GetChildActor();
 		return true;
 	case EGearSocket::EBack:
 		if (bHasBack) { return false; }
 		bHasBack = true;
 		Back->SetChildActorClass(GearToJudge->GetClass());
 		Back->CreateChildActor();
-		TacGears[3] = GearToJudge;
+		TacGears[3] = Back->GetChildActor();
 		return true;
 	default:
 		return false;

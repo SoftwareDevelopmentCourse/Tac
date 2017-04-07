@@ -21,6 +21,9 @@ public:
 	void Initialize(UStaticMeshComponent* GunMeshToSet);
 	virtual void OnLClickHit(AActor* Target) override;
 	
+protected:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gaer|Gun")
+	int32 Ammo = 10;
 
 private:
 	UPROPERTY(EditDefaultsOnly, Category = "Gear|Gun")

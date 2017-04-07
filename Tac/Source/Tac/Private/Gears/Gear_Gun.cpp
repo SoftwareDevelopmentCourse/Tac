@@ -12,5 +12,12 @@ void AGear_Gun::Initialize(UStaticMeshComponent* GunMeshToSet)
 void AGear_Gun::OnLClickHit(AActor* Target)
 {
 	Super::OnLClickHit(Target);
-	UE_LOG(LogTemp, Log, TEXT("%s,Shooooooting!"), *Target->GetName());
+	if (Ammo > 0)
+	{
+		auto SpawnLocation = GunMesh->GetSocketLocation(TEXT("Fire"));
+		auto SpawnRotation = GunMesh->GetSocketRotation(TEXT("Fire"));
+		auto Projectile = GetWorld()->SpawnActor<AProjectile>(ProjectileClass, SpawnLocation, SpawnRotation);
+		Projectile->LaunchProjectile();
+		UE_LOG(LogTemp, Warning, TEXT("Shooooting"));
+	}
 }

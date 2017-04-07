@@ -18,6 +18,7 @@ AProjectile::AProjectile()
 	ProjectileMovementComponent->bAutoActivate = false;
 
 	DamageAmount = 30.f;
+	LaunchSpeed = 10000.f;
 
 }
 
@@ -39,12 +40,17 @@ void AProjectile::Tick(float DeltaTime)
 
 void AProjectile::OnHit(UPrimitiveComponent * HitComponent, AActor * OtherActor, UPrimitiveComponent * OtherComponent, FVector NormalImpulse, const FHitResult & Hit)
 {
-	UE_LOG(LogTemp, Log, TEXT("%s"), *Hit.PhysMaterial->GetName());
-
+	if (Hit.BoneName.IsValid())
+	{
+		UE_LOG(LogTemp, Log, TEXT("%s"), *Hit.BoneName.ToString());
+	}
+	//UE_LOG(LogTemp, Log, TEXT("%s"), *OtherActor->GetName());
+	Destroy();
 }
 
-void AProjectile::LaunchProjectile(float LaunchSpeed)
+void AProjectile::LaunchProjectile()
 {
 	ProjectileMovementComponent->SetVelocityInLocalSpace(FVector::ForwardVector * LaunchSpeed);
 	ProjectileMovementComponent->Activate();
+
 }

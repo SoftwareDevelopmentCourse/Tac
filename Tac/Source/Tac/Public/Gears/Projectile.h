@@ -32,15 +32,19 @@ private:
 	UProjectileMovementComponent* ProjectileMovementComponent;
 	UFUNCTION()
 	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit);
-	
+
 public:
 	FORCEINLINE	UProjectileMovementComponent* GetProjectileMovementComponent() const { return ProjectileMovementComponent; }
 	
 public:
 	// Activite the projectile
-	void LaunchProjectile(float LaunchSpeed);
+	void LaunchProjectile();
 
 protected:
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Damage)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Damage)
 	float DamageAmount;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Damage)
+	float LaunchSpeed;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Damage)
+	float DestroyDelay = 1.f;
 };
