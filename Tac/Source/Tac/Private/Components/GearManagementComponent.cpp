@@ -185,7 +185,7 @@ void UGearManagementComponent::OnKeyQHit()
 
 void UGearManagementComponent::OnLClickHit()
 {
-	if (!bKeyQBind) { return; }
+	if (!bLClickBind) { return; }
 	for (auto Actor : TacGears)
 	{
 		auto Gear = Cast<AGears>(Actor);
@@ -198,7 +198,7 @@ void UGearManagementComponent::OnLClickHit()
 
 void UGearManagementComponent::OnRClickHit()
 {
-	if (!bKeyQBind) { return; }
+	if (!bRClickBind) { return; }
 	for (auto Actor : TacGears)
 	{
 		auto Gear = Cast<AGears>(Actor);

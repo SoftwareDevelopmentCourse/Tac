@@ -17,13 +17,16 @@ class TAC_API AGear_Gun : public AGears
 	GENERATED_BODY()
 
 public:
-	AGear_Gun();
-
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Gear|Gun")
-	UStaticMeshComponent* GunMesh;
+	UFUNCTION(BlueprintCallable, Category = "Gear|Gun")
+	void Initialize(UStaticMeshComponent* GunMeshToSet);
+	virtual void OnLClickHit(AActor* Target) override;
+	
 
 private:
+	UPROPERTY(EditDefaultsOnly, Category = "Gear|Gun")
 	TSubclassOf<AProjectile> ProjectileClass;
+
+	UStaticMeshComponent* GunMesh;
 	
 	
 };
