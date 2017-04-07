@@ -42,9 +42,11 @@ void AProjectile::OnHit(UPrimitiveComponent * HitComponent, AActor * OtherActor,
 {
 	if (Hit.BoneName.IsValid())
 	{
-		UE_LOG(LogTemp, Log, TEXT("%s"), *Hit.BoneName.ToString());
+		//UE_LOG(LogTemp, Log, TEXT("%s"), *Hit.BoneName.ToString());
+		TArray<TCHAR> HitName = Hit.BoneName.ToString().GetCharArray();
+		UE_LOG(LogTemp, Error, TEXT("GG%i"), HitName.GetData());
+
 	}
-	//UE_LOG(LogTemp, Log, TEXT("%s"), *OtherActor->GetName());
 	Destroy();
 }
 

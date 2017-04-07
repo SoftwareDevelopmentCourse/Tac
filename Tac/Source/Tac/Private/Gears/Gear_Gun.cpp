@@ -18,6 +18,5 @@ void AGear_Gun::OnLClickHit(AActor* Target)
 		auto SpawnRotation = GunMesh->GetSocketRotation(TEXT("Fire"));
 		auto Projectile = GetWorld()->SpawnActor<AProjectile>(ProjectileClass, SpawnLocation, SpawnRotation);
 		Projectile->LaunchProjectile();
-		UE_LOG(LogTemp, Warning, TEXT("Shooooting"));
 	}
 }
