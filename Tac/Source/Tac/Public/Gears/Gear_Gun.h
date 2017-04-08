@@ -20,9 +20,11 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Gear|Gun")
 	void Initialize(UStaticMeshComponent* GunMeshToSet);
 	virtual void OnLClickHit(AActor* Target) override;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gear|Gun")
+	float ArmorPenetration = 0.5f;
 	
 protected:
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gaer|Gun")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gear|Gun")
 	int32 Ammo = 10;
 
 private:

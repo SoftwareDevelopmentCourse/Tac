@@ -148,8 +148,7 @@ void ATacVehicle::SetupPlayerInputComponent(class UInputComponent* PlayerInputCo
 
 float ATacVehicle::TakeDamage(float DamageAmount, struct FDamageEvent const & DamageEvent, class AController * EventInstigator, AActor * DamageCauser)
 {
-	int32 DamageInt = FPlatformMath::RoundToInt(DamageAmount);
-	DamageManager->HandleDamage(DamageInt);
+	DamageManager->HandleDamage(DamageAmount, DamageCauser);
 	return DamageAmount;// TODO Changes return value
 }
 

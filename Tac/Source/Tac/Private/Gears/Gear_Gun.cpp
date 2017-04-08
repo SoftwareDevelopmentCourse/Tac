@@ -18,6 +18,7 @@ void AGear_Gun::OnLClickHit(AActor* Target)
 		auto SpawnRotation = GunMesh->GetSocketRotation(TEXT("Fire"));
 		auto Projectile = GetWorld()->SpawnActor<AProjectile>(ProjectileClass, SpawnLocation, SpawnRotation);
 		Projectile->Instigator = Cast<APawn>(Target);
+		Projectile->OwnerGun = this;
 		Projectile->LaunchProjectile();
 	}
 }

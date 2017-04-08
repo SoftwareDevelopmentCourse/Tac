@@ -5,6 +5,7 @@
 #include "GameFramework/Actor.h"
 #include "Projectile.generated.h"
 
+
 UCLASS()
 class TAC_API AProjectile : public AActor
 {
@@ -39,6 +40,7 @@ public:
 public:
 	// Activite the projectile
 	void LaunchProjectile();
+	AActor* OwnerGun;
 
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Damage)

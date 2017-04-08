@@ -44,7 +44,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = State)
 	void RecoverHealth(int32 val);
 	
-	void HandleDamage(int32 DamageVal);
+	void HandleDamage(float DamageVal, AActor* DamageCauser);
 
 private:
 	

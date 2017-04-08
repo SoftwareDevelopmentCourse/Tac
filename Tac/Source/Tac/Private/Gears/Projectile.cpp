@@ -2,7 +2,7 @@
 
 #include "Tac.h"
 #include "Projectile.h"
-
+#include "VehicleDamageType.h"
 
 // Sets default values
 AProjectile::AProjectile()
@@ -56,8 +56,8 @@ void AProjectile::OnHit(UPrimitiveComponent * HitComponent, AActor * OtherActor,
 		OtherActor,
 		DamageAmount * DamageFactor,
 		Instigator->GetController(),
-		Instigator,
-		UDamageType::StaticClass()
+		OwnerGun,
+		UVehicleDamageType::StaticClass()
 		);
 	}
 	Destroy();

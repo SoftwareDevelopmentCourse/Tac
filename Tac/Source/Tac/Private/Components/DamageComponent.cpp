@@ -2,6 +2,7 @@
 
 #include "Tac.h"
 #include "DamageComponent.h"
+#include "Gear_Gun.h"
 
 
 // Sets default values for this component's properties
@@ -50,13 +51,20 @@ void UDamageComponent::RecoverHealth(int32 val)
 	Health = FMath::Clamp<int32>(Health + val, val, MaxHealth);
 }
 
-void UDamageComponent::HandleDamage(int32 DamageVal)
+void UDamageComponent::HandleDamage(float DamageVal, AActor* DamageCauser)
 {
-	//UE_LOG(LogTemp, Warning, TEXT("Take damage : %i"), DamageVal);
-	Health = FMath::Clamp<int32>(Health - DamageVal, 0, MaxHealth);
-	if (Health == 0)
+	auto Penetration = Cast<AGear_Gun>(DamageCauser)->ArmorPenetration;
+	float DamVal;
+	if (Armor <= 0)
 	{
-		UE_LOG(LogTemp, Error, TEXT("Dead"));
+		DamVal = DamageVal;
 	}
+	else
+	{
+		DamVal = DamageVal * Penetration;
+		Armor = FMath::Clamp<int32>(Armor - DamVal * 0.5, 0, MaxArmor);
+	}
+	Health = FMath::Clamp<int32>(Health - DamVal, 0, MaxHealth);
+	UE_LOG(LogTemp, Log, TEXT("\nHealth: %i	DamageReceived: %i\nArmor: %i"), Health, (int32)DamVal, Armor);
 }
 
