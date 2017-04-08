@@ -52,6 +52,11 @@ void UDamageComponent::RecoverHealth(int32 val)
 
 void UDamageComponent::HandleDamage(int32 DamageVal)
 {
-
+	//UE_LOG(LogTemp, Warning, TEXT("Take damage : %i"), DamageVal);
+	Health = FMath::Clamp<int32>(Health - DamageVal, 0, MaxHealth);
+	if (Health == 0)
+	{
+		UE_LOG(LogTemp, Error, TEXT("Dead"));
+	}
 }
 

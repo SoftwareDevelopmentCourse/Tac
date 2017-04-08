@@ -135,8 +135,15 @@ void ATacVehicle::SetupPlayerInputComponent(class UInputComponent* PlayerInputCo
 	PlayerInputComponent->BindAxis("LookRight", this, &ATacVehicle::RotateCamera);
 	PlayerInputComponent->BindAxis("LookUp", this, &ATacVehicle::LiftCamera);
 	PlayerInputComponent->BindAxis("Zoom", this, &ATacVehicle::ZoomCamera);
+	PlayerInputComponent->BindAxis("LookUp", GearManager, &UGearManagementComponent::OnLookUp);
+	PlayerInputComponent->BindAxis("LookRight", GearManager, &UGearManagementComponent::OnLookRight);
 
 	PlayerInputComponent->BindAction("Use", IE_Pressed, this, &ATacVehicle::PickupGear);
+	PlayerInputComponent->BindAction("LClick", IE_Pressed, GearManager, &UGearManagementComponent::OnLClickHit);
+	PlayerInputComponent->BindAction("RClick", IE_Pressed, GearManager, &UGearManagementComponent::OnRClickHit);
+	PlayerInputComponent->BindAction("SpaceBar", IE_Pressed, GearManager, &UGearManagementComponent::OnSpaceHit);
+	PlayerInputComponent->BindAction("Shift", IE_Pressed, GearManager, &UGearManagementComponent::OnShiftHit);
+	PlayerInputComponent->BindAction("KeyQ", IE_Pressed, GearManager, &UGearManagementComponent::OnKeyQHit);
 }
 
 float ATacVehicle::TakeDamage(float DamageAmount, struct FDamageEvent const & DamageEvent, class AController * EventInstigator, AActor * DamageCauser)

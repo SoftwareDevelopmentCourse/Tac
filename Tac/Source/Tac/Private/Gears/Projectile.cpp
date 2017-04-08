@@ -42,10 +42,23 @@ void AProjectile::OnHit(UPrimitiveComponent * HitComponent, AActor * OtherActor,
 {
 	if (Hit.BoneName.IsValid())
 	{
-		//UE_LOG(LogTemp, Log, TEXT("%s"), *Hit.BoneName.ToString());
+		float DamageFactor = 1.f;
 		TArray<TCHAR> HitName = Hit.BoneName.ToString().GetCharArray();
-		UE_LOG(LogTemp, Error, TEXT("GG%i"), HitName.GetData());
-
+		if (FString(5, HitName.GetData()) == FString(TEXT("PhysW")))
+		{
+			DamageFactor = 0.75f;
+		}
+		else if (HitName.GetData() == FString(TEXT("Engine")))
+		{
+			DamageFactor = 2.f;
+		}
+		UGameplayStatics::ApplyDamage(
+		OtherActor,
+		DamageAmount * DamageFactor,
+		Instigator->GetController(),
+		Instigator,
+		UDamageType::StaticClass()
+		);
 	}
 	Destroy();
 }
@@ -54,5 +67,4 @@ void AProjectile::LaunchProjectile()
 {
 	ProjectileMovementComponent->SetVelocityInLocalSpace(FVector::ForwardVector * LaunchSpeed);
 	ProjectileMovementComponent->Activate();
-
 }
