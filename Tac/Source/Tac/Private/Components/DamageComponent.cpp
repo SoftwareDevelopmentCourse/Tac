@@ -14,9 +14,11 @@ UDamageComponent::UDamageComponent()
 
 	// ...
 	MaxHealth = 100;
-	MaxArmor = 100;
+	MaxArmor = 100.f;
 	Health = MaxHealth;
 	Armor = MaxArmor;
+	ArmorRecoveryDelay = 5.f;
+	ArmorRecoveryRate = 2.5f;
 }
 
 
@@ -26,6 +28,7 @@ void UDamageComponent::BeginPlay()
 	Super::BeginPlay();
 
 	// ...
+	GetWorld()->GetTimerManager().SetTimer(ArmorRecoveryHandle, this, &UDamageComponent::RecoverArmor, ArmorRecoveryDelay);
 	
 }
 
@@ -36,14 +39,29 @@ void UDamageComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	// ...
+	if (bShouldRecoverArmor)
+	{
+		Armor = FMath::Clamp<float>(Armor + DeltaTime * 10 * ArmorRecoveryRate, Armor, MaxArmor);
+		UE_LOG(LogTemp, Log, TEXT("%f"), Armor);
+		if (Armor == MaxArmor)
+		{
+			bShouldRecoverArmor = false;
+		}
+	}
 }
 
 void UDamageComponent::RecoverArmor()
 {
+	bShouldRecoverArmor = true;
+	UE_LOG(LogTemp, Warning, TEXT("Recovery"));
 }
 
 void UDamageComponent::StopRecoverArmor()
 {
+	bShouldRecoverArmor = false;
+	UE_LOG(LogTemp, Warning, TEXT("StopRecovery"));
+	GetWorld()->GetTimerManager().ClearTimer(ArmorRecoveryHandle);
+	GetWorld()->GetTimerManager().SetTimer(ArmorRecoveryHandle, this, &UDamageComponent::RecoverArmor, ArmorRecoveryDelay);
 }
 
 void UDamageComponent::RecoverHealth(int32 val)
@@ -62,9 +80,10 @@ void UDamageComponent::HandleDamage(float DamageVal, AActor* DamageCauser)
 	else
 	{
 		DamVal = DamageVal * Penetration;
-		Armor = FMath::Clamp<int32>(Armor - DamVal * 0.5, 0, MaxArmor);
+		Armor = FMath::Clamp<float>(Armor - DamVal * 0.5, 0, MaxArmor);
 	}
 	Health = FMath::Clamp<int32>(Health - DamVal, 0, MaxHealth);
-	UE_LOG(LogTemp, Log, TEXT("\nHealth: %i	DamageReceived: %i\nArmor: %i"), Health, (int32)DamVal, Armor);
+	StopRecoverArmor();
+	UE_LOG(LogTemp, Log, TEXT("\nHealth: %i	DamageReceived: %i\nArmor: %i"), Health, (int32)DamVal, (int32)Armor);
 }
 

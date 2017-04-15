@@ -30,9 +30,15 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = State)
 	int32 Health;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = State)
-	int32 Armor;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Armor)
+	float Armor;
 	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Armor)
+	float ArmorRecoveryDelay;
+	// Range from 0 to 100
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Armor)
+	float ArmorRecoveryRate;
+
 public:
 	// Dynamic multicast delegate
 	FTacDelegate OnDeath;
@@ -45,9 +51,11 @@ public:
 	void RecoverHealth(int32 val);
 	
 	void HandleDamage(float DamageVal, AActor* DamageCauser);
+	FTimerHandle ArmorRecoveryHandle;
 
 private:
 	
 	int32 MaxHealth;
-	int32 MaxArmor;
+	float MaxArmor;
+	bool bShouldRecoverArmor;
 };

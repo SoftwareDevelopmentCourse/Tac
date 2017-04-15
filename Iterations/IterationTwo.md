@@ -11,7 +11,7 @@
 - [ ] Adding -> Gear slots. 
 - [ ] Adding -> Modeling more gears. 
 - [ ] Adding -> Gear class.
-- [ ] Problems/Solutions -> Emptying gears should delete gears immediately.
+- [x] Problems/Solutions -> Emptying gears should delete gears immediately -> Spawn and delete with [UChildActorComponent](https://docs.unrealengine.com/latest/INT/API/Runtime/Engine/Components/UChildActorComponent/index.html).
 
 - **Controller** 
 - [x] Adding -> GearManagementComponent to manage gears.
