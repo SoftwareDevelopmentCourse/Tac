@@ -17,8 +17,6 @@ AGears::AGears()
 	Root = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
 	RootComponent = Root;
 
-	OwnerVehicle = Cast<ATacVehicle>(GetOwner());
-
 	/*==========================================
 		Timeline triggered event initialize
 	===========================================*/
@@ -83,7 +81,6 @@ void AGears::WorldSpawn()
 	// Initialize timeline
 	Timeline->AddInterpFloat(TimelineCurve, InterpFunction);
 	Timeline->PlayFromStart();
-	//UE_LOG(LogTemp, Error, TEXT("%s"), *this->GetName());
 }
 
 // Add gears rotation
@@ -102,29 +99,28 @@ void AGears::OnLookRight(float val)
 	// For overridden by child class
 }
 
-void AGears::OnSpaceHit()
+void AGears::OnSpaceHit(AActor* Target)
 {
 	// For overridden by child class
 }
 
-void AGears::OnShiftHit()
-{
-	UE_LOG(LogTemp, Error, TEXT("%s"), *OwnerVehicle->GetName());
-	// For overridden by child class
-}
-
-void AGears::OnKeyQHit()
-{
-	UE_LOG(LogTemp, Error, TEXT("%s"), *OwnerVehicle->GetName());
-	// For overridden by child class
-}
-
-void AGears::OnLClickHit()
+void AGears::OnShiftHit(AActor* Target)
 {
 	// For overridden by child class
 }
 
-void AGears::OnRClickHit()
+void AGears::OnKeyQHit(AActor* Target)
+{
+	//UE_LOG(LogTemp, Error, TEXT("%s"), *OwnerVehicle->GetName());
+	// For overridden by child class
+}
+
+void AGears::OnLClickHit(AActor* Target)
+{
+	// For overridden by child class
+}
+
+void AGears::OnRClickHit(AActor* Target)
 {
 	// For overridden by child class
 }

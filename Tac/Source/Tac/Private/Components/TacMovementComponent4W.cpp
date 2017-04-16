@@ -24,7 +24,7 @@ void UTacMovementComponent4W::RequestDirectMove(const FVector& MoveVelocity, boo
 	auto AIForwardIntention = MoveVelocity.GetSafeNormal();
 	auto ForwardThrow = FVector::DotProduct(TankForward, AIForwardIntention);
 	auto RightThrow = FVector::CrossProduct(TankForward, AIForwardIntention).Z;
-	UE_LOG(LogTemp, Warning, TEXT("%f"), ForwardThrow);
+	//UE_LOG(LogTemp, Warning, TEXT("%f"), ForwardThrow);
 	ATacVehicle* TacPawn = Cast<ATacVehicle>(GetOwner());
 	if (!ensure(TacPawn)) { return; }
 	TacPawn->MoveForward(ForwardThrow * ForwardSpeed);

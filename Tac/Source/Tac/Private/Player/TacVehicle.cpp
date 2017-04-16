@@ -3,17 +3,18 @@
 #include "Tac.h"
 #include "TacVehicle.h"
 #include "VehicleWheel.h"
-#include "Components/SkeletalMeshComponent.h"
-#include "GameFramework/SpringArmComponent.h"
+#include "Engine/SkeletalMesh.h"
 #include "Camera/CameraComponent.h"
 #include "Components/InputComponent.h"
-#include "Components/TacMovementComponent4W.h"
-#include "Engine/SkeletalMesh.h"
+#include "Components/SkeletalMeshComponent.h"
+#include "GameFramework/SpringArmComponent.h"
+#include "TacHeader.h"
+#include "Gears.h"
 #include "TacPlayerState.h"
+#include "DamageComponent.h"
 #include "PickupComponent.h"
 #include "GearManagementComponent.h"
-#include "Gears.h"
-#include "TacHeader.h"// TODO Adjust headers' order
+#include "Components/TacMovementComponent4W.h"
 
 ATacVehicle::ATacVehicle(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer.SetDefaultSubobjectClass<UTacMovementComponent4W>(VehicleMovementComponentName))
 {
@@ -94,6 +95,9 @@ ATacVehicle::ATacVehicle(const FObjectInitializer& ObjectInitializer) : Super(Ob
 	// Create the gear management component
 	GearManager = CreateDefaultSubobject<UGearManagementComponent>(TEXT("GearManager"));
 
+	// Create the damage component
+	DamageManager = CreateDefaultSubobject<UDamageComponent>(TEXT("DamageManager"));
+
 	// Create the pickup component
 	PickupVolume = CreateDefaultSubobject<UPickupComponent>(TEXT("PickupVolume"));
 	BoostSpeed = 400.f;
@@ -102,24 +106,15 @@ ATacVehicle::ATacVehicle(const FObjectInitializer& ObjectInitializer) : Super(Ob
 	// Reference: https://forums.unrealengine.com/showthread.php?53823-c-equivalent-of-Add-ChildActorComponent
 	GearActorFront = CreateDefaultSubobject<UChildActorComponent>(TEXT("GearFront"));
 	GearActorFront->SetupAttachment(RootComponent, TEXT("EFront"));
-	//GearActorFront->SetChildActorClass(AGears::StaticClass());
-	//GearActorFront->CreateChildActor();
 
 	GearActorBack = CreateDefaultSubobject<UChildActorComponent>(TEXT("GearBack"));
 	GearActorBack->SetupAttachment(RootComponent, TEXT("EBack"));
-	//GearActorBack->SetChildActorClass(AGears::StaticClass());
-	//GearActorBack->CreateChildActor();
 
 	GearActorLeft = CreateDefaultSubobject<UChildActorComponent>(TEXT("GearLeft"));
 	GearActorLeft->SetupAttachment(RootComponent, TEXT("ELeft"));
-	//GearActorLeft->SetChildActorClass(AGears::StaticClass());
-	//GearActorLeft->CreateChildActor();
 
 	GearActorRight = CreateDefaultSubobject<UChildActorComponent>(TEXT("GearRight"));
 	GearActorRight->SetupAttachment(RootComponent, TEXT("ERight"));
-	//GearActorRight->SetChildActorClass(AGears::StaticClass());
-	//GearActorRight->CreateChildActor();
-
 }
 
 void ATacVehicle::BeginPlay()
@@ -140,8 +135,21 @@ void ATacVehicle::SetupPlayerInputComponent(class UInputComponent* PlayerInputCo
 	PlayerInputComponent->BindAxis("LookRight", this, &ATacVehicle::RotateCamera);
 	PlayerInputComponent->BindAxis("LookUp", this, &ATacVehicle::LiftCamera);
 	PlayerInputComponent->BindAxis("Zoom", this, &ATacVehicle::ZoomCamera);
+	PlayerInputComponent->BindAxis("LookUp", GearManager, &UGearManagementComponent::OnLookUp);
+	PlayerInputComponent->BindAxis("LookRight", GearManager, &UGearManagementComponent::OnLookRight);
 
 	PlayerInputComponent->BindAction("Use", IE_Pressed, this, &ATacVehicle::PickupGear);
+	PlayerInputComponent->BindAction("LClick", IE_Pressed, GearManager, &UGearManagementComponent::OnLClickHit);
+	PlayerInputComponent->BindAction("RClick", IE_Pressed, GearManager, &UGearManagementComponent::OnRClickHit);
+	PlayerInputComponent->BindAction("SpaceBar", IE_Pressed, GearManager, &UGearManagementComponent::OnSpaceHit);
+	PlayerInputComponent->BindAction("Shift", IE_Pressed, GearManager, &UGearManagementComponent::OnShiftHit);
+	PlayerInputComponent->BindAction("KeyQ", IE_Pressed, GearManager, &UGearManagementComponent::OnKeyQHit);
+}
+
+float ATacVehicle::TakeDamage(float DamageAmount, struct FDamageEvent const & DamageEvent, class AController * EventInstigator, AActor * DamageCauser)
+{
+	DamageManager->HandleDamage(DamageAmount, DamageCauser);
+	return DamageAmount;// TODO Changes return value
 }
 
 void ATacVehicle::MoveForward(float Val)
@@ -163,11 +171,7 @@ void ATacVehicle::PickupGear()
 void ATacVehicle::UpdateState()
 {
 	ATacPlayerState* TacPS = Cast<ATacPlayerState>(PlayerState);
-	for (auto Gear : TacPS->GetGears())
-	{
-		GearManager->InitializeGear(Gear.GetDefaultObject());
-		//UE_LOG(LogTemp, Log, TEXT("%s"), *Gear->GetName());
-	}
+	GearManager->InitializeGear(TacPS->GetGears());
 	SetActorTransform(TacPS->GetTacTransform(), false, nullptr, ETeleportType::TeleportPhysics);
 }
 

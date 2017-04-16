@@ -11,11 +11,11 @@
 - [ ] Adding -> Gear slots. 
 - [ ] Adding -> Modeling more gears. 
 - [ ] Adding -> Gear class.
-- [ ] Problems/Solutions -> Emptying gears should delete gears immediately.
+- [x] Problems/Solutions -> Emptying gears should delete gears immediately -> Spawn and delete with [UChildActorComponent](https://docs.unrealengine.com/latest/INT/API/Runtime/Engine/Components/UChildActorComponent/index.html).
 
 - **Controller** 
-- [ ] Adding -> GearManagementComponent to manage gears.
-- [ ] Adding -> CapsuleSensorComponent to interacting with the world.
+- [x] Adding -> GearManagementComponent to manage gears.
+- [x] Adding -> CapsuleSensorComponent to interacting with the world.
 - [ ] Adding -> Trinity( Health, armor and energy) factors. 
 - [ ] Fixing -> Refactoring code, simplifing header files.
 - [ ] Fixing -> The crazy spin.

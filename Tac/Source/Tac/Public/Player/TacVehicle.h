@@ -12,8 +12,9 @@
 class UCameraComponent;
 class USpringArmComponent;
 class UInputComponent;
-class UGearManagementComponent;
 class UPickupComponent;
+class UDamageComponent;
+class UGearManagementComponent;
 
 UCLASS()
 class TAC_API ATacVehicle : public AWheeledVehicle
@@ -36,6 +37,10 @@ class TAC_API ATacVehicle : public AWheeledVehicle
 	UPROPERTY(Category = Gear, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	UGearManagementComponent* GearManager;
 
+	// Damage manager deals with player's health and armor
+	UPROPERTY(Category = Gear, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	UDamageComponent* DamageManager;
+
 public:
 	ATacVehicle(const FObjectInitializer& ObjectInitializer);
 	
@@ -56,6 +61,14 @@ public:
 
 	virtual void BeginPlay() override;
 	virtual void SetupPlayerInputComponent(UInputComponent* InputComponent) override;
+	virtual float TakeDamage
+	(
+		float DamageAmount,
+		struct FDamageEvent const & DamageEvent,
+		class AController* EventInstigator,
+		AActor* DamageCauser
+	) override;
+
 	/** Handle pressing forwards */
 	void MoveForward(float val);
 	/** Handle pressing right */
@@ -74,12 +87,12 @@ public:
 	FORCEINLINE USpringArmComponent* GetSpringArm() const { return SpringArm; }
 	FORCEINLINE UCameraComponent* GetCamera() const { return Camera; }
 	FORCEINLINE UGearManagementComponent* GetGearManager() const { return GearManager; }
+	FORCEINLINE UDamageComponent* GetDamageManager() const { return DamageManager; }
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Setup")
 	float BoostSpeed;
 	/** Called from player controller to update tac's state */
 	void UpdateState();
-
 
 };
