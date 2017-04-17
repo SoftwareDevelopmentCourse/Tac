@@ -21,7 +21,7 @@ public:
 
 
 	// Variable to hold the widget After Creating it.
-	class UUserWidget* TacView;
+	class UGearWidget* TacView;
 
 	/** Save the game */
 	void SaveGame();
@@ -29,6 +29,8 @@ public:
 	void LoadGame();
 	/** Clear game records */
 	void EmptyGame();
+
+	void AddGearSlot();
 
 private:
 	/** Widget blueprint's reference */

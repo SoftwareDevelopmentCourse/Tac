@@ -5,14 +5,14 @@
 #include "TacSaveGame.h"
 #include "Kismet/GameplayStatics.h"
 #include "TacPlayerState.h"
-#include "Blueprint/UserWidget.h"
+#include "GearWidget.h"
 #include "TacVehicle.h"
 #include "GearManagementComponent.h"
 
 ATacController::ATacController()
 {
 
-	static ConstructorHelpers::FClassFinder<UUserWidget> Widget(TEXT("/Game/Tac/Core/Characters/WBP_PlayerView"));
+	static ConstructorHelpers::FClassFinder<UGearWidget> Widget(TEXT("/Game/Tac/Core/Characters/WBP_TacView"));
 	if (Widget.Succeeded())
 	{
 		PlayerView = Widget.Class;
@@ -25,7 +25,7 @@ void ATacController::BeginPlay()
 	// Load game when begin play game
 	LoadGame();
 	// Create widget and add to player viewport
-	TacView = CreateWidget<UUserWidget>(this, PlayerView);
+	TacView = CreateWidget<UGearWidget>(this, PlayerView);
 	if (TacView)
 	{
 		TacView->AddToViewport();
@@ -107,4 +107,9 @@ void ATacController::EmptyGame()
 	SaveGameInstance->Gears = TacPS->GetGears();
 	SaveGameInstance->TacTransform = TacPS->GetTacTransform();
 	UGameplayStatics::SaveGameToSlot(SaveGameInstance, SaveGameInstance->SaveSlotName, SaveGameInstance->UserIndex);
+}
+
+void ATacController::AddGearSlot()
+{
+	TacView->AddGearSlot();
 }

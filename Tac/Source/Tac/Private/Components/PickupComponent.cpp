@@ -42,13 +42,21 @@ void UPickupComponent::Pickup()
 	// Try to get gear in range
 	TArray<AActor*> ActorsInRange;
 	PickupCapsule->GetOverlappingActors(ActorsInRange, AGears::StaticClass());
+	for (int32 ActorIndex = 0; ActorIndex<ActorsInRange.Num();	)
+	{
+		auto Gear = Cast<AGears>(ActorsInRange[ActorIndex]);
+		if (Gear->bIsPicked)
+		{
+			ActorsInRange.Remove(Gear);
+			continue;
+		}
+		ActorIndex++;
+	}
 	if (!ActorsInRange.IsValidIndex(0)) 
 	{
-		UE_LOG(LogTemp, Error, TEXT("No gears in range"));
 		return; 
 	}
 	AGears* Gear = Cast<AGears>(ActorsInRange[0]);
-	ActorsInRange.Empty();
 	// Try to add the gear to tac
 	UGearManagementComponent* Manager = Cast<UGearManagementComponent>(OwnerVehicle->GetGearManager());
 	Manager->TryPickup(Gear);

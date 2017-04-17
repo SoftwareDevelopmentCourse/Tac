@@ -29,6 +29,8 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	bool bIsPicked = false;
+
 public:
 	/** Gear hover's range */
 	UPROPERTY(Category = GearWorld, EditAnywhere)

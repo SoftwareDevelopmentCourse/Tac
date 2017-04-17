@@ -6,6 +6,7 @@
 #include "TacVehicle.h"
 #include "TacPlayerState.h"
 #include "Gears.h"
+#include "TacController.h"
 
 
 // Sets default values for this component's properties
@@ -66,6 +67,8 @@ void UGearManagementComponent::InitializeGear(TArray<TSubclassOf<AGears>> OwnedG
 void UGearManagementComponent::UpdateData(AGears* GearToAdd)
 {
 	OwnerPS->AddGear(GearToAdd->GetClass());
+	ATacController* TacCtrl = Cast<ATacController>(OwnerVehicle->Controller);
+	TacCtrl->AddGearSlot();
 }
 
 void UGearManagementComponent::TryPickup(AGears * GearToPickup)
@@ -208,7 +211,7 @@ bool UGearManagementComponent::JudgeBySocket(AGears* GearToJudge)
 	auto Right = OwnerVehicle->GearActorRight;
 	auto Front = OwnerVehicle->GearActorFront;
 	auto Back = OwnerVehicle->GearActorBack;
-
+	AGears* Gear;
 	switch (GearToJudge->GearSocket)
 	{
 	case EGearSocket::ENull:
@@ -219,6 +222,8 @@ bool UGearManagementComponent::JudgeBySocket(AGears* GearToJudge)
 		Left->SetChildActorClass(GearToJudge->GetClass());
 		Left->CreateChildActor();
 		TacGears[0] = Left->GetChildActor();
+		Gear = Cast<AGears>(TacGears[0]);
+		Gear->bIsPicked = true;
 		return true;
 	case EGearSocket::ERight:
 		if (bHasRight) { return false; }
@@ -226,6 +231,8 @@ bool UGearManagementComponent::JudgeBySocket(AGears* GearToJudge)
 		Right->SetChildActorClass(GearToJudge->GetClass());
 		Right->CreateChildActor();
 		TacGears[1] = Right->GetChildActor();
+		Gear = Cast<AGears>(TacGears[1]);
+		Gear->bIsPicked = true;
 		return true;
 	case EGearSocket::EFront:
 		if (bHasFront) { return false; }
@@ -233,6 +240,8 @@ bool UGearManagementComponent::JudgeBySocket(AGears* GearToJudge)
 		Front->SetChildActorClass(GearToJudge->GetClass());
 		Front->CreateChildActor();
 		TacGears[2] = Front->GetChildActor();
+		Gear = Cast<AGears>(TacGears[2]);
+		Gear->bIsPicked = true;
 		return true;
 	case EGearSocket::EBack:
 		if (bHasBack) { return false; }
@@ -240,6 +249,8 @@ bool UGearManagementComponent::JudgeBySocket(AGears* GearToJudge)
 		Back->SetChildActorClass(GearToJudge->GetClass());
 		Back->CreateChildActor();
 		TacGears[3] = Back->GetChildActor();
+		Gear = Cast<AGears>(TacGears[3]);
+		Gear->bIsPicked = true;
 		return true;
 	default:
 		return false;

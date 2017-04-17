@@ -42,7 +42,7 @@ void UDamageComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 	if (bShouldRecoverArmor)
 	{
 		Armor = FMath::Clamp<float>(Armor + DeltaTime * 10 * ArmorRecoveryRate, Armor, MaxArmor);
-		UE_LOG(LogTemp, Log, TEXT("%f"), Armor);
+		//UE_LOG(LogTemp, Log, TEXT("%f"), Armor);
 		if (Armor == MaxArmor)
 		{
 			bShouldRecoverArmor = false;
@@ -53,13 +53,13 @@ void UDamageComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 void UDamageComponent::RecoverArmor()
 {
 	bShouldRecoverArmor = true;
-	UE_LOG(LogTemp, Warning, TEXT("Recovery"));
+	//UE_LOG(LogTemp, Warning, TEXT("Recovery"));
 }
 
 void UDamageComponent::StopRecoverArmor()
 {
 	bShouldRecoverArmor = false;
-	UE_LOG(LogTemp, Warning, TEXT("StopRecovery"));
+	//UE_LOG(LogTemp, Warning, TEXT("StopRecovery"));
 	GetWorld()->GetTimerManager().ClearTimer(ArmorRecoveryHandle);
 	GetWorld()->GetTimerManager().SetTimer(ArmorRecoveryHandle, this, &UDamageComponent::RecoverArmor, ArmorRecoveryDelay);
 }
@@ -84,6 +84,6 @@ void UDamageComponent::HandleDamage(float DamageVal, AActor* DamageCauser)
 	}
 	Health = FMath::Clamp<int32>(Health - DamVal, 0, MaxHealth);
 	StopRecoverArmor();
-	UE_LOG(LogTemp, Log, TEXT("\nHealth: %i	DamageReceived: %i\nArmor: %i"), Health, (int32)DamVal, (int32)Armor);
+	//UE_LOG(LogTemp, Log, TEXT("\nHealth: %i	DamageReceived: %i\nArmor: %i"), Health, (int32)DamVal, (int32)Armor);
 }
 
