@@ -4,6 +4,7 @@
 
 #include "Components/ActorComponent.h"
 #include "TacHeader.h"
+#include "Core.h"
 #include "DamageComponent.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FTacDelegate);
@@ -21,21 +22,25 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
+	virtual bool IsSupportedForNetworking() const override
+	{
+		return true;
+	}
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 public:
-	UPROPERTY(BlueprintReadOnly, Category = State)
+	UPROPERTY(Replicated, BlueprintReadOnly, Category = State)
 	int32 Health;
 
-	UPROPERTY(BlueprintReadOnly, Category = State)
+	UPROPERTY(Replicated, BlueprintReadOnly, Category = State)
 	float Armor;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = State)
+	UPROPERTY(Replicated, EditDefaultsOnly, BlueprintReadOnly, Category = State)
 	int32 MaxHealth;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = State)
+	UPROPERTY(Replicated, EditDefaultsOnly, BlueprintReadOnly, Category = State)
 	float MaxArmor;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = State)
 	float ArmorRecoveryDelay;

@@ -52,4 +52,7 @@ private:
 	FString MyPlayerName = TEXT("Tacky");
 	int32 GearsAmount;
 	
+public:
+	int32 PlayerNumber;
+	bool bIsGroup_A;
 };

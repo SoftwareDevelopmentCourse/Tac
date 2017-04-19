@@ -16,6 +16,7 @@ class TAC_API UGearWidget : public UUserWidget
 public:
 	UFUNCTION(BlueprintImplementableEvent, Category = "Gear")
 	void AddGearSlot();
-	
+	UPROPERTY(BlueprintReadOnly, Category = "Gear")
+	class ATacController* TacController;
 	
 };

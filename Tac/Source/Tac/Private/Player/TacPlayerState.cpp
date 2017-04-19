@@ -60,7 +60,7 @@ void ATacPlayerState::SetGears(TArray<TSubclassOf<AGears>> GearsToSet)
 
 void ATacPlayerState::AddGear(TSubclassOf<AGears> GearToAdd)
 {
-	Gears[GearsAmount++] = GearToAdd;
+	Gears.AddUnique(GearToAdd);
 }
 
 void ATacPlayerState::EmptyGears()

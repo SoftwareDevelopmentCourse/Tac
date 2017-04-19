@@ -7,11 +7,11 @@
 #include "TacPlayerState.h"
 #include "GearWidget.h"
 #include "TacVehicle.h"
+#include "TacGameModeBase.h"
 #include "GearManagementComponent.h"
 
 ATacController::ATacController()
 {
-
 	static ConstructorHelpers::FClassFinder<UGearWidget> Widget(TEXT("/Game/Tac/Core/Characters/WBP_TacView"));
 	if (Widget.Succeeded())
 	{
@@ -23,13 +23,8 @@ void ATacController::BeginPlay()
 {
 	Super::BeginPlay();
 	// Load game when begin play game
-	LoadGame();
+	//LoadGame();
 	// Create widget and add to player viewport
-	TacView = CreateWidget<UGearWidget>(this, PlayerView);
-	if (TacView)
-	{
-		TacView->AddToViewport();
-	}
 }
 
 // Directly uses input component in controller
@@ -112,4 +107,22 @@ void ATacController::EmptyGame()
 void ATacController::AddGearSlot()
 {
 	TacView->AddGearSlot();
+}
+
+void ATacController::ClientPostLogin()
+{
+	ATacGameModeBase* TacGameMode = Cast<ATacGameModeBase>(GetWorld()->GetAuthGameMode());
+	TacGameMode->RespawnPlayerEvent(this);
+}
+
+void ATacController::RespawnFinished()
+{
+	TacView = CreateWidget<UGearWidget>(this, PlayerView);
+	if (TacView)
+	{
+		TacView->AddToViewport();
+	}
+	TacView->TacController = this;
+	//if (!GEngine) { return; }
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, *TacView->TacController->GetName());
 }

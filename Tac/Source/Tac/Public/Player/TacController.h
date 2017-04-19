@@ -31,6 +31,10 @@ public:
 	void EmptyGame();
 
 	void AddGearSlot();
+	//UFUNCTION(Client, Reliable)
+	void ClientPostLogin();
+	//UFUNCTION(Client, Reliable)
+	void RespawnFinished();
 
 private:
 	/** Widget blueprint's reference */
