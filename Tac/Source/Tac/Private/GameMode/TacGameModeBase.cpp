@@ -41,6 +41,9 @@ void ATacGameModeBase::PostLogin(APlayerController* NewController)
 		ATacController* NewTacController = Cast<ATacController>(NewController);
 		NewTacController->ClientPostLogin();
 	}
+	else
+	{
+	}
 }
 
 /*
@@ -90,10 +93,9 @@ void ATacGameModeBase::RespawnPlayerEvent_Implementation(AController * PlayerCon
 	if (PlayerController->GetPawn())
 	{
 		PlayerController->GetPawn()->Destroy();
-		UE_LOG(LogTemp, Error, TEXT("Destroy"));
 	}
 	ATacPlayerState* TacPlayerState = Cast<ATacPlayerState>(PlayerController->PlayerState);
-	FTransform SpawnTransform;
+	FTransform SpawnTransform = SpawnStart_A[0]->GetActorTransform();
 	if (TacPlayerState->bIsGroup_A)
 	{
 		if (!ensure(SpawnStart_A.IsValidIndex(0)))
@@ -116,6 +118,7 @@ void ATacGameModeBase::RespawnPlayerEvent_Implementation(AController * PlayerCon
 	//if (!ensure(TacPawnBP.Succeeded())) { return; }
 	ATacVehicle* NewTac = GetWorld()->SpawnActor<ATacVehicle>(ATacVehicle::StaticClass(), SpawnTransform);// TODO spawn BP
 	PlayerController->Possess(NewTac);
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, *PlayerController->GetName());
 	ATacController* NewTacController = Cast<ATacController>(PlayerController);
 	NewTacController->RespawnFinished();
 }

@@ -117,12 +117,11 @@ void ATacController::ClientPostLogin()
 
 void ATacController::RespawnFinished()
 {
+	if (!IsLocalController()) { return; }
 	TacView = CreateWidget<UGearWidget>(this, PlayerView);
 	if (TacView)
 	{
 		TacView->AddToViewport();
 	}
 	TacView->TacController = this;
-	//if (!GEngine) { return; }
-	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, *TacView->TacController->GetName());
 }

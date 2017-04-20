@@ -17,6 +17,7 @@ class TAC_API ATacPlayerState : public APlayerState
 	GENERATED_BODY()
 	
 public:
+	ATacPlayerState();
 	/** Functions for reading data */
 	UFUNCTION(BlueprintPure, Category = State)
 	TArray<TSubclassOf<AGears>> GetGears();

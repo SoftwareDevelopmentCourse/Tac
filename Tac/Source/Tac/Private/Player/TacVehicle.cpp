@@ -14,6 +14,7 @@
 #include "DamageComponent.h"
 #include "PickupComponent.h"
 #include "GearManagementComponent.h"
+#include "UnrealNetwork.h"
 #include "Components/TacMovementComponent4W.h"
 
 ATacVehicle::ATacVehicle(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer.SetDefaultSubobjectClass<UTacMovementComponent4W>(VehicleMovementComponentName))
@@ -97,6 +98,7 @@ ATacVehicle::ATacVehicle(const FObjectInitializer& ObjectInitializer) : Super(Ob
 
 	// Create the damage component
 	DamageManager = CreateDefaultSubobject<UDamageComponent>(TEXT("DamageManager"));
+	DamageManager->SetIsReplicated(true);
 
 	// Create the pickup component
 	PickupVolume = CreateDefaultSubobject<UPickupComponent>(TEXT("PickupVolume"));
