@@ -95,7 +95,7 @@ void ATacGameModeBase::RespawnPlayerEvent_Implementation(AController * PlayerCon
 		PlayerController->GetPawn()->Destroy();
 	}
 	ATacPlayerState* TacPlayerState = Cast<ATacPlayerState>(PlayerController->PlayerState);
-	FTransform SpawnTransform = SpawnStart_A[0]->GetActorTransform();
+	FTransform SpawnTransform;
 	if (TacPlayerState->bIsGroup_A)
 	{
 		if (!ensure(SpawnStart_A.IsValidIndex(0)))
@@ -112,7 +112,7 @@ void ATacGameModeBase::RespawnPlayerEvent_Implementation(AController * PlayerCon
 			UE_LOG(LogTemp, Error, TEXT("No PlayerStart_B for Group_B"));
 			return;
 		}
-		SpawnTransform = SpawnStart_B[0]->GetActorTransform();
+		SpawnTransform = SpawnStart_B[PlayerIndex++]->GetActorTransform();
 	}
 	//static ConstructorHelpers::FClassFinder<APawn> TacPawnBP(TEXT("/Game/Tac/Core/Characters/BP_Tac"));
 	//if (!ensure(TacPawnBP.Succeeded())) { return; }

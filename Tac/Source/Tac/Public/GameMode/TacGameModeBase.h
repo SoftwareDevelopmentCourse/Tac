@@ -30,4 +30,5 @@ private:
 
 	void ActiveGearVolume();
 	void InitSpawnStart();
+	int32 PlayerIndex;
 };
