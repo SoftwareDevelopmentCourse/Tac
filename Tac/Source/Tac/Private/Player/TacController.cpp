@@ -109,15 +109,19 @@ void ATacController::AddGearSlot()
 	TacView->AddGearSlot();
 }
 
-void ATacController::ClientPostLogin()
+void ATacController::ClientPostLogin_Implementation()
 {
 	ATacGameModeBase* TacGameMode = Cast<ATacGameModeBase>(GetWorld()->GetAuthGameMode());
 	TacGameMode->RespawnPlayerEvent(this);
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Duty"));
 }
 
-void ATacController::RespawnFinished()
+void ATacController::RespawnFinished_Implementation()
 {
-	if (!IsLocalController()) { return; }
+	if (!IsLocalController()) 
+	{
+		return; 
+	}
 	TacView = CreateWidget<UGearWidget>(this, PlayerView);
 	if (TacView)
 	{

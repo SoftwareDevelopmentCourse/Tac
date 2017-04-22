@@ -21,6 +21,7 @@ public:
 
 
 	// Variable to hold the widget After Creating it.
+	UPROPERTY()
 	class UGearWidget* TacView;
 
 	/** Save the game */
@@ -31,13 +32,14 @@ public:
 	void EmptyGame();
 
 	void AddGearSlot();
-	//UFUNCTION(Client, Reliable)
+	UFUNCTION(Client, Unreliable)
 	void ClientPostLogin();
-	//UFUNCTION(Client, Reliable)
+	UFUNCTION(Client, Unreliable)
 	void RespawnFinished();
 
 private:
 	/** Widget blueprint's reference */
+	UPROPERTY()
 	TSubclassOf<class UUserWidget> PlayerView;
 	
 };
