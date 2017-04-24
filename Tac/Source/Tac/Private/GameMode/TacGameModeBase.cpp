@@ -79,6 +79,8 @@ void ATacGameModeBase::RespawnPlayerEvent_Implementation(AController * PlayerCon
 	}
 	ATacVehicle* NewTac = GetWorld()->SpawnActor<ATacVehicle>(ATacVehicle::StaticClass(), SpawnTransform);// TODO spawn BP
 	PlayerController->Possess(NewTac);
+	ATacController* TacController = Cast<ATacController>(PlayerController);
+	TacController->UpdateVehicle();
 }
 
 void ATacGameModeBase::ActiveGearVolume()
@@ -90,7 +92,6 @@ void ATacGameModeBase::ActiveGearVolume()
 		AGearSpawnVolume* SpawnVolumeActor = Cast<AGearSpawnVolume>(Actor);
 		if (!ensure(SpawnVolumeActor)) { return; }
 		SpawnVolumeActor->SpawnActors();
-		UE_LOG(LogTemp, Warning, TEXT("Spawn gear"));
 	}
 }
 

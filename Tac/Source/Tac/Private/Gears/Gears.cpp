@@ -4,6 +4,7 @@
 #include "Gears.h"
 #include "TacVehicle.h"
 #include "TacHeader.h"
+#include "UnrealNetwork.h"
 
 // Sets default values
 AGears::AGears()

@@ -173,8 +173,8 @@ void ATacVehicle::PickupGear()
 void ATacVehicle::UpdateState()
 {
 	ATacPlayerState* TacPS = Cast<ATacPlayerState>(PlayerState);
+	if (!ensure(TacPS)) { return; }
 	GearManager->InitializeGear(TacPS->GetGears());
-	SetActorTransform(TacPS->GetTacTransform(), false, nullptr, ETeleportType::TeleportPhysics);
 }
 
 void ATacVehicle::RotateCamera(float val)

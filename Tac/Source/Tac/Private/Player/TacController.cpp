@@ -43,11 +43,9 @@ void ATacController::SaveGame()
 {
 	UTacSaveGame* SaveGameInstance = Cast<UTacSaveGame>(UGameplayStatics::CreateSaveGameObject(UTacSaveGame::StaticClass()));
 	ATacPlayerState* TacPS = Cast<ATacPlayerState>(PlayerState);
-	TacPS->SetTacTransform(GetPawn()->GetActorTransform());
 	// Saves player's name, gears and transform
 	SaveGameInstance->PlayerName = TacPS->GetPlayerName();
 	SaveGameInstance->Gears = TacPS->GetGears();
-	SaveGameInstance->TacTransform = TacPS->GetTacTransform();
 	UGameplayStatics::SaveGameToSlot(SaveGameInstance, SaveGameInstance->SaveSlotName, SaveGameInstance->UserIndex);
 }
 
@@ -55,18 +53,17 @@ void ATacController::LoadGame()
 {
 	UTacSaveGame* LoadGameInstance = Cast<UTacSaveGame>(UGameplayStatics::CreateSaveGameObject(UTacSaveGame::StaticClass()));
 	ATacPlayerState* TacPS = Cast<ATacPlayerState>(PlayerState);
+	if (!ensure(TacPS)) { return; }
 	LoadGameInstance = Cast<UTacSaveGame>(UGameplayStatics::LoadGameFromSlot(LoadGameInstance->SaveSlotName, LoadGameInstance->UserIndex));
 	if (LoadGameInstance) // Could load from the previous GameInstance
 	{
 		TacPS->SetPlayerName(LoadGameInstance->PlayerName);
 		TacPS->SetGears(LoadGameInstance->Gears);
-		TacPS->SetTacTransform(LoadGameInstance->TacTransform);
 	}
 	else // If there's no GameInstance exists
 	{
 		TacPS->SetPlayerName(FString(TEXT("NULL")));
 		TacPS->EmptyGears();
-		TacPS->SetTacTransform(FTransform(FTransform(FRotator(0.f, -90.f, 0.f), FVector(141.f, 0.f, 192.f), FVector(1.f))));
 	}
 }
 
@@ -83,20 +80,8 @@ void ATacController::EmptyGame()
 	ATacVehicle* Tac = Cast<ATacVehicle>(GetPawn());
 	UGearManagementComponent* Manager = Cast<UGearManagementComponent>(Tac->GetGearManager());
 	Manager->ResetGears();
-	for (auto Actor : FoundActors)
-	{
-		APlayerStart* SpawnStart = Cast<APlayerStart>(Actor);
-		if (!ensure(SpawnStart)) 
-		{
-			TacPS->SetTacTransform(FTransform());
-			break; 
-		}
-		TacPS->SetTacTransform(SpawnStart->GetActorTransform());
-		break;
-	}
 	SaveGameInstance->PlayerName = TacPS->GetPlayerName();
 	SaveGameInstance->Gears = TacPS->GetGears();
-	SaveGameInstance->TacTransform = TacPS->GetTacTransform();
 	UGameplayStatics::SaveGameToSlot(SaveGameInstance, SaveGameInstance->SaveSlotName, SaveGameInstance->UserIndex);
 }
 
