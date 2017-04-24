@@ -10,11 +10,13 @@ AGears::AGears()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+	bReplicates = true;
 	
 	/*==========================================
 		Gear component initialize
 	===========================================*/
 	Root = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
+	Root->SetIsReplicated(true);
 	RootComponent = Root;
 
 	/*==========================================
@@ -63,6 +65,11 @@ void AGears::Tick(float DeltaTime)
 	{
 		AddGearRotation();
 	}
+}
+
+void AGears::GetLifetimeReplicatedProps(TArray< FLifetimeProperty > & OutLifetimeProps) const
+{
+	DOREPLIFETIME(AGears, bIsPicked);
 }
 
 // Gears hover 

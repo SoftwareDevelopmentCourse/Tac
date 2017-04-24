@@ -31,6 +31,8 @@ public:
 	void LoadGame();
 	/** Clear game records */
 	void EmptyGame();
+	UFUNCTION(Server, Reliable, WithValidation)
+	void UpdateVehicle();
 
 	void AddGearSlot();
 	UFUNCTION(Server, Reliable, WithValidation)

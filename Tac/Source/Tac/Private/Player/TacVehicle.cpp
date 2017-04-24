@@ -19,6 +19,7 @@
 ATacVehicle::ATacVehicle(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer.SetDefaultSubobjectClass<UTacMovementComponent4W>(VehicleMovementComponentName))
 {
 	PrimaryActorTick.bCanEverTick = false;
+	bReplicates = true;
 	/*=======================================================================================================
 		Initialize Tac's mesh, ainmation, movement component, camera, pickup component and gear component
 	=======================================================================================================*/
@@ -93,6 +94,7 @@ ATacVehicle::ATacVehicle(const FObjectInitializer& ObjectInitializer) : Super(Ob
 
 	// Create the gear management component
 	GearManager = CreateDefaultSubobject<UGearManagementComponent>(TEXT("GearManager"));
+	GearManager->SetIsReplicated(true);
 
 	// Create the damage component
 	DamageManager = CreateDefaultSubobject<UDamageComponent>(TEXT("DamageManager"));

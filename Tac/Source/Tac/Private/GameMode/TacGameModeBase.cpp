@@ -56,7 +56,6 @@ void ATacGameModeBase::RespawnPlayerEvent_Implementation(AController * PlayerCon
 		PlayerController->GetPawn()->Destroy();
 	}
 	ATacPlayerState* TacPlayerState = Cast<ATacPlayerState>(PlayerController->PlayerState);
-	UE_LOG(LogTemp, Error, TEXT("%s"), *TacPlayerState->GetName());
 	FTransform SpawnTransform;
 	if (TacPlayerState->bIsGroup_A)
 	{
@@ -91,6 +90,7 @@ void ATacGameModeBase::ActiveGearVolume()
 		AGearSpawnVolume* SpawnVolumeActor = Cast<AGearSpawnVolume>(Actor);
 		if (!ensure(SpawnVolumeActor)) { return; }
 		SpawnVolumeActor->SpawnActors();
+		UE_LOG(LogTemp, Warning, TEXT("Spawn gear"));
 	}
 }
 

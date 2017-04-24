@@ -15,7 +15,7 @@ UGearManagementComponent::UGearManagementComponent()
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
-
+	bReplicates = true;
 	// Initialize owner vehicle, for some reason, the GetOwner() function can only be used once in Constructor
 	OwnerVehicle = Cast<ATacVehicle>(GetOwner());
 	// Initialize 4 sockets

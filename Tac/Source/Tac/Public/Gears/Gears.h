@@ -13,13 +13,12 @@ class TAC_API AGears : public AActor
 {
 	GENERATED_BODY()
 
-	/** Root component of gear */
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Gear, meta = (AllowPrivateAccess = "true"))
-	USceneComponent* Root; // TODO Sometimes should be replaced by skeletal mesh
-
 public:	
 	// Sets default values for this actor's properties
 	AGears();
+	/** Root component of gear */
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Gear, meta = (AllowPrivateAccess = "true"))
+	USceneComponent* Root; // TODO Sometimes should be replaced by skeletal mesh
 
 protected:
 	// Called when the game starts or when spawned
@@ -28,7 +27,7 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
+	UPROPERTY(Replicated)
 	bool bIsPicked = false;
 
 public:

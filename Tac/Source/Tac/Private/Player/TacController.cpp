@@ -68,9 +68,6 @@ void ATacController::LoadGame()
 		TacPS->EmptyGears();
 		TacPS->SetTacTransform(FTransform(FTransform(FRotator(0.f, -90.f, 0.f), FVector(141.f, 0.f, 192.f), FVector(1.f))));
 	}
-	ATacVehicle* Tac = Cast<ATacVehicle>(GetPawn());
-	// Spawns gears which player already had
-	Tac->UpdateState();
 }
 
 void ATacController::EmptyGame()
@@ -103,6 +100,18 @@ void ATacController::EmptyGame()
 	UGameplayStatics::SaveGameToSlot(SaveGameInstance, SaveGameInstance->SaveSlotName, SaveGameInstance->UserIndex);
 }
 
+bool ATacController::UpdateVehicle_Validate()
+{
+	return true;
+}
+
+void ATacController::UpdateVehicle_Implementation()
+{
+	ATacVehicle* Tac = Cast<ATacVehicle>(GetPawn());
+	// Spawns gears which player already had
+	Tac->UpdateState();
+}
+
 void ATacController::AddGearSlot()
 {
 	TacView->AddGearSlot();
@@ -122,6 +131,7 @@ void ATacController::ClientPostLogin_Implementation()
 			UE_LOG(LogTemp, Error, TEXT("No playerstate"));
 			return;
 		}
+		LoadGame();
 		AGameModeBase* CurrentGameMode = GetWorld()->GetAuthGameMode();
 		if (!ensure(CurrentGameMode))
 		{
