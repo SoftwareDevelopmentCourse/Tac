@@ -14,13 +14,11 @@
 #include "DamageComponent.h"
 #include "PickupComponent.h"
 #include "GearManagementComponent.h"
-#include "UnrealNetwork.h"
 #include "Components/TacMovementComponent4W.h"
 
 ATacVehicle::ATacVehicle(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer.SetDefaultSubobjectClass<UTacMovementComponent4W>(VehicleMovementComponentName))
 {
 	PrimaryActorTick.bCanEverTick = false;
-	bReplicates = true;
 	/*=======================================================================================================
 		Initialize Tac's mesh, ainmation, movement component, camera, pickup component and gear component
 	=======================================================================================================*/

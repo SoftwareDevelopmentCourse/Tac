@@ -95,7 +95,6 @@ void ATacController::EmptyGame()
 			break; 
 		}
 		TacPS->SetTacTransform(SpawnStart->GetActorTransform());
-		//UE_LOG(LogTemp, Error, TEXT("%s"), *SpawnStart->GetName());
 		break;
 	}
 	SaveGameInstance->PlayerName = TacPS->GetPlayerName();
@@ -109,23 +108,46 @@ void ATacController::AddGearSlot()
 	TacView->AddGearSlot();
 }
 
-void ATacController::ClientPostLogin_Implementation()
+bool ATacController::ClientPostLogin_Validate()
 {
-	ATacGameModeBase* TacGameMode = Cast<ATacGameModeBase>(GetWorld()->GetAuthGameMode());
-	TacGameMode->RespawnPlayerEvent(this);
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Duty"));
+	return true;
 }
 
-void ATacController::RespawnFinished_Implementation()
+void ATacController::ClientPostLogin_Implementation()
 {
-	if (!IsLocalController()) 
+	if (HasAuthority())
 	{
-		return; 
+		if (!ensure(PlayerState))
+		{
+			UE_LOG(LogTemp, Error, TEXT("No playerstate"));
+			return;
+		}
+		AGameModeBase* CurrentGameMode = GetWorld()->GetAuthGameMode();
+		if (!ensure(CurrentGameMode))
+		{
+			UE_LOG(LogTemp, Error, TEXT("No gamemode"));
+			return;
+		}
+		ATacGameModeBase* TacGameMode = Cast<ATacGameModeBase>(CurrentGameMode);
+		TacGameMode->RespawnPlayerEvent(this);
+		UE_LOG(LogTemp, Error, TEXT("Server"));
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("Client"));
+	}
+}
+
+void ATacController::UpdateHUD_Implementation()
+{
+	if (!IsLocalController())
+	{
+		UE_LOG(LogTemp, Error, TEXT("Is not local controller"));
+		return;
 	}
 	TacView = CreateWidget<UGearWidget>(this, PlayerView);
 	if (TacView)
 	{
 		TacView->AddToViewport();
 	}
-	TacView->TacController = this;
 }

@@ -3,12 +3,10 @@
 #include "Tac.h"
 #include "TacPlayerState.h"
 #include "Gears.h"
-#include "UnrealNetwork.h"
 #include "Kismet/GameplayStatics.h"
 
 ATacPlayerState::ATacPlayerState()
 {
-	bReplicates = true;
 }
 
 TArray<TSubclassOf<AGears>> ATacPlayerState::GetGears()

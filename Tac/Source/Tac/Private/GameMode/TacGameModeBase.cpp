@@ -5,6 +5,7 @@
 #include "GearSpawnVolume.h"
 #include "TacController.h"
 #include "TacPlayerState.h"
+#include "UnrealNetwork.h"
 #include "Kismet/GameplayStatics.h"
 
 ATacGameModeBase::ATacGameModeBase()
@@ -39,10 +40,7 @@ void ATacGameModeBase::PostLogin(APlayerController* NewController)
 		NewTacPlayerState->PlayerNumber = GameState->PlayerArray.Num();
 		ATacController* NewTacController = Cast<ATacController>(NewController);
 		NewTacController->ClientPostLogin();
-		UE_LOG(LogTemp, Error, TEXT("Duty"));
-	}
-	else
-	{
+		NewTacController->UpdateHUD();
 	}
 }
 
@@ -58,6 +56,7 @@ void ATacGameModeBase::RespawnPlayerEvent_Implementation(AController * PlayerCon
 		PlayerController->GetPawn()->Destroy();
 	}
 	ATacPlayerState* TacPlayerState = Cast<ATacPlayerState>(PlayerController->PlayerState);
+	UE_LOG(LogTemp, Error, TEXT("%s"), *TacPlayerState->GetName());
 	FTransform SpawnTransform;
 	if (TacPlayerState->bIsGroup_A)
 	{
@@ -75,12 +74,12 @@ void ATacGameModeBase::RespawnPlayerEvent_Implementation(AController * PlayerCon
 			UE_LOG(LogTemp, Error, TEXT("No PlayerStart_B for Group_B"));
 			return;
 		}
-		SpawnTransform = SpawnStart_B[PlayerIndex++]->GetActorTransform();
+		int32 StartIndex = FMath::RandRange(0, SpawnStart_B.Num() - 1);
+		SpawnTransform = SpawnStart_B[StartIndex]->GetActorTransform();
+		SpawnStart_B.RemoveAt(StartIndex);
 	}
 	ATacVehicle* NewTac = GetWorld()->SpawnActor<ATacVehicle>(ATacVehicle::StaticClass(), SpawnTransform);// TODO spawn BP
 	PlayerController->Possess(NewTac);
-	ATacController* NewTacController = Cast<ATacController>(PlayerController);
-	NewTacController->RespawnFinished();
 }
 
 void ATacGameModeBase::ActiveGearVolume()

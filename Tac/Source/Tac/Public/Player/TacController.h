@@ -6,6 +6,7 @@
 #include "TacVehicle.h"
 #include "TacController.generated.h"
 
+class TacGameModeBase;
 /**
  * 
  */
@@ -32,10 +33,10 @@ public:
 	void EmptyGame();
 
 	void AddGearSlot();
-	UFUNCTION(Client, Unreliable)
+	UFUNCTION(Server, Reliable, WithValidation)
 	void ClientPostLogin();
-	UFUNCTION(Client, Unreliable)
-	void RespawnFinished();
+	UFUNCTION(Client, Reliable)
+	void UpdateHUD();
 
 private:
 	/** Widget blueprint's reference */
