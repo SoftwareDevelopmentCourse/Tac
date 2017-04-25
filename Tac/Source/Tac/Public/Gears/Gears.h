@@ -32,39 +32,39 @@ public:
 
 public:
 	/** Gear hover's range */
-	UPROPERTY(Category = GearWorld, EditAnywhere)
+	UPROPERTY(Replicated, Category = GearWorld, EditAnywhere)
 	float FloatRange;
 	
 	/** Gear spawn's rate, amount per min */
-	UPROPERTY(Category = GearWorld, EditAnywhere)
+	UPROPERTY(Replicated, Category = GearWorld, EditAnywhere)
 	int32 SpawnRate;
 
 	/** Gear's maximum existence at base */
-	UPROPERTY(Category = GearWorld, EditAnywhere)
+	UPROPERTY(Replicated, Category = GearWorld, EditAnywhere)
 	int32 MaxExistenceBase;
 
 	/** Gear's maximum existence outdoors */
-	UPROPERTY(Category = GearWorld, EditAnywhere)
+	UPROPERTY(Replicated, Category = GearWorld, EditAnywhere)
 	int32 MaxExistenceOutdoors;
 
 	/** Gear's cost at base */
-	UPROPERTY(Category = GearWorld, EditAnywhere)
+	UPROPERTY(Replicated, Category = GearWorld, EditAnywhere)
 	int32 CostBase;
 
 	/** Gear's cost outdoors */
-	UPROPERTY(Category = GearWorld, EditAnywhere)
+	UPROPERTY(Replicated, Category = GearWorld, EditAnywhere)
 	int32 CostOutdoors;
 
 	/** Gear's installation socket */
-	UPROPERTY(Category = GearVehicle, EditAnywhere)
+	UPROPERTY(Replicated, Category = GearVehicle, EditAnywhere)
 	EGearSocket GearSocket;
 
 	/** Gear's installation type */
-	UPROPERTY(Category = GearVehicle, EditAnywhere)
+	UPROPERTY(Replicated, Category = GearVehicle, EditAnywhere)
 	EGearType GearType;
 
 	/** Gear's name for display */
-	UPROPERTY(Category = GearVehicle, EditAnywhere)
+	UPROPERTY(Replicated, Category = GearVehicle, EditAnywhere)
 	FName GearName;
 
 public:

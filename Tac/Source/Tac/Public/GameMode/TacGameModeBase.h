@@ -21,7 +21,6 @@ public:
 
 	TArray<APlayerStart*> SpawnStart_A;
 	TArray<APlayerStart*> SpawnStart_B;
-	UFUNCTION(Server, Reliable, WithValidation)
 	void RespawnPlayerEvent(AController* PlayerController);
 
 private:

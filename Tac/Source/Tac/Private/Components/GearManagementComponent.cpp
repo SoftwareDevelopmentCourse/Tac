@@ -72,12 +72,14 @@ bool UGearManagementComponent::TryPickup_Validate(AGears * GearToPickup)
 void UGearManagementComponent::TryPickup_Implementation(AGears * GearToPickup)
 {
 	int32 GearIndex = JudgeByType(GearToPickup);
-	if (GearIndex == -1) { return; }
-	GearToPickup->Destroy();
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan, *GearToPickup->GetName());
-	OwnerPS->AddGear(GearIndex, GearToPickup->GetClass());
-	ATacController* TacCtrl = Cast<ATacController>(OwnerVehicle->Controller);
-	TacCtrl->AddGearSlot();
+	if (GearIndex >= 0 && GearIndex <=3)
+	{
+		GearToPickup->Destroy();
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan, *GearToPickup->GetName());
+		OwnerPS->AddGear(GearIndex, GearToPickup->GetClass());
+		ATacController* TacCtrl = Cast<ATacController>(OwnerVehicle->Controller);
+		TacCtrl->AddGearSlot();
+	}
 }
 
 void UGearManagementComponent::ResetGears()
@@ -225,7 +227,7 @@ int32 UGearManagementComponent::JudgeBySocket(AGears* GearToJudge)
 		Gear->bIsPicked = true;
 		return 2;
 	case EGearSocket::ERight:
-		if (bHasRight) { return false; }
+		if (bHasRight) { return -1; }
 		bHasRight = true;
 		Right->SetChildActorClass(GearToJudge->GetClass());
 		Right->CreateChildActor();
@@ -234,7 +236,7 @@ int32 UGearManagementComponent::JudgeBySocket(AGears* GearToJudge)
 		Gear->bIsPicked = true;
 		return 3;
 	case EGearSocket::EFront:
-		if (bHasFront) { return false; }
+		if (bHasFront) { return -1; }
 		bHasFront = true;
 		Front->SetChildActorClass(GearToJudge->GetClass());
 		Front->CreateChildActor();
@@ -243,7 +245,7 @@ int32 UGearManagementComponent::JudgeBySocket(AGears* GearToJudge)
 		Gear->bIsPicked = true;
 		return 0;
 	case EGearSocket::EBack:
-		if (bHasBack) { return false; }
+		if (bHasBack) { return -1; }
 		bHasBack = true;
 		Back->SetChildActorClass(GearToJudge->GetClass());
 		Back->CreateChildActor();

@@ -44,12 +44,7 @@ void ATacGameModeBase::PostLogin(APlayerController* NewController)
 	}
 }
 
-bool ATacGameModeBase::RespawnPlayerEvent_Validate(AController * PlayerController)
-{
-	return true;
-}
-
-void ATacGameModeBase::RespawnPlayerEvent_Implementation(AController * PlayerController)
+void ATacGameModeBase::RespawnPlayerEvent(AController * PlayerController)
 {
 	if (PlayerController->GetPawn())
 	{
@@ -97,6 +92,7 @@ void ATacGameModeBase::ActiveGearVolume()
 
 void ATacGameModeBase::InitSpawnStart()
 {
+	if (!ensure(GetWorld())) { return; }
 	TArray<AActor*> FoundActors;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), APlayerStart::StaticClass(), FoundActors);
 	for (auto Actor : FoundActors)
@@ -107,9 +103,10 @@ void ATacGameModeBase::InitSpawnStart()
 		{
 			SpawnStart_A.AddUnique(PlayerStartActor);
 		}
-		if (PlayerStartActor->PlayerStartTag == TEXT("PlayerB"))
+		else if (PlayerStartActor->PlayerStartTag == TEXT("PlayerB"))
 		{
 			SpawnStart_B.AddUnique(PlayerStartActor);
 		}
 	}
+	UE_LOG(LogTemp, Warning, TEXT("%i"), SpawnStart_B.Num());
 }

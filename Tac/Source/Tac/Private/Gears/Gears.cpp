@@ -71,6 +71,15 @@ void AGears::Tick(float DeltaTime)
 void AGears::GetLifetimeReplicatedProps(TArray< FLifetimeProperty > & OutLifetimeProps) const
 {
 	DOREPLIFETIME(AGears, bIsPicked);
+	DOREPLIFETIME(AGears, FloatRange);
+	DOREPLIFETIME(AGears, SpawnRate);
+	DOREPLIFETIME(AGears, MaxExistenceBase);
+	DOREPLIFETIME(AGears, MaxExistenceOutdoors);
+	DOREPLIFETIME(AGears, CostBase);
+	DOREPLIFETIME(AGears, CostOutdoors);
+	DOREPLIFETIME(AGears, GearSocket);
+	DOREPLIFETIME(AGears, GearType);
+	DOREPLIFETIME(AGears, GearName);
 }
 
 // Gears hover 
