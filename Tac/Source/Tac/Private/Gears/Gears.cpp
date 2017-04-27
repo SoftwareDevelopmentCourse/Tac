@@ -100,6 +100,16 @@ void AGears::WorldSpawn()
 	Timeline->PlayFromStart();
 }
 
+bool AGears::ResetLocation_Validate()
+{
+	return true;
+}
+
+void AGears::ResetLocation_Implementation()
+{
+	SetActorLocation(FVector(0.f));
+}
+
 // Add gears rotation
 void AGears::AddGearRotation()
 {

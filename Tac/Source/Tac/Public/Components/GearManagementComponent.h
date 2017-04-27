@@ -34,7 +34,7 @@ public:
 	/** Spawn gear to tac */
 	void InitializeGear(TArray<TSubclassOf<AGears>> OwnedGears);
 	/** Try to pick up gear */
-	UFUNCTION(NetMulticast, Reliable)
+	UFUNCTION(Server, Reliable, WithValidation)
 	void TryPickup(AGears* GearToPickup);
 	/** Reset tac gears as class AGears */
 	void ResetGears();

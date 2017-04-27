@@ -8,7 +8,6 @@
 #include "Gears.h"
 #include "TacController.h"
 
-
 // Sets default values for this component's properties
 UGearManagementComponent::UGearManagementComponent()
 {
@@ -65,12 +64,10 @@ void UGearManagementComponent::InitializeGear(TArray<TSubclassOf<AGears>> OwnedG
 	}
 }
 
-/*
 bool UGearManagementComponent::TryPickup_Validate(AGears * GearToPickup)
 {
 	return true;
 }
-*/
 
 void UGearManagementComponent::TryPickup_Implementation(AGears * GearToPickup)
 {
@@ -276,6 +273,7 @@ int32 UGearManagementComponent::JudgeBySocket(AGears* GearToJudge)
 		UE_LOG(LogTemp, Warning, TEXT("%s"), *Front->GetName());
 		TacGears[2] = Front->GetChildActor();
 		Gear = Cast<AGears>(TacGears[2]);
+		Gear->ResetLocation();
 		Gear->bIsPicked = true;
 		return 0;
 	case EGearSocket::EBack:

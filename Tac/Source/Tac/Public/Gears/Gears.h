@@ -100,6 +100,9 @@ public:
 	/** Timeline triggered function */
 	FOnTimelineFloat InterpFunction{};
 
+	UFUNCTION(Server, Reliable, WithValidation)
+	void ResetLocation();
+
 private:
 	/** Add gears rotation */
 	void AddGearRotation();
