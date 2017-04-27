@@ -34,7 +34,7 @@ public:
 	/** Spawn gear to tac */
 	void InitializeGear(TArray<TSubclassOf<AGears>> OwnedGears);
 	/** Try to pick up gear */
-	UFUNCTION(Server, Reliable, WithValidation)
+	UFUNCTION(NetMulticast, Reliable)
 	void TryPickup(AGears* GearToPickup);
 	/** Reset tac gears as class AGears */
 	void ResetGears();
@@ -82,10 +82,10 @@ private:
 	bool bHasRight;
 
 private:
+	/** Judge by gear type */
+	void JudgeByType(AGears* GearToJudge, int32 Result);
 	/** Judge by gear socket */
 	int32 JudgeBySocket(AGears* GearToJudge);
-	/** Judge by gear type */
-	int32 JudgeByType(AGears* GearToJudge);
 	/** Initialize gear's boolean states */
 	void InitializeState();
 	/** Storages every socket's gear */

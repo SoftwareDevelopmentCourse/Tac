@@ -60,25 +60,29 @@ void UGearManagementComponent::InitializeGear(TArray<TSubclassOf<AGears>> OwnedG
 	ResetGears();
 	for (int32 GearIndex = 0; GearIndex < 4; GearIndex++)
 	{
-		JudgeByType(OwnedGears[GearIndex].GetDefaultObject());
+		int32 JudgeResult = 0;
+		JudgeByType(OwnedGears[GearIndex].GetDefaultObject(), JudgeResult);
 	}
 }
 
+/*
 bool UGearManagementComponent::TryPickup_Validate(AGears * GearToPickup)
 {
 	return true;
 }
+*/
 
 void UGearManagementComponent::TryPickup_Implementation(AGears * GearToPickup)
 {
-	int32 GearIndex = JudgeByType(GearToPickup);
-	if (GearIndex >= 0 && GearIndex <=3)
+	int32 JudgeResult = 0;
+	JudgeByType(GearToPickup, JudgeResult);
+	if (JudgeResult >= 0 && JudgeResult <=3)
 	{
 		GearToPickup->Destroy();
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan, *GearToPickup->GetName());
-		OwnerPS->AddGear(GearIndex, GearToPickup->GetClass());
-		ATacController* TacCtrl = Cast<ATacController>(OwnerVehicle->Controller);
-		TacCtrl->AddGearSlot();
+		//OwnerPS->AddGear(GearIndex, GearToPickup->GetClass());
+		//ATacController* TacCtrl = Cast<ATacController>(OwnerVehicle->Controller);
+		//TacCtrl->AddGearSlot();
 	}
 }
 
@@ -206,6 +210,34 @@ void UGearManagementComponent::OnRClickHit()
 /*================================================================
 	Judges by gear's socket and type, and spawns gear to tac
 ================================================================*/
+
+void UGearManagementComponent::JudgeByType(AGears* GearToJudge, int32 Result)
+{
+	switch (GearToJudge->GearType)
+	{
+	case EGearType::EBoost:
+		if (bShiftBind) { Result = -1; }
+		bShiftBind = true;
+		Result = JudgeBySocket(GearToJudge);
+	case EGearType::EJump:
+		if (bSpaceBind) { Result = -1; }
+		bSpaceBind = true;
+		Result = JudgeBySocket(GearToJudge);
+	case EGearType::EProtector:
+		Result = JudgeBySocket(GearToJudge);
+	case EGearType::EShoot:
+		if (bLClickBind) { Result = -1; }
+		bLClickBind = true;
+		Result = JudgeBySocket(GearToJudge);
+	case EGearType::EThrow:
+		if (bKeyQBind) { Result = -1; }
+		bKeyQBind = true;
+		Result = JudgeBySocket(GearToJudge);
+	default:
+		Result = -1;
+	}
+}
+
 int32 UGearManagementComponent::JudgeBySocket(AGears* GearToJudge)
 {
 	auto Left = OwnerVehicle->GearActorLeft;
@@ -240,6 +272,8 @@ int32 UGearManagementComponent::JudgeBySocket(AGears* GearToJudge)
 		bHasFront = true;
 		Front->SetChildActorClass(GearToJudge->GetClass());
 		Front->CreateChildActor();
+		//Front->GetChildActor()->SetActorLocation(OwnerVehicle->GetRootComponent()->GetSocketLocation(TEXT("EFront")));
+		UE_LOG(LogTemp, Warning, TEXT("%s"), *Front->GetName());
 		TacGears[2] = Front->GetChildActor();
 		Gear = Cast<AGears>(TacGears[2]);
 		Gear->bIsPicked = true;
@@ -253,33 +287,6 @@ int32 UGearManagementComponent::JudgeBySocket(AGears* GearToJudge)
 		Gear = Cast<AGears>(TacGears[3]);
 		Gear->bIsPicked = true;
 		return 1;
-	default:
-		return -1;
-	}
-}
-
-int32 UGearManagementComponent::JudgeByType(AGears* GearToJudge)
-{
-	switch (GearToJudge->GearType)
-	{
-	case EGearType::EBoost:
-		if (bShiftBind) { return -1; }
-		bShiftBind = true;
-		return JudgeBySocket(GearToJudge);
-	case EGearType::EJump:
-		if (bSpaceBind) { return -1; }
-		bSpaceBind = true;
-		return JudgeBySocket(GearToJudge);
-	case EGearType::EProtector:
-		return JudgeBySocket(GearToJudge);
-	case EGearType::EShoot:
-		if (bLClickBind) { return -1; }
-		bLClickBind = true;
-		return JudgeBySocket(GearToJudge);
-	case EGearType::EThrow:
-		if (bKeyQBind) { return -1; }
-		bKeyQBind = true;
-		return JudgeBySocket(GearToJudge);
 	default:
 		return -1;
 	}

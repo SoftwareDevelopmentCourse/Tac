@@ -107,15 +107,19 @@ ATacVehicle::ATacVehicle(const FObjectInitializer& ObjectInitializer) : Super(Ob
 	// Initialization for ChildActorComponent
 	// Reference: https://forums.unrealengine.com/showthread.php?53823-c-equivalent-of-Add-ChildActorComponent
 	GearActorFront = CreateDefaultSubobject<UChildActorComponent>(TEXT("GearFront"));
+	GearActorFront->SetIsReplicated(true);
 	GearActorFront->SetupAttachment(RootComponent, TEXT("EFront"));
 
 	GearActorBack = CreateDefaultSubobject<UChildActorComponent>(TEXT("GearBack"));
+	GearActorBack->SetIsReplicated(true);
 	GearActorBack->SetupAttachment(RootComponent, TEXT("EBack"));
 
 	GearActorLeft = CreateDefaultSubobject<UChildActorComponent>(TEXT("GearLeft"));
+	GearActorLeft->SetIsReplicated(true);
 	GearActorLeft->SetupAttachment(RootComponent, TEXT("ELeft"));
 
 	GearActorRight = CreateDefaultSubobject<UChildActorComponent>(TEXT("GearRight"));
+	GearActorRight->SetIsReplicated(true);
 	GearActorRight->SetupAttachment(RootComponent, TEXT("ERight"));
 }
 
