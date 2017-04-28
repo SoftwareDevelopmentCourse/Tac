@@ -38,6 +38,7 @@ AGears::AGears()
 	============================================*/
 	FloatRange = 5.f;
 	GearSocket = EGearSocket::ENull;
+	GearBindKey = EGearBindKey::ENull;
 	GearName = TEXT("DEFAULT_NAME");
 	SpawnRate = 3;
 	MaxExistenceBase = -1;

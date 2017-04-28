@@ -19,6 +19,7 @@ class TAC_API AGear_Gun : public AGears
 public:
 	UFUNCTION(BlueprintCallable, Category = "Gear|Gun")
 	void Initialize(UStaticMeshComponent* GunMeshToSet);
+	UFUNCTION(NetMulticast, Reliable)
 	virtual void OnLClickHit(AActor* Target) override;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gear|Gun")
 	float ArmorPenetration = 0.5f;

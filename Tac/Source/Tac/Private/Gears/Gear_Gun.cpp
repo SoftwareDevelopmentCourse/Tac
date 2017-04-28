@@ -9,7 +9,14 @@ void AGear_Gun::Initialize(UStaticMeshComponent* GunMeshToSet)
 	GunMesh = GunMeshToSet;
 }
 
-void AGear_Gun::OnLClickHit(AActor* Target)
+/*
+bool AGear_Gun::OnLClickHit_Validate(AActor* Target)
+{
+	return true;
+}
+*/
+
+void AGear_Gun::OnLClickHit_Implementation(AActor* Target)
 {
 	Super::OnLClickHit(Target);
 	if (Ammo > 0)
@@ -19,6 +26,7 @@ void AGear_Gun::OnLClickHit(AActor* Target)
 		auto Projectile = GetWorld()->SpawnActor<AProjectile>(ProjectileClass, SpawnLocation, SpawnRotation);
 		Projectile->Instigator = Cast<APawn>(Target);
 		Projectile->OwnerGun = this;
+		Projectile->CollisionSphere->IgnoreActorWhenMoving(Target, true);
 		Projectile->LaunchProjectile();
 	}
 }

@@ -59,6 +59,9 @@ public:
 	UPROPERTY(Replicated, Category = GearVehicle, EditAnywhere)
 	EGearSocket GearSocket;
 
+	UPROPERTY(Replicated, Category = GearVehicle, EditAnywhere)
+	EGearBindKey GearBindKey;
+
 	/** Gear's name for display */
 	UPROPERTY(Replicated, Category = GearVehicle, EditAnywhere)
 	FName GearName;

@@ -10,11 +10,16 @@ AProjectile::AProjectile()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	CollisionMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("CollisionMesh"));
-	RootComponent = CollisionMesh;
-	CollisionMesh->SetNotifyRigidBodyCollision(true);
+	CollisionSphere = CreateDefaultSubobject<USphereComponent>(TEXT("CollisionSphere"));
+	RootComponent = CollisionSphere;
+
+	VisualMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("CollisionMesh"));
+	VisualMesh->SetupAttachment(RootComponent);
+	VisualMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	VisualMesh->SetNotifyRigidBodyCollision(false);
 
 	ProjectileMovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMovementComponent"));
+	ProjectileMovementComponent->SetIsReplicated(true);
 	ProjectileMovementComponent->bAutoActivate = false;
 
 	DamageAmount = 30.f;
@@ -27,7 +32,7 @@ void AProjectile::BeginPlay()
 {
 	Super::BeginPlay();
 
-	CollisionMesh->OnComponentHit.AddDynamic(this, &AProjectile::OnHit);
+	CollisionSphere->OnComponentHit.AddDynamic(this, &AProjectile::OnHit);
 	
 }
 
@@ -38,7 +43,7 @@ void AProjectile::Tick(float DeltaTime)
 
 }
 
-void AProjectile::OnHit(UPrimitiveComponent * HitComponent, AActor * OtherActor, UPrimitiveComponent * OtherComponent, FVector NormalImpulse, const FHitResult & Hit)
+void AProjectile::OnHit_Implementation(UPrimitiveComponent * HitComponent, AActor * OtherActor, UPrimitiveComponent * OtherComponent, FVector NormalImpulse, const FHitResult & Hit)
 {
 	if (Hit.BoneName.IsValid())
 	{
@@ -62,6 +67,13 @@ void AProjectile::OnHit(UPrimitiveComponent * HitComponent, AActor * OtherActor,
 	}
 	Destroy();
 }
+
+/*
+bool AProjectile::LaunchProjectile_Validate()
+{
+	return true;
+}
+*/
 
 void AProjectile::LaunchProjectile()
 {

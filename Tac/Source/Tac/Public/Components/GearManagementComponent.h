@@ -53,12 +53,14 @@ public:
 	void OnSpaceHit();
 
 	/** When hitting left shift */
+	//UFUNCTION(Server, Reliable, WithValidation)
 	void OnShiftHit();
 
 	/** When hitting key Q */
 	void OnKeyQHit();
 
 	/** When hitting left mouse button */
+	UFUNCTION(Server, Reliable, WithValidation)
 	void OnLClickHit();
 
 	/** When hitting right mouse button */
@@ -83,10 +85,11 @@ private:
 
 private:
 	/** Judge by gear socket */
-	int32 JudgeBySocket(AGears* GearToJudge);
+	void JudgeBySocket(AGears* GearToJudge, int32 Result);
 	/** Initialize gear's boolean states */
 	void InitializeState();
 	/** Storages every socket's gear */
+	UPROPERTY(Replicated)
 	TArray<AActor*> TacGears;
 
 };
