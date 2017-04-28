@@ -11,6 +11,7 @@ AProjectile::AProjectile()
 	PrimaryActorTick.bCanEverTick = true;
 
 	CollisionSphere = CreateDefaultSubobject<USphereComponent>(TEXT("CollisionSphere"));
+	CollisionSphere->SetCollisionProfileName(TEXT("BlockAll"));
 	RootComponent = CollisionSphere;
 
 	VisualMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("CollisionMesh"));
