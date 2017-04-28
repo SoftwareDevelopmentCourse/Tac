@@ -14,16 +14,6 @@ enum class EGearSocket : uint8
 };
 
 UENUM(BlueprintType)
-enum class EGearType : uint8
-{
-	EProtector,
-	EShoot,
-	EThrow,
-	EBoost,
-	EJump
-};
-
-UENUM(BlueprintType)
 enum class EArmorType : uint8
 {
 	EEngine,

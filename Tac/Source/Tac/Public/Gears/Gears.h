@@ -28,7 +28,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	UPROPERTY(Replicated)
-	bool bIsPicked = false;
+	bool bPicked = false;
 
 public:
 	/** Gear hover's range */
@@ -59,10 +59,6 @@ public:
 	UPROPERTY(Replicated, Category = GearVehicle, EditAnywhere)
 	EGearSocket GearSocket;
 
-	/** Gear's installation type */
-	UPROPERTY(Replicated, Category = GearVehicle, EditAnywhere)
-	EGearType GearType;
-
 	/** Gear's name for display */
 	UPROPERTY(Replicated, Category = GearVehicle, EditAnywhere)
 	FName GearName;
@@ -91,6 +87,9 @@ public:
 	/**  When gear is being spawned on the world */
 	void WorldSpawn();
 
+	/** When gear is picked up */
+	void OnPicked();
+
 	/** Curve of gear's hover */
 	class UCurveFloat* TimelineCurve;
 
@@ -106,8 +105,5 @@ public:
 private:
 	/** Add gears rotation */
 	void AddGearRotation();
-	
-	/** Whether the gear is picked up */
-	bool bShouldRotate;
 
 };

@@ -104,23 +104,6 @@ ATacVehicle::ATacVehicle(const FObjectInitializer& ObjectInitializer) : Super(Ob
 	PickupVolume = CreateDefaultSubobject<UPickupComponent>(TEXT("PickupVolume"));
 	BoostSpeed = 400.f;
 
-	// Initialization for ChildActorComponent
-	// Reference: https://forums.unrealengine.com/showthread.php?53823-c-equivalent-of-Add-ChildActorComponent
-	GearActorFront = CreateDefaultSubobject<UChildActorComponent>(TEXT("GearFront"));
-	GearActorFront->SetIsReplicated(true);
-	GearActorFront->SetupAttachment(RootComponent, TEXT("EFront"));
-
-	GearActorBack = CreateDefaultSubobject<UChildActorComponent>(TEXT("GearBack"));
-	GearActorBack->SetIsReplicated(true);
-	GearActorBack->SetupAttachment(RootComponent, TEXT("EBack"));
-
-	GearActorLeft = CreateDefaultSubobject<UChildActorComponent>(TEXT("GearLeft"));
-	GearActorLeft->SetIsReplicated(true);
-	GearActorLeft->SetupAttachment(RootComponent, TEXT("ELeft"));
-
-	GearActorRight = CreateDefaultSubobject<UChildActorComponent>(TEXT("GearRight"));
-	GearActorRight->SetIsReplicated(true);
-	GearActorRight->SetupAttachment(RootComponent, TEXT("ERight"));
 }
 
 void ATacVehicle::BeginPlay()
@@ -173,14 +156,6 @@ void ATacVehicle::PickupGear()
 	PickupVolume->Pickup();
 }
 
-// Update player states which consists of OwnedGears and Transform
-void ATacVehicle::UpdateState()
-{
-	ATacPlayerState* TacPS = Cast<ATacPlayerState>(PlayerState);
-	if (!ensure(TacPS)) { return; }
-	GearManager->InitializeGear(TacPS->GetGears());
-}
-
 void ATacVehicle::RotateCamera(float val)
 {
 	SpringArm->AddRelativeRotation(FRotator(0.f, val, 0.f));
@@ -198,4 +173,12 @@ void ATacVehicle::LiftCamera(float val)
 void ATacVehicle::ZoomCamera(float val)
 {
 	SpringArm->TargetArmLength += val * -10.f;
+}
+
+// Update player states which consists of OwnedGears and Transform
+void ATacVehicle::UpdateState()
+{
+	ATacPlayerState* TacPS = Cast<ATacPlayerState>(PlayerState);
+	if (!ensure(TacPS)) { return; }
+	GearManager->InitializeGear(TacPS->GetGears());
 }

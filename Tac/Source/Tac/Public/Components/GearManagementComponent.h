@@ -82,8 +82,6 @@ private:
 	bool bHasRight;
 
 private:
-	/** Judge by gear type */
-	void JudgeByType(AGears* GearToJudge, int32 Result);
 	/** Judge by gear socket */
 	int32 JudgeBySocket(AGears* GearToJudge);
 	/** Initialize gear's boolean states */

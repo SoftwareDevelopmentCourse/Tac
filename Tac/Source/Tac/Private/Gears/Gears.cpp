@@ -39,14 +39,11 @@ AGears::AGears()
 	FloatRange = 5.f;
 	GearSocket = EGearSocket::ENull;
 	GearName = TEXT("DEFAULT_NAME");
-	GearType = EGearType::EProtector;
 	SpawnRate = 3;
 	MaxExistenceBase = -1;
 	MaxExistenceOutdoors = 5;
 	CostBase = 150;
 	CostOutdoors = 100;
-	bShouldRotate = false;
-
 }
 
 // Called when the game starts or when spawned
@@ -62,7 +59,7 @@ void AGears::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	// Add gear's rotation judged by whether gear is be picked up
-	if (bShouldRotate)
+	if (!bPicked)
 	{
 		AddGearRotation();
 	}
@@ -70,7 +67,7 @@ void AGears::Tick(float DeltaTime)
 
 void AGears::GetLifetimeReplicatedProps(TArray< FLifetimeProperty > & OutLifetimeProps) const
 {
-	DOREPLIFETIME(AGears, bIsPicked);
+	DOREPLIFETIME(AGears, bPicked);
 	DOREPLIFETIME(AGears, FloatRange);
 	DOREPLIFETIME(AGears, SpawnRate);
 	DOREPLIFETIME(AGears, MaxExistenceBase);
@@ -78,7 +75,6 @@ void AGears::GetLifetimeReplicatedProps(TArray< FLifetimeProperty > & OutLifetim
 	DOREPLIFETIME(AGears, CostBase);
 	DOREPLIFETIME(AGears, CostOutdoors);
 	DOREPLIFETIME(AGears, GearSocket);
-	DOREPLIFETIME(AGears, GearType);
 	DOREPLIFETIME(AGears, GearName);
 }
 
@@ -94,10 +90,16 @@ void AGears::GearsHover(float val)
 // Called from GearSpawnVolume
 void AGears::WorldSpawn()
 {
-	bShouldRotate = true;
+	bPicked = false;
 	// Initialize timeline
 	Timeline->AddInterpFloat(TimelineCurve, InterpFunction);
 	Timeline->PlayFromStart();
+}
+
+void AGears::OnPicked()
+{
+	bPicked = true;
+	Timeline->Stop();
 }
 
 bool AGears::ResetLocation_Validate()
