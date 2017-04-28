@@ -49,15 +49,6 @@ public:
 	===========================*/
 	UPROPERTY(Category = Vehicle, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	UCapsuleComponent* PickupCapsule;
-	/** Uses child components for spawning gears */
-	UPROPERTY(Category = Gear, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	UChildActorComponent* GearActorFront;
-	UPROPERTY(Category = Gear, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	UChildActorComponent* GearActorBack;
-	UPROPERTY(Category = Gear, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	UChildActorComponent* GearActorLeft;
-	UPROPERTY(Category = Gear, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	UChildActorComponent* GearActorRight;
 
 	virtual void BeginPlay() override;
 	virtual void SetupPlayerInputComponent(UInputComponent* InputComponent) override;
