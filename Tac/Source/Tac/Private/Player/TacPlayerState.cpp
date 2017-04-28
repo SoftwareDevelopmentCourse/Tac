@@ -3,12 +3,16 @@
 #include "Tac.h"
 #include "TacPlayerState.h"
 #include "Gears.h"
-#include "UnrealNetwork.h"
 #include "Kismet/GameplayStatics.h"
 
 ATacPlayerState::ATacPlayerState()
 {
 	bReplicates = true;
+}
+
+void ATacPlayerState::GetLifetimeReplicatedProps(TArray< FLifetimeProperty > & OutLifetimeProps) const
+{
+	DOREPLIFETIME(ATacPlayerState, Gears);
 }
 
 TArray<TSubclassOf<AGears>> ATacPlayerState::GetGears()
@@ -64,30 +68,21 @@ void ATacPlayerState::SetGears(TArray<TSubclassOf<AGears>> GearsToSet)
 	Gears = GearsToSet;
 }
 
-void ATacPlayerState::AddGear(TSubclassOf<AGears> GearToAdd)
+void ATacPlayerState::AddGear(int32 GearIndex, TSubclassOf<AGears> GearToAdd)
 {
-	Gears.AddUnique(GearToAdd);
+	if (!(Gears.IsValidIndex(GearIndex))) { return; }
+	Gears[GearIndex] = GearToAdd;//TODO Modify specific gear socket not add
 }
 
 void ATacPlayerState::EmptyGears()
 {
 	Gears.SetNum(4);
 	GearsAmount = 0;
-	for (int32 i = 0; i < 4; i++)
+	for (int32 GearIndex = 0; GearIndex < 4; GearIndex++)
 	{
 		//UE_LOG(LogTemp, Log, TEXT("%s"), *Gears[i]->GetName());
-		Gears[i] = AGears::StaticClass();
+		Gears[GearIndex] = AGears::StaticClass();
 	}
-}
-
-FTransform ATacPlayerState::GetTacTransform()
-{
-	return TacTransform;
-}
-
-void ATacPlayerState::SetTacTransform(FTransform TransformToSet)
-{
-	TacTransform = TransformToSet;
 }
 
 FString ATacPlayerState::GetPlayerName()

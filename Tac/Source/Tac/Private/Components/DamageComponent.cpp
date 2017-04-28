@@ -2,7 +2,6 @@
 
 #include "Tac.h"
 #include "DamageComponent.h"
-#include "UnrealNetwork.h"
 #include "Gear_Gun.h"
 
 
@@ -12,7 +11,6 @@ UDamageComponent::UDamageComponent()
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
-	bReplicates = true;
 	// ...
 	MaxHealth = 100;
 	MaxArmor = 100.f;
@@ -20,15 +18,6 @@ UDamageComponent::UDamageComponent()
 	Armor = MaxArmor;
 	ArmorRecoveryDelay = 5.f;
 	ArmorRecoveryRate = 2.5f;
-}
-
-void UDamageComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty> & OutLifetimeProps) const
-{
-	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-	DOREPLIFETIME(UDamageComponent, Health);
-	DOREPLIFETIME(UDamageComponent, Armor);
-	DOREPLIFETIME(UDamageComponent, MaxHealth);
-	DOREPLIFETIME(UDamageComponent, MaxArmor);
 }
 
 // Called when the game starts

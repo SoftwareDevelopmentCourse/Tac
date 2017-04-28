@@ -43,11 +43,9 @@ void ATacController::SaveGame()
 {
 	UTacSaveGame* SaveGameInstance = Cast<UTacSaveGame>(UGameplayStatics::CreateSaveGameObject(UTacSaveGame::StaticClass()));
 	ATacPlayerState* TacPS = Cast<ATacPlayerState>(PlayerState);
-	TacPS->SetTacTransform(GetPawn()->GetActorTransform());
 	// Saves player's name, gears and transform
 	SaveGameInstance->PlayerName = TacPS->GetPlayerName();
 	SaveGameInstance->Gears = TacPS->GetGears();
-	SaveGameInstance->TacTransform = TacPS->GetTacTransform();
 	UGameplayStatics::SaveGameToSlot(SaveGameInstance, SaveGameInstance->SaveSlotName, SaveGameInstance->UserIndex);
 }
 
@@ -55,22 +53,18 @@ void ATacController::LoadGame()
 {
 	UTacSaveGame* LoadGameInstance = Cast<UTacSaveGame>(UGameplayStatics::CreateSaveGameObject(UTacSaveGame::StaticClass()));
 	ATacPlayerState* TacPS = Cast<ATacPlayerState>(PlayerState);
+	if (!ensure(TacPS)) { return; }
 	LoadGameInstance = Cast<UTacSaveGame>(UGameplayStatics::LoadGameFromSlot(LoadGameInstance->SaveSlotName, LoadGameInstance->UserIndex));
 	if (LoadGameInstance) // Could load from the previous GameInstance
 	{
 		TacPS->SetPlayerName(LoadGameInstance->PlayerName);
 		TacPS->SetGears(LoadGameInstance->Gears);
-		TacPS->SetTacTransform(LoadGameInstance->TacTransform);
 	}
 	else // If there's no GameInstance exists
 	{
 		TacPS->SetPlayerName(FString(TEXT("NULL")));
 		TacPS->EmptyGears();
-		TacPS->SetTacTransform(FTransform(FTransform(FRotator(0.f, -90.f, 0.f), FVector(141.f, 0.f, 192.f), FVector(1.f))));
 	}
-	ATacVehicle* Tac = Cast<ATacVehicle>(GetPawn());
-	// Spawns gears which player already had
-	Tac->UpdateState();
 }
 
 void ATacController::EmptyGame()
@@ -86,22 +80,21 @@ void ATacController::EmptyGame()
 	ATacVehicle* Tac = Cast<ATacVehicle>(GetPawn());
 	UGearManagementComponent* Manager = Cast<UGearManagementComponent>(Tac->GetGearManager());
 	Manager->ResetGears();
-	for (auto Actor : FoundActors)
-	{
-		APlayerStart* SpawnStart = Cast<APlayerStart>(Actor);
-		if (!ensure(SpawnStart)) 
-		{
-			TacPS->SetTacTransform(FTransform());
-			break; 
-		}
-		TacPS->SetTacTransform(SpawnStart->GetActorTransform());
-		//UE_LOG(LogTemp, Error, TEXT("%s"), *SpawnStart->GetName());
-		break;
-	}
 	SaveGameInstance->PlayerName = TacPS->GetPlayerName();
 	SaveGameInstance->Gears = TacPS->GetGears();
-	SaveGameInstance->TacTransform = TacPS->GetTacTransform();
 	UGameplayStatics::SaveGameToSlot(SaveGameInstance, SaveGameInstance->SaveSlotName, SaveGameInstance->UserIndex);
+}
+
+bool ATacController::UpdateVehicle_Validate()
+{
+	return true;
+}
+
+void ATacController::UpdateVehicle_Implementation()
+{
+	ATacVehicle* Tac = Cast<ATacVehicle>(GetPawn());
+	// Spawns gears which player already had
+	Tac->UpdateState();
 }
 
 void ATacController::AddGearSlot()
@@ -109,19 +102,47 @@ void ATacController::AddGearSlot()
 	TacView->AddGearSlot();
 }
 
-void ATacController::ClientPostLogin()
+bool ATacController::ClientPostLogin_Validate()
 {
-	ATacGameModeBase* TacGameMode = Cast<ATacGameModeBase>(GetWorld()->GetAuthGameMode());
-	TacGameMode->RespawnPlayerEvent(this);
+	return true;
 }
 
-void ATacController::RespawnFinished()
+void ATacController::ClientPostLogin_Implementation()
 {
-	if (!IsLocalController()) { return; }
+	if (HasAuthority())
+	{
+		if (!ensure(PlayerState))
+		{
+			UE_LOG(LogTemp, Error, TEXT("No playerstate"));
+			return;
+		}
+		LoadGame();
+		AGameModeBase* CurrentGameMode = GetWorld()->GetAuthGameMode();
+		if (!ensure(CurrentGameMode))
+		{
+			UE_LOG(LogTemp, Error, TEXT("No gamemode"));
+			return;
+		}
+		ATacGameModeBase* TacGameMode = Cast<ATacGameModeBase>(CurrentGameMode);
+		TacGameMode->RespawnPlayerEvent(this);
+		UE_LOG(LogTemp, Error, TEXT("Server"));
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("Client"));
+	}
+}
+
+void ATacController::UpdateHUD_Implementation()
+{
+	if (!IsLocalController())
+	{
+		UE_LOG(LogTemp, Error, TEXT("Is not local controller"));
+		return;
+	}
 	TacView = CreateWidget<UGearWidget>(this, PlayerView);
 	if (TacView)
 	{
 		TacView->AddToViewport();
 	}
-	TacView->TacController = this;
 }

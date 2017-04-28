@@ -13,13 +13,12 @@ class TAC_API AGears : public AActor
 {
 	GENERATED_BODY()
 
-	/** Root component of gear */
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Gear, meta = (AllowPrivateAccess = "true"))
-	USceneComponent* Root; // TODO Sometimes should be replaced by skeletal mesh
-
 public:	
 	// Sets default values for this actor's properties
 	AGears();
+	/** Root component of gear */
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Gear, meta = (AllowPrivateAccess = "true"))
+	USceneComponent* Root; // TODO Sometimes should be replaced by skeletal mesh
 
 protected:
 	// Called when the game starts or when spawned
@@ -28,44 +27,43 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
-	bool bIsPicked = false;
+	UPROPERTY(Replicated)
+	bool bPicked = false;
 
 public:
 	/** Gear hover's range */
-	UPROPERTY(Category = GearWorld, EditAnywhere)
+	UPROPERTY(Replicated, Category = GearWorld, EditAnywhere)
 	float FloatRange;
 	
 	/** Gear spawn's rate, amount per min */
-	UPROPERTY(Category = GearWorld, EditAnywhere)
+	UPROPERTY(Replicated, Category = GearWorld, EditAnywhere)
 	int32 SpawnRate;
 
 	/** Gear's maximum existence at base */
-	UPROPERTY(Category = GearWorld, EditAnywhere)
+	UPROPERTY(Replicated, Category = GearWorld, EditAnywhere)
 	int32 MaxExistenceBase;
 
 	/** Gear's maximum existence outdoors */
-	UPROPERTY(Category = GearWorld, EditAnywhere)
+	UPROPERTY(Replicated, Category = GearWorld, EditAnywhere)
 	int32 MaxExistenceOutdoors;
 
 	/** Gear's cost at base */
-	UPROPERTY(Category = GearWorld, EditAnywhere)
+	UPROPERTY(Replicated, Category = GearWorld, EditAnywhere)
 	int32 CostBase;
 
 	/** Gear's cost outdoors */
-	UPROPERTY(Category = GearWorld, EditAnywhere)
+	UPROPERTY(Replicated, Category = GearWorld, EditAnywhere)
 	int32 CostOutdoors;
 
 	/** Gear's installation socket */
-	UPROPERTY(Category = GearVehicle, EditAnywhere)
+	UPROPERTY(Replicated, Category = GearVehicle, EditAnywhere)
 	EGearSocket GearSocket;
 
-	/** Gear's installation type */
-	UPROPERTY(Category = GearVehicle, EditAnywhere)
-	EGearType GearType;
+	UPROPERTY(Replicated, Category = GearVehicle, EditAnywhere)
+	EGearBindKey GearBindKey;
 
 	/** Gear's name for display */
-	UPROPERTY(Category = GearVehicle, EditAnywhere)
+	UPROPERTY(Replicated, Category = GearVehicle, EditAnywhere)
 	FName GearName;
 
 public:
@@ -92,6 +90,9 @@ public:
 	/**  When gear is being spawned on the world */
 	void WorldSpawn();
 
+	/** When gear is picked up */
+	void OnPicked();
+
 	/** Curve of gear's hover */
 	class UCurveFloat* TimelineCurve;
 
@@ -101,11 +102,11 @@ public:
 	/** Timeline triggered function */
 	FOnTimelineFloat InterpFunction{};
 
+	UFUNCTION(Server, Reliable, WithValidation)
+	void ResetLocation();
+
 private:
 	/** Add gears rotation */
 	void AddGearRotation();
-	
-	/** Whether the gear is picked up */
-	bool bShouldRotate;
 
 };

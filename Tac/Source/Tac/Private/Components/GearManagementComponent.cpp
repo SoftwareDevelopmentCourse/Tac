@@ -1,13 +1,12 @@
 // Copyright by GameDream.
 
 #include "Tac.h"
-#include "Components/GearManagementComponent.h"
+#include "GearManagementComponent.h"
 #include "TacHeader.h"
 #include "TacVehicle.h"
 #include "TacPlayerState.h"
 #include "Gears.h"
 #include "TacController.h"
-
 
 // Sets default values for this component's properties
 UGearManagementComponent::UGearManagementComponent()
@@ -15,7 +14,7 @@ UGearManagementComponent::UGearManagementComponent()
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
-
+	bReplicates = true;
 	// Initialize owner vehicle, for some reason, the GetOwner() function can only be used once in Constructor
 	OwnerVehicle = Cast<ATacVehicle>(GetOwner());
 	// Initialize 4 sockets
@@ -55,56 +54,50 @@ void UGearManagementComponent::TickComponent(float DeltaTime, ELevelTick TickTyp
 	// ...
 }
 
+void UGearManagementComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>&OutLifetimeProps)const
+{
+	DOREPLIFETIME(UGearManagementComponent, TacGears);
+}
+
 void UGearManagementComponent::InitializeGear(TArray<TSubclassOf<AGears>> OwnedGears)
 {
 	ResetGears();
+	int32 JudgeResult = 0;
 	for (int32 GearIndex = 0; GearIndex < 4; GearIndex++)
 	{
-		JudgeByType(OwnedGears[GearIndex].GetDefaultObject());
+		JudgeBySocket(OwnedGears[GearIndex].GetDefaultObject(), JudgeResult);
 	}
 }
 
-void UGearManagementComponent::UpdateData(AGears* GearToAdd)
+bool UGearManagementComponent::TryPickup_Validate(AGears * GearToPickup)
 {
-	OwnerPS->AddGear(GearToAdd->GetClass());
-	ATacController* TacCtrl = Cast<ATacController>(OwnerVehicle->Controller);
-	TacCtrl->AddGearSlot();
+	return true;
 }
 
-void UGearManagementComponent::TryPickup(AGears * GearToPickup)
+void UGearManagementComponent::TryPickup_Implementation(AGears * GearToPickup)
 {
-	if (JudgeByType(GearToPickup))
+	int32 JudgeResult = 0;
+	JudgeBySocket(GearToPickup, JudgeResult);
+	if (JudgeResult >= 0 && JudgeResult <=3)
 	{
-		GearToPickup->Destroy();
-		UpdateData(GearToPickup);
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan, *GearToPickup->GetName());
+		//OwnerPS->AddGear(GearIndex, GearToPickup->GetClass());
+		//ATacController* TacCtrl = Cast<ATacController>(OwnerVehicle->Controller);
+		//TacCtrl->AddGearSlot();
 	}
 }
 
 void UGearManagementComponent::ResetGears()
 {
-
-	auto Left = OwnerVehicle->GearActorLeft;
-	auto Right = OwnerVehicle->GearActorRight;
-	auto Front = OwnerVehicle->GearActorFront;
-	auto Back = OwnerVehicle->GearActorBack;
-
 	TacGears.Empty();
-	Left->SetChildActorClass(AGears::StaticClass());
-	Left->CreateChildActor();
-	TacGears.Push(Left->GetChildActor());
-	
-	Right->SetChildActorClass(AGears::StaticClass());
-	Right->CreateChildActor();
-	TacGears.Push(Right->GetChildActor());
-	
-	Front->SetChildActorClass(AGears::StaticClass());
-	Front->CreateChildActor();
-	TacGears.Push(Front->GetChildActor());
-	
-	Back->SetChildActorClass(AGears::StaticClass());
-	Back->CreateChildActor();
-	TacGears.Push(Back->GetChildActor());
-	
+	TacGears.SetNum(4);
+	TArray<AActor*> AttachedActors;
+	OwnerVehicle->GetAttachedActors(AttachedActors);
+	for (auto Actor : AttachedActors)
+	{
+		AGears* Gear = Cast<AGears>(Actor);
+		Gear->Destroy();
+	}
 	InitializeState();
 }
 
@@ -116,11 +109,9 @@ void UGearManagementComponent::OnLookUp(float val)
 	if (!bMouseBind) { return; }
 	for (auto Actor : TacGears)
 	{
-		auto Gear = Cast<AGears>(Actor);
-		if (Gear->GearType == EGearType::EShoot)
-		{
-			Gear->OnLookUp(val);
-		}
+		AGears* Gear = Cast<AGears>(Actor);
+		if (Gear->GearBindKey != EGearBindKey::EMouseLook) { return; }
+		Gear->OnLookUp(val);
 	}
 }
 
@@ -129,11 +120,8 @@ void UGearManagementComponent::OnLookRight(float val)
 	if (!bMouseBind) { return; }
 	for (auto Actor : TacGears)
 	{
-		auto Gear = Cast<AGears>(Actor);
-		if (Gear->GearType == EGearType::EShoot)
-		{
-			Gear->OnLookRight(val);
-		}
+		AGears* Gear = Cast<AGears>(Actor);
+		Gear->OnLookRight(val);
 	}
 }
 
@@ -142,24 +130,22 @@ void UGearManagementComponent::OnSpaceHit()
 	if (!bSpaceBind) { return; }
 	for (auto Actor : TacGears)
 	{
-		auto Gear = Cast<AGears>(Actor);
-		if (Gear->GearType == EGearType::EJump)
-		{
-			Gear->OnSpaceHit(OwnerVehicle);
-		}
+		AGears* Gear = Cast<AGears>(Actor);
+		Gear->OnSpaceHit(OwnerVehicle);
 	}
 }
 
 void UGearManagementComponent::OnShiftHit()
 {
-	if (!bShiftBind) { return; }
+	//if (!bShiftBind) { return; }
 	for (auto Actor : TacGears)
 	{
-		auto Gear = Cast<AGears>(Actor);
-		if (Gear->GearType == EGearType::EBoost)
-		{
-			Gear->OnShiftHit(OwnerVehicle);
+		AGears* Gear = Cast<AGears>(Actor);
+		if (!Gear || Gear->GearBindKey != EGearBindKey::EShift)
+		{ 
+			continue; 
 		}
+		Gear->OnShiftHit(OwnerVehicle);
 	}
 }
 
@@ -168,24 +154,27 @@ void UGearManagementComponent::OnKeyQHit()
 	if (!bKeyQBind) { return; }
 	for (auto Actor : TacGears)
 	{
-		auto Gear = Cast<AGears>(Actor);
-		if (Gear->GearType == EGearType::EThrow)
-		{
-			Gear->OnKeyQHit(OwnerVehicle);
-		}
+		AGears* Gear = Cast<AGears>(Actor);
+		Gear->OnKeyQHit(OwnerVehicle);
 	}
 }
 
-void UGearManagementComponent::OnLClickHit()
+bool UGearManagementComponent::OnLClickHit_Validate()
 {
-	if (!bLClickBind) { return; }
+	return true;
+}
+
+void UGearManagementComponent::OnLClickHit_Implementation()
+{
+	//if (!bLClickBind) { return; }
 	for (auto Actor : TacGears)
 	{
-		auto Gear = Cast<AGears>(Actor);
-		if (Gear->GearType == EGearType::EShoot)
+		AGears* Gear = Cast<AGears>(Actor);
+		if (!Gear || Gear->GearBindKey != EGearBindKey::ELClick)
 		{
-			Gear->OnLClickHit(OwnerVehicle);
+			continue;
 		}
+		Gear->OnLClickHit(OwnerVehicle);
 	}
 }
 
@@ -194,93 +183,54 @@ void UGearManagementComponent::OnRClickHit()
 	if (!bRClickBind) { return; }
 	for (auto Actor : TacGears)
 	{
-		auto Gear = Cast<AGears>(Actor);
-		if (Gear->GearType == EGearType::EShoot)
-		{
-			Gear->OnRClickHit(OwnerVehicle);
-		}
+		AGears* Gear = Cast<AGears>(Actor);
+		Gear->OnRClickHit(OwnerVehicle);
 	}
 }
 
-/*================================================================
-	Judges by gear's socket and type, and spawns gear to tac
-================================================================*/
-bool UGearManagementComponent::JudgeBySocket(AGears* GearToJudge)
+void UGearManagementComponent::JudgeBySocket(AGears* GearToJudge, int32 Result)
 {
-	auto Left = OwnerVehicle->GearActorLeft;
-	auto Right = OwnerVehicle->GearActorRight;
-	auto Front = OwnerVehicle->GearActorFront;
-	auto Back = OwnerVehicle->GearActorBack;
-	AGears* Gear;
 	switch (GearToJudge->GearSocket)
 	{
 	case EGearSocket::ENull:
-		return false;
-	case EGearSocket::ELeft:
-		if (bHasLeft) { return false; }
-		bHasLeft = true;
-		Left->SetChildActorClass(GearToJudge->GetClass());
-		Left->CreateChildActor();
-		TacGears[0] = Left->GetChildActor();
-		Gear = Cast<AGears>(TacGears[0]);
-		Gear->bIsPicked = true;
-		return true;
-	case EGearSocket::ERight:
-		if (bHasRight) { return false; }
-		bHasRight = true;
-		Right->SetChildActorClass(GearToJudge->GetClass());
-		Right->CreateChildActor();
-		TacGears[1] = Right->GetChildActor();
-		Gear = Cast<AGears>(TacGears[1]);
-		Gear->bIsPicked = true;
-		return true;
+		Result = -1;
+		break;
 	case EGearSocket::EFront:
-		if (bHasFront) { return false; }
+		if (bHasFront) { Result = -1; }
 		bHasFront = true;
-		Front->SetChildActorClass(GearToJudge->GetClass());
-		Front->CreateChildActor();
-		TacGears[2] = Front->GetChildActor();
-		Gear = Cast<AGears>(TacGears[2]);
-		Gear->bIsPicked = true;
-		return true;
+		GearToJudge->OnPicked();
+		GearToJudge->AttachToActor(OwnerVehicle, FAttachmentTransformRules::SnapToTargetIncludingScale, TEXT("EFront"));
+		//UE_LOG(LogTemp, Warning, TEXT("\nOwner: %s\nNetOwner: %s\nNetOwningOwner: %s"), *GearToJudge->GetOwner()->GetName(), *GearToJudge->GetNetOwner()->GetName(), *GearToJudge->GetNetOwningPlayer()->GetName());
+		TacGears[0] = GearToJudge;
+		Result = 0;
+		break;
 	case EGearSocket::EBack:
-		if (bHasBack) { return false; }
+		if (bHasBack) { Result = -1; }
 		bHasBack = true;
-		Back->SetChildActorClass(GearToJudge->GetClass());
-		Back->CreateChildActor();
-		TacGears[3] = Back->GetChildActor();
-		Gear = Cast<AGears>(TacGears[3]);
-		Gear->bIsPicked = true;
-		return true;
+		GearToJudge->OnPicked();
+		GearToJudge->AttachToActor(OwnerVehicle, FAttachmentTransformRules::SnapToTargetNotIncludingScale, TEXT("EBack"));
+		TacGears[1] = GearToJudge;
+		Result = 1;
+		break;
+	case EGearSocket::ELeft:
+		if (bHasLeft) { Result = -1; }
+		bHasLeft = true;
+		GearToJudge->OnPicked();
+		GearToJudge->AttachToActor(OwnerVehicle, FAttachmentTransformRules::SnapToTargetNotIncludingScale, TEXT("ELeft"));
+		TacGears[2] = GearToJudge;
+		Result = 2;
+		break;
+	case EGearSocket::ERight:
+		if (bHasRight) { Result = -1; }
+		bHasRight = true;
+		GearToJudge->OnPicked();
+		GearToJudge->AttachToActor(OwnerVehicle, FAttachmentTransformRules::SnapToTargetNotIncludingScale, TEXT("ERight"));
+		TacGears[3] = GearToJudge;
+		Result = 3;
+		break;
 	default:
-		return false;
-	}
-}
-
-bool UGearManagementComponent::JudgeByType(AGears* GearToJudge)
-{
-	switch (GearToJudge->GearType)
-	{
-	case EGearType::EBoost:
-		if (bShiftBind) { return false; }
-		bShiftBind = true;
-		return JudgeBySocket(GearToJudge);
-	case EGearType::EJump:
-		if (bSpaceBind) { return false; }
-		bSpaceBind = true;
-		return JudgeBySocket(GearToJudge);
-	case EGearType::EProtector:
-		return JudgeBySocket(GearToJudge);
-	case EGearType::EShoot:
-		if (bLClickBind) { return false; }
-		bLClickBind = true;
-		return JudgeBySocket(GearToJudge);
-	case EGearType::EThrow:
-		if (bKeyQBind) { return false; }
-		bKeyQBind = true;
-		return JudgeBySocket(GearToJudge);
-	default:
-		return false;
+		Result = -1;
+		break;
 	}
 }
 

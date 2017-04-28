@@ -26,12 +26,15 @@ public:
 public:
 	// Collision mesh to observe hit event
 	UPROPERTY(VisibleAnywhere)
-	UStaticMeshComponent* CollisionMesh;
+	USphereComponent* CollisionSphere;
+
+	UPROPERTY(VisibleAnywhere)
+	UStaticMeshComponent* VisualMesh;
 
 private:
 	// Projectile movement component launches actor as projectile
 	UProjectileMovementComponent* ProjectileMovementComponent;
-	UFUNCTION()
+	UFUNCTION(NetMulticast, Reliable)
 	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit);
 
 public:
@@ -39,6 +42,7 @@ public:
 	
 public:
 	// Activite the projectile
+	//UFUNCTION(Server, Reliable, WithValidation)
 	void LaunchProjectile();
 	AActor* OwnerGun;
 

@@ -26,8 +26,6 @@ public:
 	UFUNCTION(BlueprintPure, Category = State)
 	FString GetSocketName(int32 GearIndex);
 	UFUNCTION(BlueprintPure, Category = State)
-	FTransform GetTacTransform();
-	UFUNCTION(BlueprintPure, Category = State)
 	FString GetPlayerName();
 	UFUNCTION(BlueprintPure, Category = State)
 	FName GetGearName(int32 GearIndex);
@@ -36,11 +34,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = State)
 	void SetGears(TArray<TSubclassOf<AGears>> GearsToSet);
 	UFUNCTION(BlueprintCallable, Category = State)
-	void AddGear(TSubclassOf<AGears> GearToAdd);
+	void AddGear(int32 GearIndex, TSubclassOf<AGears> GearToAdd);
 	UFUNCTION(BlueprintCallable, Category = State)
 	void EmptyGears();
-	UFUNCTION(BlueprintCallable, Category = State)
-	void SetTacTransform(FTransform TransformToSet);
 	UFUNCTION(BlueprintCallable, Category = State)
 	void SetName(FString NameToSet);
 
@@ -48,8 +44,8 @@ private:
 	/*==========================================
 		Saves player state for synchronizing	
 	==========================================*/
+	UPROPERTY(Replicated)
 	TArray<TSubclassOf<AGears>> Gears;
-	FTransform TacTransform;
 	FString MyPlayerName = TEXT("Tacky");
 	int32 GearsAmount;
 	

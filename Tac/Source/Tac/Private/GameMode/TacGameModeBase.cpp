@@ -5,6 +5,7 @@
 #include "GearSpawnVolume.h"
 #include "TacController.h"
 #include "TacPlayerState.h"
+#include "UnrealNetwork.h"
 #include "Kismet/GameplayStatics.h"
 
 ATacGameModeBase::ATacGameModeBase()
@@ -27,7 +28,7 @@ void ATacGameModeBase::BeginPlay()
 		Spawn all GearSpawnVolumes
 	================================*/
 	ActiveGearVolume();
-	//InitSpawnStart();
+	InitSpawnStart();
 }
 
 void ATacGameModeBase::PostLogin(APlayerController* NewController)
@@ -35,60 +36,15 @@ void ATacGameModeBase::PostLogin(APlayerController* NewController)
 	Super::PostLogin(NewController);
 	if (HasAuthority())
 	{
-		InitSpawnStart();
 		ATacPlayerState* NewTacPlayerState = Cast<ATacPlayerState>(NewController->PlayerState);
 		NewTacPlayerState->PlayerNumber = GameState->PlayerArray.Num();
 		ATacController* NewTacController = Cast<ATacController>(NewController);
 		NewTacController->ClientPostLogin();
-	}
-	else
-	{
+		NewTacController->UpdateHUD();
 	}
 }
 
-/*
 void ATacGameModeBase::RespawnPlayerEvent(AController * PlayerController)
-{
-	if (PlayerController->GetPawn())
-	{
-		PlayerController->GetPawn()->Destroy();
-		UE_LOG(LogTemp, Error, TEXT("Destroy"));
-	}
-	ATacPlayerState* TacPlayerState = Cast<ATacPlayerState>(PlayerController->PlayerState);
-	FTransform SpawnTransform;
-	if (TacPlayerState->bIsGroup_A)
-	{
-		if (!ensure(SpawnStart_A.IsValidIndex(0))) 
-		{
-			UE_LOG(LogTemp, Error, TEXT("No PlayerStart_A for Group_A"));
-			return; 
-		}
-		SpawnTransform = SpawnStart_A[0]->GetActorTransform();
-	}
-	else
-	{
-		if (!ensure(SpawnStart_B.IsValidIndex(0)))
-		{
-			UE_LOG(LogTemp, Error, TEXT("No PlayerStart_B for Group_B"));
-			return;
-		}
-		SpawnTransform = SpawnStart_B[0]->GetActorTransform();
-	}
-	//static ConstructorHelpers::FClassFinder<APawn> TacPawnBP(TEXT("/Game/Tac/Core/Characters/BP_Tac"));
-	//if (!ensure(TacPawnBP.Succeeded())) { return; }
-	ATacVehicle* NewTac = GetWorld()->SpawnActor<ATacVehicle>(ATacVehicle::StaticClass(), SpawnTransform);// TODO spawn BP
-	PlayerController->Possess(NewTac);
-	ATacController* NewTacController = Cast<ATacController>(PlayerController);
-	NewTacController->RespawnFinished();
-}
-*/
-
-bool ATacGameModeBase::RespawnPlayerEvent_Validate(AController * PlayerController)
-{
-	return true;
-}
-
-void ATacGameModeBase::RespawnPlayerEvent_Implementation(AController * PlayerController)
 {
 	if (PlayerController->GetPawn())
 	{
@@ -112,15 +68,14 @@ void ATacGameModeBase::RespawnPlayerEvent_Implementation(AController * PlayerCon
 			UE_LOG(LogTemp, Error, TEXT("No PlayerStart_B for Group_B"));
 			return;
 		}
-		SpawnTransform = SpawnStart_B[PlayerIndex++]->GetActorTransform();
+		int32 StartIndex = FMath::RandRange(0, SpawnStart_B.Num() - 1);
+		SpawnTransform = SpawnStart_B[StartIndex]->GetActorTransform();
+		SpawnStart_B.RemoveAt(StartIndex);
 	}
-	//static ConstructorHelpers::FClassFinder<APawn> TacPawnBP(TEXT("/Game/Tac/Core/Characters/BP_Tac"));
-	//if (!ensure(TacPawnBP.Succeeded())) { return; }
 	ATacVehicle* NewTac = GetWorld()->SpawnActor<ATacVehicle>(ATacVehicle::StaticClass(), SpawnTransform);// TODO spawn BP
 	PlayerController->Possess(NewTac);
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, *PlayerController->GetName());
-	ATacController* NewTacController = Cast<ATacController>(PlayerController);
-	NewTacController->RespawnFinished();
+	ATacController* TacController = Cast<ATacController>(PlayerController);
+	TacController->UpdateVehicle();
 }
 
 void ATacGameModeBase::ActiveGearVolume()
@@ -137,6 +92,7 @@ void ATacGameModeBase::ActiveGearVolume()
 
 void ATacGameModeBase::InitSpawnStart()
 {
+	if (!ensure(GetWorld())) { return; }
 	TArray<AActor*> FoundActors;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), APlayerStart::StaticClass(), FoundActors);
 	for (auto Actor : FoundActors)
@@ -147,9 +103,10 @@ void ATacGameModeBase::InitSpawnStart()
 		{
 			SpawnStart_A.AddUnique(PlayerStartActor);
 		}
-		if (PlayerStartActor->PlayerStartTag == TEXT("PlayerB"))
+		else if (PlayerStartActor->PlayerStartTag == TEXT("PlayerB"))
 		{
 			SpawnStart_B.AddUnique(PlayerStartActor);
 		}
 	}
+	UE_LOG(LogTemp, Warning, TEXT("%i"), SpawnStart_B.Num());
 }

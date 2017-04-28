@@ -14,7 +14,6 @@
 #include "DamageComponent.h"
 #include "PickupComponent.h"
 #include "GearManagementComponent.h"
-#include "UnrealNetwork.h"
 #include "Components/TacMovementComponent4W.h"
 
 ATacVehicle::ATacVehicle(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer.SetDefaultSubobjectClass<UTacMovementComponent4W>(VehicleMovementComponentName))
@@ -95,6 +94,7 @@ ATacVehicle::ATacVehicle(const FObjectInitializer& ObjectInitializer) : Super(Ob
 
 	// Create the gear management component
 	GearManager = CreateDefaultSubobject<UGearManagementComponent>(TEXT("GearManager"));
+	GearManager->SetIsReplicated(true);
 
 	// Create the damage component
 	DamageManager = CreateDefaultSubobject<UDamageComponent>(TEXT("DamageManager"));
@@ -104,19 +104,6 @@ ATacVehicle::ATacVehicle(const FObjectInitializer& ObjectInitializer) : Super(Ob
 	PickupVolume = CreateDefaultSubobject<UPickupComponent>(TEXT("PickupVolume"));
 	BoostSpeed = 400.f;
 
-	// Initialization for ChildActorComponent
-	// Reference: https://forums.unrealengine.com/showthread.php?53823-c-equivalent-of-Add-ChildActorComponent
-	GearActorFront = CreateDefaultSubobject<UChildActorComponent>(TEXT("GearFront"));
-	GearActorFront->SetupAttachment(RootComponent, TEXT("EFront"));
-
-	GearActorBack = CreateDefaultSubobject<UChildActorComponent>(TEXT("GearBack"));
-	GearActorBack->SetupAttachment(RootComponent, TEXT("EBack"));
-
-	GearActorLeft = CreateDefaultSubobject<UChildActorComponent>(TEXT("GearLeft"));
-	GearActorLeft->SetupAttachment(RootComponent, TEXT("ELeft"));
-
-	GearActorRight = CreateDefaultSubobject<UChildActorComponent>(TEXT("GearRight"));
-	GearActorRight->SetupAttachment(RootComponent, TEXT("ERight"));
 }
 
 void ATacVehicle::BeginPlay()
@@ -169,14 +156,6 @@ void ATacVehicle::PickupGear()
 	PickupVolume->Pickup();
 }
 
-// Update player states which consists of OwnedGears and Transform
-void ATacVehicle::UpdateState()
-{
-	ATacPlayerState* TacPS = Cast<ATacPlayerState>(PlayerState);
-	GearManager->InitializeGear(TacPS->GetGears());
-	SetActorTransform(TacPS->GetTacTransform(), false, nullptr, ETeleportType::TeleportPhysics);
-}
-
 void ATacVehicle::RotateCamera(float val)
 {
 	SpringArm->AddRelativeRotation(FRotator(0.f, val, 0.f));
@@ -194,4 +173,12 @@ void ATacVehicle::LiftCamera(float val)
 void ATacVehicle::ZoomCamera(float val)
 {
 	SpringArm->TargetArmLength += val * -10.f;
+}
+
+// Update player states which consists of OwnedGears and Transform
+void ATacVehicle::UpdateState()
+{
+	ATacPlayerState* TacPS = Cast<ATacPlayerState>(PlayerState);
+	if (!ensure(TacPS)) { return; }
+	GearManager->InitializeGear(TacPS->GetGears());
 }

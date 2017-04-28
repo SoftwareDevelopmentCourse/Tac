@@ -45,7 +45,7 @@ void UPickupComponent::Pickup()
 	for (int32 ActorIndex = 0; ActorIndex<ActorsInRange.Num();	)
 	{
 		auto Gear = Cast<AGears>(ActorsInRange[ActorIndex]);
-		if (Gear->bIsPicked)
+		if (Gear->bPicked)
 		{
 			ActorsInRange.Remove(Gear);
 			continue;

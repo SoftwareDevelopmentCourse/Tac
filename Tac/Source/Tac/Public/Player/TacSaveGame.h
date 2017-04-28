@@ -30,8 +30,11 @@ public:
 	UPROPERTY(VisibleAnywhere, Category = Save)
 	TArray<TSubclassOf<AGears>> Gears;
 
+	/** No need to record player transform
 	UPROPERTY(VisibleAnywhere, Category = Save)
 	FTransform TacTransform;
+	*/
+
 
 	UTacSaveGame();
 	

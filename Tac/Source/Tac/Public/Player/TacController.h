@@ -6,6 +6,7 @@
 #include "TacVehicle.h"
 #include "TacController.generated.h"
 
+class TacGameModeBase;
 /**
  * 
  */
@@ -21,6 +22,7 @@ public:
 
 
 	// Variable to hold the widget After Creating it.
+	UPROPERTY()
 	class UGearWidget* TacView;
 
 	/** Save the game */
@@ -29,15 +31,18 @@ public:
 	void LoadGame();
 	/** Clear game records */
 	void EmptyGame();
+	UFUNCTION(Server, Reliable, WithValidation)
+	void UpdateVehicle();
 
 	void AddGearSlot();
-	//UFUNCTION(Client, Reliable)
+	UFUNCTION(Server, Reliable, WithValidation)
 	void ClientPostLogin();
-	//UFUNCTION(Client, Reliable)
-	void RespawnFinished();
+	UFUNCTION(Client, Reliable)
+	void UpdateHUD();
 
 private:
 	/** Widget blueprint's reference */
+	UPROPERTY()
 	TSubclassOf<class UUserWidget> PlayerView;
 	
 };
