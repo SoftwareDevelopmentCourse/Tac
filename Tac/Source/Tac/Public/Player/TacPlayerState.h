@@ -20,7 +20,7 @@ public:
 	ATacPlayerState();
 
 	/** Functions for reading data */
-	UFUNCTION(BlueprintCallable, Category = State)
+	UFUNCTION(BlueprintPure, Category = State)
 	TArray<TSubclassOf<AGears>> GetGears();
 	UFUNCTION(BlueprintPure, Category = State)
 	TSubclassOf<AGears> GetGear(int32 GearIndex);
@@ -28,7 +28,7 @@ public:
 	FString GetSocketName(int32 GearIndex);
 	UFUNCTION(BlueprintPure, Category = State)
 	FString GetPlayerName();
-	UFUNCTION(BlueprintPure, Category = State)
+	UFUNCTION(BlueprintCallable, Category = State)
 	FName GetGearName(int32 GearIndex);
 
 	/** Functions for writing data */
@@ -45,6 +45,7 @@ private:
 	/*==========================================
 		Saves player state for synchronizing	
 	==========================================*/
+	UPROPERTY()
 	TArray<TSubclassOf<AGears>> Gears;
 	FString MyPlayerName = TEXT("Tacky");
 	int32 GearsAmount;

@@ -7,7 +7,7 @@
 
 ATacPlayerState::ATacPlayerState()
 {
-	bReplicates = true;
+	//bReplicates = true;
 }
 
 TArray<TSubclassOf<AGears>> ATacPlayerState::GetGears()
@@ -61,6 +61,7 @@ FString ATacPlayerState::GetSocketName(int32 GearIndex)
 void ATacPlayerState::SetGears(TArray<TSubclassOf<AGears>> GearsToSet)
 {
 	Gears = GearsToSet;
+	GearsAmount++;
 }
 
 void ATacPlayerState::AddGear(int32 GearIndex, TSubclassOf<AGears> GearToAdd)

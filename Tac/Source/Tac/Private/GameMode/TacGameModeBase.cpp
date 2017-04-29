@@ -4,6 +4,7 @@
 #include "TacGameModeBase.h"
 #include "GearSpawnVolume.h"
 #include "TacController.h"
+#include "TacHUD.h"
 #include "TacPlayerState.h"
 #include "UnrealNetwork.h"
 #include "Kismet/GameplayStatics.h"
@@ -22,6 +23,8 @@ ATacGameModeBase::ATacGameModeBase()
 	static ConstructorHelpers::FClassFinder<AController> TacController(TEXT("Class'/Script/Tac.TacController'"));
 	if (!ensure(TacController.Succeeded())) { return; }
 	PlayerControllerClass = TacController.Class;
+
+	HUDClass = ATacHUD::StaticClass();
 }
 
 void ATacGameModeBase::BeginPlay()
