@@ -180,5 +180,5 @@ void ATacVehicle::UpdateState()
 {
 	ATacPlayerState* TacPS = Cast<ATacPlayerState>(PlayerState);
 	if (!ensure(TacPS)) { return; }
-	GearManager->InitializeGear(TacPS->GetGears());
+	GearManager->ResetGears();
 }

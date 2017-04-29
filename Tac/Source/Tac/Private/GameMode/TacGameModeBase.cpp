@@ -13,9 +13,12 @@ ATacGameModeBase::ATacGameModeBase()
 	/*============================================
 		Initialize for the Pawn and Controller
 	============================================*/
+	/*
 	static ConstructorHelpers::FClassFinder<APawn> TacPawnBP(TEXT("/Game/Tac/Core/Characters/BP_Tac"));
 	if (!ensure(TacPawnBP.Succeeded())) { return; }
 	DefaultPawnClass = TacPawnBP.Class;
+	*/
+	
 	static ConstructorHelpers::FClassFinder<AController> TacController(TEXT("Class'/Script/Tac.TacController'"));
 	if (!ensure(TacController.Succeeded())) { return; }
 	PlayerControllerClass = TacController.Class;
@@ -108,5 +111,5 @@ void ATacGameModeBase::InitSpawnStart()
 			SpawnStart_B.AddUnique(PlayerStartActor);
 		}
 	}
-	UE_LOG(LogTemp, Warning, TEXT("%i"), SpawnStart_B.Num());
+	UE_LOG(LogTemp, Warning, TEXT("Has Player start B : %i"), SpawnStart_B.Num());
 }

@@ -17,8 +17,6 @@ UGearManagementComponent::UGearManagementComponent()
 	bReplicates = true;
 	// Initialize owner vehicle, for some reason, the GetOwner() function can only be used once in Constructor
 	OwnerVehicle = Cast<ATacVehicle>(GetOwner());
-	// Initialize 4 sockets
-	TacGears.SetNum(4);
 	// Initialize judging conditions
 	bShiftBind = false;
 	bSpaceBind = false;
@@ -30,20 +28,15 @@ UGearManagementComponent::UGearManagementComponent()
 	bHasBack = false;
 	bHasLeft = false;
 	bHasRight = false;
+
+	//TacGears.SetNum(4);
 }
 
 // Called when the game starts
 void UGearManagementComponent::BeginPlay()
 {
 	Super::BeginPlay();
-	/*======================================
-		Initialize here, GetOwner() could
-		be used in BeginPlay()
-	======================================*/
-	if (OwnerVehicle)
-	{
-		OwnerPS = Cast<ATacPlayerState>(OwnerVehicle->PlayerState);
-	}
+
 }
 
 // Called every frame
@@ -59,16 +52,6 @@ void UGearManagementComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProper
 	DOREPLIFETIME(UGearManagementComponent, TacGears);
 }
 
-void UGearManagementComponent::InitializeGear(TArray<TSubclassOf<AGears>> OwnedGears)
-{
-	ResetGears();
-	int32 JudgeResult = 0;
-	for (int32 GearIndex = 0; GearIndex < 4; GearIndex++)
-	{
-		JudgeBySocket(OwnedGears[GearIndex].GetDefaultObject(), JudgeResult);
-	}
-}
-
 bool UGearManagementComponent::TryPickup_Validate(AGears * GearToPickup)
 {
 	return true;
@@ -80,16 +63,18 @@ void UGearManagementComponent::TryPickup_Implementation(AGears * GearToPickup)
 	JudgeBySocket(GearToPickup, JudgeResult);
 	if (JudgeResult >= 0 && JudgeResult <=3)
 	{
+		ATacPlayerState* OwnerPS = Cast<ATacPlayerState>(OwnerVehicle->PlayerState);
+		if (!OwnerPS) { return; }
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan, *GearToPickup->GetName());
-		//OwnerPS->AddGear(GearIndex, GearToPickup->GetClass());
-		//ATacController* TacCtrl = Cast<ATacController>(OwnerVehicle->Controller);
-		//TacCtrl->AddGearSlot();
+		OwnerPS->AddGear(JudgeResult, GearToPickup->GetClass());
+		ATacController* TacCtrl = Cast<ATacController>(OwnerVehicle->Controller);
+		TacCtrl->AddGearSlot();
 	}
 }
 
 void UGearManagementComponent::ResetGears()
 {
-	TacGears.Empty();
+	TacGears.Empty(4);
 	TacGears.SetNum(4);
 	TArray<AActor*> AttachedActors;
 	OwnerVehicle->GetAttachedActors(AttachedActors);
@@ -98,7 +83,6 @@ void UGearManagementComponent::ResetGears()
 		AGears* Gear = Cast<AGears>(Actor);
 		Gear->Destroy();
 	}
-	InitializeState();
 }
 
 /*========================================================
@@ -188,7 +172,7 @@ void UGearManagementComponent::OnRClickHit()
 	}
 }
 
-void UGearManagementComponent::JudgeBySocket(AGears* GearToJudge, int32 Result)
+void UGearManagementComponent::JudgeBySocket(AGears* GearToJudge, int32 & Result)
 {
 	switch (GearToJudge->GearSocket)
 	{
@@ -200,7 +184,6 @@ void UGearManagementComponent::JudgeBySocket(AGears* GearToJudge, int32 Result)
 		bHasFront = true;
 		GearToJudge->OnPicked();
 		GearToJudge->AttachToActor(OwnerVehicle, FAttachmentTransformRules::SnapToTargetIncludingScale, TEXT("EFront"));
-		//UE_LOG(LogTemp, Warning, TEXT("\nOwner: %s\nNetOwner: %s\nNetOwningOwner: %s"), *GearToJudge->GetOwner()->GetName(), *GearToJudge->GetNetOwner()->GetName(), *GearToJudge->GetNetOwningPlayer()->GetName());
 		TacGears[0] = GearToJudge;
 		Result = 0;
 		break;

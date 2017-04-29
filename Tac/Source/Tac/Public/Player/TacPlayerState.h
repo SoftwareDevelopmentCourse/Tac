@@ -18,8 +18,9 @@ class TAC_API ATacPlayerState : public APlayerState
 	
 public:
 	ATacPlayerState();
+
 	/** Functions for reading data */
-	UFUNCTION(BlueprintPure, Category = State)
+	UFUNCTION(BlueprintCallable, Category = State)
 	TArray<TSubclassOf<AGears>> GetGears();
 	UFUNCTION(BlueprintPure, Category = State)
 	TSubclassOf<AGears> GetGear(int32 GearIndex);
@@ -44,7 +45,6 @@ private:
 	/*==========================================
 		Saves player state for synchronizing	
 	==========================================*/
-	UPROPERTY(Replicated)
 	TArray<TSubclassOf<AGears>> Gears;
 	FString MyPlayerName = TEXT("Tacky");
 	int32 GearsAmount;

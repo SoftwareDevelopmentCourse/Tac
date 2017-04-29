@@ -22,7 +22,6 @@ public:
 	
 	/** Sets owner's properties for component's use */
 	ATacVehicle* OwnerVehicle;
-	ATacPlayerState* OwnerPS;
 
 protected:
 	// Called when the game starts
@@ -31,8 +30,6 @@ protected:
 public:	
 	/** Called every frame */
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-	/** Spawn gear to tac */
-	void InitializeGear(TArray<TSubclassOf<AGears>> OwnedGears);
 	/** Try to pick up gear */
 	UFUNCTION(Server, Reliable, WithValidation)
 	void TryPickup(AGears* GearToPickup);
@@ -85,7 +82,7 @@ private:
 
 private:
 	/** Judge by gear socket */
-	void JudgeBySocket(AGears* GearToJudge, int32 Result);
+	void JudgeBySocket(AGears* GearToJudge, int32 & Result);
 	/** Initialize gear's boolean states */
 	void InitializeState();
 	/** Storages every socket's gear */

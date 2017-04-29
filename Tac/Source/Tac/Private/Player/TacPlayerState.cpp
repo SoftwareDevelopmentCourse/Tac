@@ -10,11 +10,6 @@ ATacPlayerState::ATacPlayerState()
 	bReplicates = true;
 }
 
-void ATacPlayerState::GetLifetimeReplicatedProps(TArray< FLifetimeProperty > & OutLifetimeProps) const
-{
-	DOREPLIFETIME(ATacPlayerState, Gears);
-}
-
 TArray<TSubclassOf<AGears>> ATacPlayerState::GetGears()
 {
 	return Gears;
@@ -70,19 +65,15 @@ void ATacPlayerState::SetGears(TArray<TSubclassOf<AGears>> GearsToSet)
 
 void ATacPlayerState::AddGear(int32 GearIndex, TSubclassOf<AGears> GearToAdd)
 {
-	if (!(Gears.IsValidIndex(GearIndex))) { return; }
-	Gears[GearIndex] = GearToAdd;//TODO Modify specific gear socket not add
+	Gears[GearIndex] = GearToAdd;
+	UE_LOG(LogTemp, Warning, TEXT("%s"), *Gears[0]->GetName());
 }
 
 void ATacPlayerState::EmptyGears()
 {
+	Gears.Empty();
 	Gears.SetNum(4);
 	GearsAmount = 0;
-	for (int32 GearIndex = 0; GearIndex < 4; GearIndex++)
-	{
-		//UE_LOG(LogTemp, Log, TEXT("%s"), *Gears[i]->GetName());
-		Gears[GearIndex] = AGears::StaticClass();
-	}
 }
 
 FString ATacPlayerState::GetPlayerName()
@@ -94,10 +85,12 @@ FName ATacPlayerState::GetGearName(int32 GearIndex)
 {
 	if (Gears.IsValidIndex(GearIndex))
 	{
+		UE_LOG(LogTemp, Warning, TEXT("Access"));
 		return Gears[GearIndex].GetDefaultObject()->GearName;
 	}
 	else // If has no gears, return null gear
 	{
+		UE_LOG(LogTemp, Warning, TEXT("No access"))
 		return FName("DEFAULT_NAME");
 	}
 }

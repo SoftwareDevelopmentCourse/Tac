@@ -20,9 +20,7 @@ public:
 	virtual void BeginPlay() override;
 	virtual void SetupInputComponent() override;
 
-
 	// Variable to hold the widget After Creating it.
-	UPROPERTY()
 	class UGearWidget* TacView;
 
 	/** Save the game */
@@ -33,7 +31,7 @@ public:
 	void EmptyGame();
 	UFUNCTION(Server, Reliable, WithValidation)
 	void UpdateVehicle();
-
+	UFUNCTION(Client, Reliable)
 	void AddGearSlot();
 	UFUNCTION(Server, Reliable, WithValidation)
 	void ClientPostLogin();

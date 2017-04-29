@@ -17,14 +17,12 @@ ATacController::ATacController()
 	{
 		PlayerView = Widget.Class;
 	}
+	TacView = nullptr;
 }
 
 void ATacController::BeginPlay()
 {
 	Super::BeginPlay();
-	// Load game when begin play game
-	//LoadGame();
-	// Create widget and add to player viewport
 }
 
 // Directly uses input component in controller
@@ -41,17 +39,21 @@ void ATacController::SetupInputComponent()
 ========================================================================================================*/
 void ATacController::SaveGame()
 {
+	/*
 	UTacSaveGame* SaveGameInstance = Cast<UTacSaveGame>(UGameplayStatics::CreateSaveGameObject(UTacSaveGame::StaticClass()));
 	ATacPlayerState* TacPS = Cast<ATacPlayerState>(PlayerState);
 	// Saves player's name, gears and transform
 	SaveGameInstance->PlayerName = TacPS->GetPlayerName();
 	SaveGameInstance->Gears = TacPS->GetGears();
 	UGameplayStatics::SaveGameToSlot(SaveGameInstance, SaveGameInstance->SaveSlotName, SaveGameInstance->UserIndex);
+	*/
+
 }
 
 void ATacController::LoadGame()
 {
-	UTacSaveGame* LoadGameInstance = Cast<UTacSaveGame>(UGameplayStatics::CreateSaveGameObject(UTacSaveGame::StaticClass()));
+	/*
+		UTacSaveGame* LoadGameInstance = Cast<UTacSaveGame>(UGameplayStatics::CreateSaveGameObject(UTacSaveGame::StaticClass()));
 	ATacPlayerState* TacPS = Cast<ATacPlayerState>(PlayerState);
 	if (!ensure(TacPS)) { return; }
 	LoadGameInstance = Cast<UTacSaveGame>(UGameplayStatics::LoadGameFromSlot(LoadGameInstance->SaveSlotName, LoadGameInstance->UserIndex));
@@ -65,11 +67,14 @@ void ATacController::LoadGame()
 		TacPS->SetPlayerName(FString(TEXT("NULL")));
 		TacPS->EmptyGears();
 	}
+	*/
+
 }
 
 void ATacController::EmptyGame()
 {
-	UTacSaveGame* SaveGameInstance = Cast<UTacSaveGame>(UGameplayStatics::CreateSaveGameObject(UTacSaveGame::StaticClass()));
+	/*
+		UTacSaveGame* SaveGameInstance = Cast<UTacSaveGame>(UGameplayStatics::CreateSaveGameObject(UTacSaveGame::StaticClass()));
 	ATacPlayerState* TacPS = Cast<ATacPlayerState>(PlayerState);
 	// Reset player respawn location at PlayerStart
 	TArray<AActor*> FoundActors;
@@ -83,6 +88,7 @@ void ATacController::EmptyGame()
 	SaveGameInstance->PlayerName = TacPS->GetPlayerName();
 	SaveGameInstance->Gears = TacPS->GetGears();
 	UGameplayStatics::SaveGameToSlot(SaveGameInstance, SaveGameInstance->SaveSlotName, SaveGameInstance->UserIndex);
+	*/
 }
 
 bool ATacController::UpdateVehicle_Validate()
@@ -97,8 +103,13 @@ void ATacController::UpdateVehicle_Implementation()
 	Tac->UpdateState();
 }
 
-void ATacController::AddGearSlot()
+void ATacController::AddGearSlot_Implementation()
 {
+	if (!IsLocalController())
+	{
+		UE_LOG(LogTemp, Error, TEXT("Is not local controller"));
+		return;
+	}
 	TacView->AddGearSlot();
 }
 
@@ -116,7 +127,9 @@ void ATacController::ClientPostLogin_Implementation()
 			UE_LOG(LogTemp, Error, TEXT("No playerstate"));
 			return;
 		}
-		LoadGame();
+		//LoadGame();
+		ATacPlayerState* TacPS = Cast<ATacPlayerState>(PlayerState);
+		TacPS->EmptyGears();
 		AGameModeBase* CurrentGameMode = GetWorld()->GetAuthGameMode();
 		if (!ensure(CurrentGameMode))
 		{
