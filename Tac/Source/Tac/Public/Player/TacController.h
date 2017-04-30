@@ -32,7 +32,7 @@ public:
 	UFUNCTION(Server, Reliable, WithValidation)
 	void UpdateVehicle();
 	UFUNCTION(Client, Reliable)
-	void AddGearSlot();
+	void AddGearSlot(int32 GearIndex);
 	UFUNCTION(Server, Reliable, WithValidation)
 	void ClientPostLogin();
 	UFUNCTION(Client, Reliable)

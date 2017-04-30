@@ -7,7 +7,7 @@
 
 ATacPlayerState::ATacPlayerState()
 {
-	//bReplicates = true;
+
 }
 
 TArray<TSubclassOf<AGears>> ATacPlayerState::GetGears()
@@ -61,20 +61,12 @@ FString ATacPlayerState::GetSocketName(int32 GearIndex)
 void ATacPlayerState::SetGears(TArray<TSubclassOf<AGears>> GearsToSet)
 {
 	Gears = GearsToSet;
-	GearsAmount++;
 }
 
-void ATacPlayerState::AddGear(int32 GearIndex, TSubclassOf<AGears> GearToAdd)
+void ATacPlayerState::AddGear_Implementation(int32 GearIndex, TSubclassOf<AGears> GearToAdd)
 {
 	Gears[GearIndex] = GearToAdd;
-	UE_LOG(LogTemp, Warning, TEXT("%s"), *Gears[0]->GetName());
-}
-
-void ATacPlayerState::EmptyGears()
-{
-	Gears.Empty();
-	Gears.SetNum(4);
-	GearsAmount = 0;
+	GearsAmount++;
 }
 
 FString ATacPlayerState::GetPlayerName()
@@ -86,12 +78,12 @@ FName ATacPlayerState::GetGearName(int32 GearIndex)
 {
 	if (Gears.IsValidIndex(GearIndex))
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Access"));
+		//UE_LOG(LogTemp, Warning, TEXT("Access"));
 		return Gears[GearIndex].GetDefaultObject()->GearName;
 	}
 	else // If has no gears, return null gear
 	{
-		UE_LOG(LogTemp, Warning, TEXT("No access"))
+		//UE_LOG(LogTemp, Warning, TEXT("No access"));
 		return FName("DEFAULT_NAME");
 	}
 }
@@ -99,4 +91,10 @@ FName ATacPlayerState::GetGearName(int32 GearIndex)
 void ATacPlayerState::SetName(FString NameToSet)
 {
 	MyPlayerName = NameToSet;
+}
+
+void ATacPlayerState::EmptyGears_Implementation()
+{
+	Gears.Empty();
+	Gears.SetNum(4);
 }

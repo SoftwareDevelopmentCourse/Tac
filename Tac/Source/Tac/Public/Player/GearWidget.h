@@ -16,7 +16,7 @@ class TAC_API UGearWidget : public UUserWidget
 public:
 	//UGearWidget();
 	UFUNCTION(BlueprintImplementableEvent, Category = "Gear")
-	void AddGearSlot();
+	void AddGearSlot(int32 GearIndex);
 	UFUNCTION(BlueprintImplementableEvent, Category = "State")
 	void InitializePlayerState();
 

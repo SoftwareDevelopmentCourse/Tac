@@ -41,19 +41,23 @@ public:
 		Bind axis and action
 	============================*/
 	/** When mouse looking up */
+	UFUNCTION(Server, Reliable, WithValidation)
 	void OnLookUp(float val);
 
 	/** When mouse looking right */
+	UFUNCTION(Server, Reliable, WithValidation)
 	void OnLookRight(float val);
 	
 	/** When hitting spacebar */
+	UFUNCTION(Server, Reliable, WithValidation)
 	void OnSpaceHit();
 
 	/** When hitting left shift */
-	//UFUNCTION(Server, Reliable, WithValidation)
+	UFUNCTION(Server, Reliable, WithValidation)
 	void OnShiftHit();
 
 	/** When hitting key Q */
+	UFUNCTION(Server, Reliable, WithValidation)
 	void OnKeyQHit();
 
 	/** When hitting left mouse button */
@@ -61,6 +65,7 @@ public:
 	void OnLClickHit();
 
 	/** When hitting right mouse button */
+	UFUNCTION(Server, Reliable, WithValidation)
 	void OnRClickHit();
 
 private:
@@ -85,6 +90,8 @@ private:
 	void JudgeBySocket(AGears* GearToJudge, int32 & Result);
 	/** Initialize gear's boolean states */
 	void InitializeState();
+
+	void BindKey(AGears * GearToBind);
 	/** Storages every socket's gear */
 	UPROPERTY(Replicated)
 	TArray<AActor*> TacGears;

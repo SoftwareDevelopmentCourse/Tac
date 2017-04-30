@@ -34,13 +34,13 @@ public:
 	/** Functions for writing data */
 	UFUNCTION(BlueprintCallable, Category = State)
 	void SetGears(TArray<TSubclassOf<AGears>> GearsToSet);
-	UFUNCTION(BlueprintCallable, Category = State)
+	UFUNCTION(Client, Reliable, BlueprintCallable, Category = State)
 	void AddGear(int32 GearIndex, TSubclassOf<AGears> GearToAdd);
-	UFUNCTION(BlueprintCallable, Category = State)
-	void EmptyGears();
 	UFUNCTION(BlueprintCallable, Category = State)
 	void SetName(FString NameToSet);
 
+	UFUNCTION(Client, Reliable)
+	void EmptyGears();
 private:
 	/*==========================================
 		Saves player state for synchronizing	

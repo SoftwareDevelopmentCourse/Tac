@@ -103,14 +103,14 @@ void ATacController::UpdateVehicle_Implementation()
 	Tac->UpdateState();
 }
 
-void ATacController::AddGearSlot_Implementation()
+void ATacController::AddGearSlot_Implementation(int32 GearIndex)
 {
 	if (!IsLocalController())
 	{
 		UE_LOG(LogTemp, Error, TEXT("Is not local controller"));
 		return;
 	}
-	TacView->AddGearSlot();
+	TacView->AddGearSlot(GearIndex);
 }
 
 bool ATacController::ClientPostLogin_Validate()
