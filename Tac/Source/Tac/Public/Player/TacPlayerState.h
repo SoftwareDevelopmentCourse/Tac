@@ -17,6 +17,8 @@ class TAC_API ATacPlayerState : public APlayerState
 	GENERATED_BODY()
 	
 public:
+	ATacPlayerState();
+
 	/** Functions for reading data */
 	UFUNCTION(BlueprintPure, Category = State)
 	TArray<TSubclassOf<AGears>> GetGears();
@@ -25,31 +27,30 @@ public:
 	UFUNCTION(BlueprintPure, Category = State)
 	FString GetSocketName(int32 GearIndex);
 	UFUNCTION(BlueprintPure, Category = State)
-	FTransform GetTacTransform();
-	UFUNCTION(BlueprintPure, Category = State)
 	FString GetPlayerName();
-	UFUNCTION(BlueprintPure, Category = State)
+	UFUNCTION(BlueprintCallable, Category = State)
 	FName GetGearName(int32 GearIndex);
 
 	/** Functions for writing data */
 	UFUNCTION(BlueprintCallable, Category = State)
 	void SetGears(TArray<TSubclassOf<AGears>> GearsToSet);
-	UFUNCTION(BlueprintCallable, Category = State)
-	void AddGear(TSubclassOf<AGears> GearToAdd);
-	UFUNCTION(BlueprintCallable, Category = State)
-	void EmptyGears();
-	UFUNCTION(BlueprintCallable, Category = State)
-	void SetTacTransform(FTransform TransformToSet);
+	UFUNCTION(Client, Reliable, BlueprintCallable, Category = State)
+	void AddGear(int32 GearIndex, TSubclassOf<AGears> GearToAdd);
 	UFUNCTION(BlueprintCallable, Category = State)
 	void SetName(FString NameToSet);
 
+	UFUNCTION(Client, Reliable)
+	void EmptyGears();
 private:
 	/*==========================================
 		Saves player state for synchronizing	
 	==========================================*/
+	UPROPERTY()
 	TArray<TSubclassOf<AGears>> Gears;
-	FTransform TacTransform;
 	FString MyPlayerName = TEXT("Tacky");
 	int32 GearsAmount;
 	
+public:
+	int32 PlayerNumber;
+	bool bIsGroup_A;
 };
