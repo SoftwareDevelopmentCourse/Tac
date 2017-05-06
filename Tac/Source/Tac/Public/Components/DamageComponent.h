@@ -26,17 +26,21 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 public:
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = State)
+	UPROPERTY(BlueprintReadOnly, Category = State)
 	int32 Health;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Armor)
+	UPROPERTY(BlueprintReadOnly, Category = State)
 	float Armor;
-	
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Armor)
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = State)
+	int32 MaxHealth;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = State)
+	float MaxArmor;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = State)
 	float ArmorRecoveryDelay;
 	// Range from 0 to 100
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Armor)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = State)
 	float ArmorRecoveryRate;
 
 public:
@@ -54,8 +58,5 @@ public:
 	FTimerHandle ArmorRecoveryHandle;
 
 private:
-	
-	int32 MaxHealth;
-	float MaxArmor;
 	bool bShouldRecoverArmor;
 };

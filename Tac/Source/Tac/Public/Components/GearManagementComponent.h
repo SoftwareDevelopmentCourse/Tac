@@ -22,7 +22,6 @@ public:
 	
 	/** Sets owner's properties for component's use */
 	ATacVehicle* OwnerVehicle;
-	ATacPlayerState* OwnerPS;
 
 protected:
 	// Called when the game starts
@@ -31,11 +30,8 @@ protected:
 public:	
 	/** Called every frame */
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-	/** Spawn gear to tac */
-	void InitializeGear(TArray<TSubclassOf<AGears>> OwnedGears);
-	/** Update player's gears state and locall gears state */
-	void UpdateData(AGears* GearToAdd);
 	/** Try to pick up gear */
+	UFUNCTION(Server, Reliable, WithValidation)
 	void TryPickup(AGears* GearToPickup);
 	/** Reset tac gears as class AGears */
 	void ResetGears();
@@ -45,24 +41,31 @@ public:
 		Bind axis and action
 	============================*/
 	/** When mouse looking up */
+	UFUNCTION(Server, Reliable, WithValidation)
 	void OnLookUp(float val);
 
 	/** When mouse looking right */
+	UFUNCTION(Server, Reliable, WithValidation)
 	void OnLookRight(float val);
 	
 	/** When hitting spacebar */
+	UFUNCTION(Server, Reliable, WithValidation)
 	void OnSpaceHit();
 
 	/** When hitting left shift */
+	UFUNCTION(Server, Reliable, WithValidation)
 	void OnShiftHit();
 
 	/** When hitting key Q */
+	UFUNCTION(Server, Reliable, WithValidation)
 	void OnKeyQHit();
 
 	/** When hitting left mouse button */
+	UFUNCTION(Server, Reliable, WithValidation)
 	void OnLClickHit();
 
 	/** When hitting right mouse button */
+	UFUNCTION(Server, Reliable, WithValidation)
 	void OnRClickHit();
 
 private:
@@ -84,12 +87,13 @@ private:
 
 private:
 	/** Judge by gear socket */
-	bool JudgeBySocket(AGears* GearToJudge);
-	/** Judge by gear type */
-	bool JudgeByType(AGears* GearToJudge);
+	void JudgeBySocket(AGears* GearToJudge, int32 & Result);
 	/** Initialize gear's boolean states */
 	void InitializeState();
+
+	void BindKey(AGears * GearToBind);
 	/** Storages every socket's gear */
+	UPROPERTY(Replicated)
 	TArray<AActor*> TacGears;
 
 };

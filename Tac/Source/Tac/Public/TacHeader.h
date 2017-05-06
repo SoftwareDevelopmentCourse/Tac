@@ -14,13 +14,15 @@ enum class EGearSocket : uint8
 };
 
 UENUM(BlueprintType)
-enum class EGearType : uint8
+enum class EGearBindKey : uint8
 {
-	EProtector,
-	EShoot,
-	EThrow,
-	EBoost,
-	EJump
+	ENull,
+	EMouseLook,
+	ELClick,
+	ERClick,
+	EShift,
+	ESpace,
+	EKeyQ
 };
 
 UENUM(BlueprintType)

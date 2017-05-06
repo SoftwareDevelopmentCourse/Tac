@@ -5,6 +5,11 @@
 #include "Gears.h"
 #include "Kismet/GameplayStatics.h"
 
+ATacPlayerState::ATacPlayerState()
+{
+
+}
+
 TArray<TSubclassOf<AGears>> ATacPlayerState::GetGears()
 {
 	return Gears;
@@ -58,30 +63,10 @@ void ATacPlayerState::SetGears(TArray<TSubclassOf<AGears>> GearsToSet)
 	Gears = GearsToSet;
 }
 
-void ATacPlayerState::AddGear(TSubclassOf<AGears> GearToAdd)
+void ATacPlayerState::AddGear_Implementation(int32 GearIndex, TSubclassOf<AGears> GearToAdd)
 {
-	Gears[GearsAmount++] = GearToAdd;
-}
-
-void ATacPlayerState::EmptyGears()
-{
-	Gears.SetNum(4);
-	GearsAmount = 0;
-	for (int32 i = 0; i < 4; i++)
-	{
-		//UE_LOG(LogTemp, Log, TEXT("%s"), *Gears[i]->GetName());
-		Gears[i] = AGears::StaticClass();
-	}
-}
-
-FTransform ATacPlayerState::GetTacTransform()
-{
-	return TacTransform;
-}
-
-void ATacPlayerState::SetTacTransform(FTransform TransformToSet)
-{
-	TacTransform = TransformToSet;
+	Gears[GearIndex] = GearToAdd;
+	GearsAmount++;
 }
 
 FString ATacPlayerState::GetPlayerName()
@@ -93,10 +78,12 @@ FName ATacPlayerState::GetGearName(int32 GearIndex)
 {
 	if (Gears.IsValidIndex(GearIndex))
 	{
+		//UE_LOG(LogTemp, Warning, TEXT("Access"));
 		return Gears[GearIndex].GetDefaultObject()->GearName;
 	}
 	else // If has no gears, return null gear
 	{
+		//UE_LOG(LogTemp, Warning, TEXT("No access"));
 		return FName("DEFAULT_NAME");
 	}
 }
@@ -104,4 +91,10 @@ FName ATacPlayerState::GetGearName(int32 GearIndex)
 void ATacPlayerState::SetName(FString NameToSet)
 {
 	MyPlayerName = NameToSet;
+}
+
+void ATacPlayerState::EmptyGears_Implementation()
+{
+	Gears.Empty();
+	Gears.SetNum(4);
 }

@@ -4,17 +4,20 @@
 #include "Gears.h"
 #include "TacVehicle.h"
 #include "TacHeader.h"
+#include "UnrealNetwork.h"
 
 // Sets default values
 AGears::AGears()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+	bReplicates = true;
 	
 	/*==========================================
 		Gear component initialize
 	===========================================*/
 	Root = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
+	Root->SetIsReplicated(true);
 	RootComponent = Root;
 
 	/*==========================================
@@ -35,15 +38,13 @@ AGears::AGears()
 	============================================*/
 	FloatRange = 5.f;
 	GearSocket = EGearSocket::ENull;
+	GearBindKey = EGearBindKey::ENull;
 	GearName = TEXT("DEFAULT_NAME");
-	GearType = EGearType::EProtector;
 	SpawnRate = 3;
 	MaxExistenceBase = -1;
 	MaxExistenceOutdoors = 5;
 	CostBase = 150;
 	CostOutdoors = 100;
-	bShouldRotate = false;
-
 }
 
 // Called when the game starts or when spawned
@@ -59,10 +60,23 @@ void AGears::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	// Add gear's rotation judged by whether gear is be picked up
-	if (bShouldRotate)
+	if (!bPicked)
 	{
 		AddGearRotation();
 	}
+}
+
+void AGears::GetLifetimeReplicatedProps(TArray< FLifetimeProperty > & OutLifetimeProps) const
+{
+	DOREPLIFETIME(AGears, bPicked);
+	DOREPLIFETIME(AGears, FloatRange);
+	DOREPLIFETIME(AGears, SpawnRate);
+	DOREPLIFETIME(AGears, MaxExistenceBase);
+	DOREPLIFETIME(AGears, MaxExistenceOutdoors);
+	DOREPLIFETIME(AGears, CostBase);
+	DOREPLIFETIME(AGears, CostOutdoors);
+	DOREPLIFETIME(AGears, GearSocket);
+	DOREPLIFETIME(AGears, GearName);
 }
 
 // Gears hover 
@@ -77,10 +91,26 @@ void AGears::GearsHover(float val)
 // Called from GearSpawnVolume
 void AGears::WorldSpawn()
 {
-	bShouldRotate = true;
+	bPicked = false;
 	// Initialize timeline
 	Timeline->AddInterpFloat(TimelineCurve, InterpFunction);
 	Timeline->PlayFromStart();
+}
+
+void AGears::OnPicked()
+{
+	bPicked = true;
+	Timeline->Stop();
+}
+
+bool AGears::ResetLocation_Validate()
+{
+	return true;
+}
+
+void AGears::ResetLocation_Implementation()
+{
+	SetActorLocation(FVector(0.f));
 }
 
 // Add gears rotation
