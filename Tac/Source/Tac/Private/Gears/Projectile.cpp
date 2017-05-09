@@ -77,6 +77,7 @@ bool AProjectile::LaunchProjectile_Validate()
 */
 
 void AProjectile::LaunchProjectile(FVector OutLaunchVelocity)
+
 {
 	ProjectileMovementComponent->SetVelocityInLocalSpace(OutLaunchVelocity * LaunchSpeed);
 	ProjectileMovementComponent->Activate();

@@ -12,7 +12,6 @@ void AGear_Gun::Initialize(UStaticMeshComponent* GunMeshToSet)
 	GunMesh = GunMeshToSet;
 }
 
-
 void AGear_Gun::OnLClickHit_Implementation(AActor* Target)
 {
 	if (HasAuthority())
