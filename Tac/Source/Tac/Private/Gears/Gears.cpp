@@ -97,10 +97,12 @@ void AGears::WorldSpawn()
 	Timeline->PlayFromStart();
 }
 
-void AGears::OnPicked()
+void AGears::OnPicked(AActor* Owner)
 {
 	bPicked = true;
 	Timeline->Stop();
+	OwnerActor = Owner;
+	//UE_LOG(LogTemp, Warning, TEXT("%s"), *OwnerActor->GetName());
 }
 
 bool AGears::ResetLocation_Validate()

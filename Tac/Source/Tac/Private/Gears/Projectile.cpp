@@ -76,8 +76,14 @@ bool AProjectile::LaunchProjectile_Validate()
 }
 */
 
-void AProjectile::LaunchProjectile()
+void AProjectile::LaunchProjectile(FVector OutLaunchVelocity)
 {
-	ProjectileMovementComponent->SetVelocityInLocalSpace(FVector::ForwardVector * LaunchSpeed);
+	ProjectileMovementComponent->SetVelocityInLocalSpace(OutLaunchVelocity * LaunchSpeed);
 	ProjectileMovementComponent->Activate();
+	UE_LOG(LogTemp, Error, TEXT("%s"), *OutLaunchVelocity.ToString());
+}
+
+float AProjectile::GetLaunchSpeed()
+{
+	return LaunchSpeed;
 }

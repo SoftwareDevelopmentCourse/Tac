@@ -195,7 +195,8 @@ void UGearManagementComponent::JudgeBySocket(AGears* GearToJudge, int32 & Result
 			break;
 		}
 		bHasFront = true;
-		GearToJudge->OnPicked();
+		GearToJudge->OnPicked(GetOwner());
+		/*UE_LOG(LogTemp, Warning, TEXT("%s"), *GetOwner()->GetName());*/
 		GearToJudge->AttachToActor(OwnerVehicle, FAttachmentTransformRules::SnapToTargetIncludingScale, TEXT("EFront"));
 		TacGears[0] = GearToJudge;
 		Result = 0;
@@ -208,7 +209,7 @@ void UGearManagementComponent::JudgeBySocket(AGears* GearToJudge, int32 & Result
 			break;
 		}
 		bHasBack = true;
-		GearToJudge->OnPicked();
+		GearToJudge->OnPicked(GetOwner());
 		GearToJudge->AttachToActor(OwnerVehicle, FAttachmentTransformRules::SnapToTargetNotIncludingScale, TEXT("EBack"));
 		TacGears[1] = GearToJudge;
 		Result = 1;
@@ -221,7 +222,7 @@ void UGearManagementComponent::JudgeBySocket(AGears* GearToJudge, int32 & Result
 			break;
 		}
 		bHasLeft = true;
-		GearToJudge->OnPicked();
+		GearToJudge->OnPicked(GetOwner());
 		GearToJudge->AttachToActor(OwnerVehicle, FAttachmentTransformRules::SnapToTargetNotIncludingScale, TEXT("ELeft"));
 		TacGears[2] = GearToJudge;
 		Result = 2;
@@ -234,7 +235,7 @@ void UGearManagementComponent::JudgeBySocket(AGears* GearToJudge, int32 & Result
 			break;
 		}
 		bHasRight = true;
-		GearToJudge->OnPicked();
+		GearToJudge->OnPicked(GetOwner());
 		GearToJudge->AttachToActor(OwnerVehicle, FAttachmentTransformRules::SnapToTargetNotIncludingScale, TEXT("ERight"));
 		TacGears[3] = GearToJudge;
 		Result = 3;

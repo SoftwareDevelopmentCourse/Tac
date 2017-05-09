@@ -30,6 +30,8 @@ public:
 	UPROPERTY(Replicated)
 	bool bPicked = false;
 
+	AActor * OwnerActor;
+
 public:
 	/** Gear hover's range */
 	UPROPERTY(Replicated, Category = GearWorld, EditAnywhere)
@@ -91,7 +93,7 @@ public:
 	void WorldSpawn();
 
 	/** When gear is picked up */
-	void OnPicked();
+	void OnPicked(AActor* Owner);
 
 	/** Curve of gear's hover */
 	class UCurveFloat* TimelineCurve;

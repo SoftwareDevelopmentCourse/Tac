@@ -43,8 +43,9 @@ public:
 public:
 	// Activite the projectile
 	//UFUNCTION(Server, Reliable, WithValidation)
-	void LaunchProjectile();
+	void LaunchProjectile(FVector OutLaunchVelocity);
 	AActor* OwnerGun;
+	float GetLaunchSpeed();
 
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Damage)

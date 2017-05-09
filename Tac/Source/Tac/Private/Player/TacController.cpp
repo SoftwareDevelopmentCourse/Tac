@@ -8,7 +8,10 @@
 #include "GearWidget.h"
 #include "TacVehicle.h"
 #include "TacGameModeBase.h"
+#include "Projectile.h"
 #include "GearManagementComponent.h"
+#include "Engine.h"
+#define OUT
 
 ATacController::ATacController()
 {
@@ -158,4 +161,67 @@ void ATacController::UpdateHUD_Implementation()
 	{
 		TacView->AddToViewport();
 	}
+}
+
+FVector ATacController::Aimat(FVector StartLoc, float LaunchVelocity)
+{
+	FVector OutLaunchVelocity;
+	FVector HitLocation;
+	GetSightRayHitLocation(HitLocation);
+	auto AimSolution = UGameplayStatics::SuggestProjectileVelocity(
+		this,
+		OutLaunchVelocity,
+		StartLoc,
+		HitLocation,
+		LaunchVelocity,
+		false,
+		0.f,
+		0.f,
+		ESuggestProjVelocityTraceOption::DoNotTrace);
+	return OutLaunchVelocity.GetSafeNormal();
+}
+
+
+bool ATacController::GetSightRayHitLocation(FVector& HitLocation) const
+{
+	if (!IsLocalController()) { return false; }
+	int32 ScreenX, ScreenY;
+	FVector2D ViewportSize;
+	GetViewportSize(ScreenX, ScreenY);
+	auto ScreenLocation = FVector2D(ScreenX * CrosshairXLocation, ScreenY * CrosshairYLocation);
+	FVector WorldDirection;
+	UE_LOG(LogTemp, Error, TEXT("ScreenLocation: %s"), *ScreenLocation.ToString());
+	if (GetLookDirection(ScreenLocation, WorldDirection))
+	{
+		return GetLookHitLocation(WorldDirection, HitLocation);
+	}
+	return false;
+}
+
+bool ATacController::GetLookDirection(FVector2D ScreenLocation, FVector& WorldDirection) const
+{
+	FVector WorldLocation;
+	DeprojectScreenPositionToWorld(ScreenLocation.X, ScreenLocation.Y, WorldLocation, WorldDirection);
+	UE_LOG(LogTemp, Error, TEXT("Result: %i\tScreenToWorld location: %s"), *WorldDirection.ToString());
+	return DeprojectScreenPositionToWorld(ScreenLocation.X, ScreenLocation.Y, WorldLocation, WorldDirection);
+}
+
+bool ATacController::GetLookHitLocation(FVector WorldDirection, FVector& HitLocation) const
+{
+	FHitResult Hit;
+	FVector CameraLocation;
+	FRotator CameraRotation;
+	GetActorEyesViewPoint(CameraLocation, CameraRotation);
+	if (GetWorld()->LineTraceSingleByChannel(
+		Hit,
+		CameraLocation,
+		CameraLocation + WorldDirection * LineTraceRange,
+		ECollisionChannel::ECC_Camera)
+		)
+	{
+		HitLocation = Hit.Location;
+		return true;
+	}
+	HitLocation = FVector(0.f);
+	return false;
 }
